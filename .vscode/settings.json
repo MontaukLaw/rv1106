@@ -1,0 +1,10 @@
+{
+    "git.ignoreLimitWarning": true,
+    "files.associations": {
+        "rtsp_demo.h": "c",
+        "sample_comm.h": "c",
+        "sample_comm_isp.h": "c",
+        "rockiva_image.h": "c",
+        "signal.h": "c"
+    }
+}

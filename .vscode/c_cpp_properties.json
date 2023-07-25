@@ -1,0 +1,41 @@
+{
+    "configurations": [
+      {
+        "name": "ARM GCC",
+        "compilerPath": "/home/marc/rv1106/toolchain/env/arm-rockchip830-linux-uclibcgnueabihf/bin/arm-rockchip830-linux-uclibcgnueabihf-gcc", // 替换为你的ARM GCC编译器路径
+        "cStandard": "c11",
+        "cppStandard": "c++17",
+        "intelliSenseMode": "gcc-arm",
+        "browse": {
+          "path": [
+            "${workspaceFolder}"
+          ],
+          "limitSymbolsToIncludedHeaders": true,
+          "databaseFilename": ""
+        },
+        "includePath": [
+          "${workspaceFolder}/**", // 替换为你的项目中的头文件路径
+          "/home/marc/rv1106/media/samples/example/common/",
+          "/home/marc/rv1106/media/samples/example/common/**",
+          "/home/marc/rv1106/media/samples/example/common/isp3.x",
+          "/home/marc/rv1106/media/out/include/**",
+          "/home/marc/rv1106/media/out/include",
+          "/home/marc/rv1106/media/out/include/rkaiq/**",
+          "${workspaceFolder}/include", 
+          // 添加其他需要的头文件路径，例如：
+          // "/path/to/your/library/includes"
+        ],
+        "defines": [
+          "_DEBUG",
+          "UNICODE",
+          "_UNICODE"
+          // 添加其他需要的宏定义
+        ],
+        "cStandard": "c11",
+        "cppStandard": "c++17",
+        "intelliSenseMode": "gcc-arm"
+      }
+    ],
+    "version": 4
+  }
+  

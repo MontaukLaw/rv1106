@@ -1,0 +1,63 @@
+# ./app
+sensor 0: main:1920*1080, sub:640*640
+#CodecName:H264
+#IQ Path: /oem/usr/share/iqfiles
+#Rkaiq XML DirPath: /oem/usr/share/iqfiles
+#bMultictx: 0
+
+rkaiq log level ff0
+[ 2310.695903] stream_cif_mipi_id0: s_power 1, entity use_count 1
+
+************************** VERSION INFOS **************************
+version release date: 2023-03-02
+         AIQ:       AIQ v5.0x1.2-rc2
+   IQ PARSER:       Calib v1.4.8,magicCode:1170944
+************************ VERSION INFOS END ************************
+ID: 0, sensor_name is m00_b_sc230ai 4-0030-3, iqfiles is /oem/usr/share/iqfiles
+[ 2310.696411] stream_cif_mipi_id0: s_power 0, entity use_count 0
+[ 2311.064314] stream_cif_mipi_id0: s_power 1, entity use_count 1
+[ 2311.065136] stream_cifrk_aiq_uapi2_sysctl_init/prepare succeed
+_mipi_id0: open video, entity use_countrk_aiq_uapi2_sysctl_start succeed
+[INFO  rtsp_demo.c:280:rtsp_new_demo] rtsp server demo starting on port 554
+[DEBUG rtsp_demo.c:480:rtsp_new_session] add session path: /live/0
+[DEBUG rtsp_demo.c:480:rtsp_new_session] add session path: /live/1
+t 2
+rtsp streamq_alloc size is 1753484
+[ 231rtsp streamq_alloc size is 1753484
+rockit log path (null), log_size = 0, can use export rt_log_path=, export rt_log_size= change
+log_file = (nil)
+RTVersion        00:38:31-104 {dump              :064} ---------------------------------------------------------
+RTVersion        00:38:31-125 {dump              :065} rockit version: git-56434d252 Tue Apr 4 15:06:22 2023 +0800
+RTVersion        00:38:31-135 {dump              :066} rockit building: built- 2023-04-04 15:21:54
+RTVersion        00:38:31-144 {dump              :067} ---------------------------------------------------------
+(null)           00:38:31-154 {log_level_init    :206}
+
+ please use echo name=level > /tmp/rt_log_level set log level
+        name: all cmpi mb sys vdec venc rgn vpss vgs tde avs wbc vo vi ai ao aenc adec
+        log_level: 0 1 2 3 4 5 6
+
+rockit default level 4, can use export rt_log_level=x, x=0,1,2,3,4,5,6 change
+(null)           00:38:31-183 {read_log_level    :097} text is all=4
+
+(null)           00:38:31-190 {read_log_level    :099} module is all, log_level is 4
+1.065230] stream_cif_mipi_RTIsp3x          00:38:31-199 {ispInitDevice     :317} sensor name = m00_b_sc230ai 4-0030-3
+(null)           00:38:31-209 {monitor_log_level :148} #Start monitor_log_level thread, arg:(nil)
+RTIsp3x          00:38:31-217 {ispInitDevice     :320} sensor_index = 0
+id1: open video, entity use_countt 1
+[ 2311.0cmpi             00:38:31-229 {SAMPLE_COMM_VI_Cre:045} RK_MPI_VI_SetDevAttr already!
+cmpi             00:38:31-236 {SAMPLE_COMM_VI_Cre:054} RK_MPI_VI_EnableDev failed with 0xa0088001!
+
+venc[0]:u32BufSize:518400
+75773cmpi             00:38:31-248 {SAMPLE_COMM_VENC_C:120} RK_MPI_VENC_CreateChn failed a0048003
+cmpi             00:38:31-257 {SAMPLE_COMM_VI_Cre:045} RK_MPI_VI_SetDevAttr already!
+cmpi             00:38:31-264 {SAMPLE_COMM_VI_Cre:054} RK_MPI_VI_EnableDev failed with 0xa0088001!
+
+#Start rkipc_get_vi_to_npu thread, arg:(nil)
+venc[1]:u32BufSize:102400
+cmpi            ] rki 00:38:31-279 {SAMPLE_COMM_VENC_C:120} RK_MPI_VENC_CreateChn failed sp rkisp-vir0: first params buf queue
+a0048003
+cmpi             00:38:31-291 {SAMPLE_COMM_Bind  :079} RK_MPI_SYS_Bind failed with 0xa0028008!
+
+cmpi             00:38:31-300 {SAMPLE_COMM_Bind  :079} RK_MPI_SYS_Bind failed with 0xa0028008!
+
+main initial finish
