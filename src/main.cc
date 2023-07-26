@@ -388,11 +388,11 @@ void create_vi_chn(int camWidth, int camHeight, AVS_CHN u32ChnId, RK_U32 u32BufC
     viCtx.stChnAttr.stIspOpt.u32BufCount = u32BufCount;
     viCtx.stChnAttr.u32Depth = depth;
 
+    SAMPLE_COMM_VI_CreateChn(&viCtx);
     if (u32ChnId == 1)
     {
         pthread_create(&get_vi_to_npu_thread, NULL, rkipc_get_vi_to_npu, NULL);
     }
-    SAMPLE_COMM_VI_CreateChn(&viCtx);
 }
 
 void init_venc(int vencWidth, int vencHeight, VENC_CHN vencChnId, Thread_Func func)
@@ -431,10 +431,9 @@ void init_venc(int vencWidth, int vencHeight, VENC_CHN vencChnId, Thread_Func fu
     SAMPLE_COMM_VENC_CreateChn(&venc);
 }
 
-int main(int argc, char *argv[]){
+int main(int argc, char *argv[])
+{
     // 读取一个yuv文件
-    
-
 }
 
 int main_bak(int argc, char *argv[])

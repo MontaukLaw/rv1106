@@ -52,12 +52,14 @@ extern "C"
         RK_U32 u32VpssModeTestDstWidth;
         RK_U32 u32VpssModeTestDstHeight;
         pthread_t vpss_thread_id;
+        pthread_t venc_thread_id;
     } g_mode_test;
 
     typedef struct _rkMpiCtx
     {
         SAMPLE_VI_CTX_S vi;
         SAMPLE_VPSS_CTX_S vpss;
+        // SAMPLE_VPSS_CTX_S vpss2Venc;
     } SAMPLE_MPI_CTX_S;
 
     /* global param */
@@ -66,6 +68,17 @@ extern "C"
     RK_S32 g_exit_result = RK_SUCCESS;
     sem_t g_sem_module_test = {0};
     pthread_mutex_t g_frame_count_mutex = {0};
+    static rtsp_demo_handle g_rtsplive = NULL;
+    static rtsp_session_handle g_rtsp_session_0;
+
+    void init_rtsp(void)
+    {
+        // init rtsp
+        g_rtsplive = create_rtsp_demo(554);
+        g_rtsp_session_0 = rtsp_new_session(g_rtsplive, "/live/0");
+        rtsp_set_video(g_rtsp_session_0, RTSP_CODEC_ID_VIDEO_H264, NULL, 0);
+        rtsp_sync_video_ts(g_rtsp_session_0, rtsp_get_reltime(), rtsp_get_ntptime());
+    }
 
     static void program_handle_error(const char *func, RK_U32 line)
     {
@@ -86,24 +99,111 @@ extern "C"
         program_normal_exit(__func__, __LINE__);
     }
 
-    static RK_CHAR optstr[] = "?::a::v:p:l:o:f:m:t:c:s:";
-    static const struct option long_options[] = {
-        {"aiq", optional_argument, NULL, 'a'},
-        {"vi_size", required_argument, NULL, 'v' + 's'},
-        {"vpss_size", required_argument, NULL, 'p' + 's'},
-        {"loop_count", required_argument, NULL, 'l'},
-        {"output_path", required_argument, NULL, 'o'},
-        {"fps", required_argument, NULL, 'f'},
-        {"mode_test_type", required_argument, NULL, 'm'},
-        {"mode_test_loop", required_argument, NULL, 't' + 'l'},
-        {"test_frame_count", required_argument, NULL, 'c'},
-        {"help", optional_argument, NULL, '?'},
-        {NULL, 0, NULL, 0},
-    };
+    static RK_S32 test_venc_init(int chnId, int width, int height, RK_CODEC_ID_E enType)
+    {
+        printf("================================%s==================================\n",
+               __func__);
+        VENC_RECV_PIC_PARAM_S stRecvParam;
+        VENC_CHN_ATTR_S stAttr;
+        memset(&stAttr, 0, sizeof(VENC_CHN_ATTR_S));
 
+        stAttr.stVencAttr.enType = enType;
+        stAttr.stVencAttr.enPixelFormat = RK_FMT_YUV420SP;
+        stAttr.stRcAttr.enRcMode = VENC_RC_MODE_H264CBR;
+        stAttr.stRcAttr.stH264Cbr.u32BitRate = 10 * 1024;
+        stAttr.stRcAttr.stH264Cbr.u32Gop = 60;
+        stAttr.stVencAttr.u32PicWidth = width;
+        stAttr.stVencAttr.u32PicHeight = height;
+        stAttr.stVencAttr.u32VirWidth = width;
+        stAttr.stVencAttr.u32VirHeight = height;
+        stAttr.stVencAttr.u32StreamBufCnt = 2;
+        stAttr.stVencAttr.u32BufSize = width * height * 3 / 2;
+        RK_MPI_VENC_CreateChn(chnId, &stAttr);
+
+        memset(&stRecvParam, 0, sizeof(VENC_RECV_PIC_PARAM_S));
+        stRecvParam.s32RecvPicNum = -1;
+        RK_MPI_VENC_StartRecvFrame(chnId, &stRecvParam);
+
+        return 0;
+    }
     /******************************************************************************
      * function : vpss thread
      ******************************************************************************/
+    static void *venc_get_stream(void *pArgs)
+    {
+        printf("#Start %s , arg:%p\n", __func__, pArgs);
+        SAMPLE_VENC_CTX_S *ctx = (SAMPLE_VENC_CTX_S *)(pArgs);
+        RK_S32 s32Ret = RK_FAILURE;
+        char name[256] = {0};
+        FILE *fp = RK_NULL;
+        void *pData = RK_NULL;
+        RK_S32 loopCount = 0;
+
+        while (!gModeTest->bIfVpssTHreadQuit)
+        {
+            s32Ret = SAMPLE_COMM_VENC_GetStream(ctx, &pData);
+            if (s32Ret == RK_SUCCESS)
+            {
+                printf("chn:%d, loopCount:%d wd:%d\n", ctx->s32ChnId, loopCount, ctx->stFrame.pstPack->u32Len);
+                // exit when complete
+                if (ctx->s32loopCount > 0)
+                {
+                    if (loopCount >= ctx->s32loopCount)
+                    {
+                        SAMPLE_COMM_VENC_ReleaseStream(ctx);
+                        gModeTest->bIfVpssTHreadQuit = true;
+                        break;
+                    }
+                }
+
+                PrintStreamDetails(ctx->s32ChnId, ctx->stFrame.pstPack->u32Len);
+                // rtsp_tx_video(g_rtsp_session_0, (const uint8_t *)pData, ctx->stFrame.pstPack->u32Len,
+                // ctx->stFrame.pstPack->u64PTS);
+                // rtsp_do_event(g_rtsplive);
+
+                SAMPLE_COMM_VENC_ReleaseStream(ctx);
+                loopCount++;
+            }
+            usleep(1000);
+        }
+
+        return RK_NULL;
+    }
+
+    void init_venc(int vencWidth, int vencHeight, VENC_CHN vencChnId, Thread_Func func)
+    {
+        RK_S32 s32loopCnt = -1;
+        CODEC_TYPE_E enCodecType = RK_CODEC_TYPE_H264;
+        VENC_RC_MODE_E enRcMode = VENC_RC_MODE_H264CBR;
+        RK_S32 s32BitRate = 4 * 1024;
+        SAMPLE_VENC_CTX_S venc;
+        RK_CHAR *pOutPathVenc = "/userdata";
+        memset(&venc, 0, sizeof(SAMPLE_VENC_CTX_S));
+
+        venc.s32ChnId = vencChnId;
+        venc.u32Width = vencWidth;
+        venc.u32Height = vencHeight;
+        int u32BufSize = vencHeight * vencWidth / 4;
+        venc.stChnAttr.stVencAttr.u32BufSize = u32BufSize;
+        venc.u32Fps = 30;
+
+        venc.u32Gop = 50;
+        venc.u32BitRate = s32BitRate;
+        venc.enCodecType = enCodecType;
+        venc.enRcMode = enRcMode;
+        venc.getStreamCbFunc = func;
+        venc.s32loopCount = s32loopCnt;
+        venc.dstFilePath = pOutPathVenc;
+        // H264  66：Baseline  77：Main Profile 100：High Profile
+        // H265  0：Main Profile  1：Main 10 Profile
+        // MJPEG 0：Baseline
+        venc.stChnAttr.stVencAttr.u32Profile = 66;
+        venc.stChnAttr.stGopAttr.enGopMode = VENC_GOPMODE_NORMALP;
+        venc.enable_buf_share = 1;
+
+        SAMPLE_COMM_VENC_CreateChn(&venc);
+    }
+
     static void *vpss_get_stream(void *pArgs)
     {
         SAMPLE_VPSS_CTX_S *ctx = (SAMPLE_VPSS_CTX_S *)(pArgs);
@@ -158,22 +258,18 @@ extern "C"
                     }
                     else
                     {
-                        fwrite(pData, 1, stPicCal.u32MBSize, fp);
-                        fflush(fp);
+                        printf("got from vpss 0");
+                        // fwrite(pData, 1, stPicCal.u32MBSize, fp);
+                        // fflush(fp);
                     }
                 }
 
-                if (ctx->stVpssChnAttr[0].u32Width ==
-                    ctx->stChnFrameInfos.stVFrame.u32Width)
+                if (ctx->stVpssChnAttr[0].u32Width == ctx->stChnFrameInfos.stVFrame.u32Width)
                 {
-                    if (ctx->stChnFrameInfos.stVFrame.u32Height !=
-                            ctx->stVpssChnAttr[0].u32Height ||
-                        ctx->stChnFrameInfos.stVFrame.u32VirWidth !=
-                            ctx->stVpssChnAttr[0].u32Width ||
-                        ctx->stChnFrameInfos.stVFrame.u32VirHeight !=
-                            ctx->stVpssChnAttr[0].u32Height ||
-                        ctx->stChnFrameInfos.stVFrame.enPixelFormat !=
-                            ctx->stVpssChnAttr[0].enPixelFormat)
+                    if (ctx->stChnFrameInfos.stVFrame.u32Height != ctx->stVpssChnAttr[0].u32Height ||
+                        ctx->stChnFrameInfos.stVFrame.u32VirWidth != ctx->stVpssChnAttr[0].u32Width ||
+                        ctx->stChnFrameInfos.stVFrame.u32VirHeight != ctx->stVpssChnAttr[0].u32Height ||
+                        ctx->stChnFrameInfos.stVFrame.enPixelFormat != ctx->stVpssChnAttr[0].enPixelFormat)
                     {
                         RK_LOGE("Avs Current resolution is:%dX%d, get frame's resolution is "
                                 ":%dX%d, the frame's PixelFormat"
@@ -187,17 +283,12 @@ extern "C"
                         program_handle_error(__func__, __LINE__);
                     }
                 }
-                else if (gModeTest->u32VpssModeTestDstWidth ==
-                         ctx->stChnFrameInfos.stVFrame.u32Width)
+                else if (gModeTest->u32VpssModeTestDstWidth == ctx->stChnFrameInfos.stVFrame.u32Width)
                 {
-                    if (ctx->stChnFrameInfos.stVFrame.u32Height !=
-                            gModeTest->u32VpssModeTestDstHeight ||
-                        ctx->stChnFrameInfos.stVFrame.u32VirWidth !=
-                            gModeTest->u32VpssModeTestDstWidth ||
-                        ctx->stChnFrameInfos.stVFrame.u32VirHeight !=
-                            gModeTest->u32VpssModeTestDstHeight ||
-                        ctx->stChnFrameInfos.stVFrame.enPixelFormat !=
-                            ctx->stVpssChnAttr[0].enPixelFormat)
+                    if (ctx->stChnFrameInfos.stVFrame.u32Height != gModeTest->u32VpssModeTestDstHeight ||
+                        ctx->stChnFrameInfos.stVFrame.u32VirWidth != gModeTest->u32VpssModeTestDstWidth ||
+                        ctx->stChnFrameInfos.stVFrame.u32VirHeight != gModeTest->u32VpssModeTestDstHeight ||
+                        ctx->stChnFrameInfos.stVFrame.enPixelFormat != ctx->stVpssChnAttr[0].enPixelFormat)
                     {
                         RK_LOGE("Avs Current resolution is:%dX%d, get frame's resolution is "
                                 ":%dX%d, the frame's PixelFormat"
@@ -245,169 +336,6 @@ extern "C"
             fp = RK_NULL;
         }
         RK_LOGE("-----------vpss_get_stream thread exit!!!");
-        return RK_NULL;
-    }
-
-    static void wait_module_test_switch_success(void)
-    {
-
-        pthread_mutex_lock(&g_frame_count_mutex);
-        gModeTest->u32VpssGetFrameCount = 0;
-        pthread_mutex_unlock(&g_frame_count_mutex);
-        sem_wait(&g_sem_module_test);
-    }
-
-    static void vpss_destroy_ubind_test(RK_S32 s32Testloop)
-    {
-        RK_S32 s32Ret = RK_FAILURE;
-        RK_S32 s32TestCount = 0;
-        MPP_CHN_S stSrcChn, stDestChn;
-
-        while (!gModeTest->bModuleTestThreadQuit)
-        {
-
-            /* vpss get frame thread exit */
-            gModeTest->bIfVpssTHreadQuit = RK_TRUE;
-            pthread_join(gModeTest->vpss_thread_id, NULL);
-
-            /* ubind vi and vpss */
-            stSrcChn.enModId = RK_ID_VI;
-            stSrcChn.s32DevId = ctx->vi.s32DevId;
-            stSrcChn.s32ChnId = ctx->vi.s32ChnId;
-            stDestChn.enModId = RK_ID_VPSS;
-            stDestChn.s32DevId = ctx->vpss.s32GrpId;
-            stDestChn.s32ChnId = ctx->vpss.s32ChnId;
-            SAMPLE_COMM_UnBind(&stSrcChn, &stDestChn);
-
-            /* destroy vpss */
-            s32Ret = SAMPLE_COMM_VPSS_DestroyChn(&ctx->vpss);
-            if (s32Ret != RK_SUCCESS)
-            {
-                RK_LOGE("destroy vpss failure:%#X", s32Ret);
-                program_handle_error(__func__, __LINE__);
-                break;
-            }
-
-            /* create vpss */
-            s32Ret = SAMPLE_COMM_VPSS_CreateChn(&ctx->vpss);
-            if (s32Ret != RK_SUCCESS)
-            {
-                RK_LOGE("create vpss failure:%#X", s32Ret);
-                program_handle_error(__func__, __LINE__);
-                break;
-            }
-
-            /* bind vi and vpss */
-            SAMPLE_COMM_Bind(&stSrcChn, &stDestChn);
-
-            /* launch vpss get frame thread */
-            gModeTest->bIfVpssTHreadQuit = RK_FALSE;
-            pthread_create(&gModeTest->vpss_thread_id, 0, vpss_get_stream,
-                           (void *)(&ctx->vpss));
-
-            wait_module_test_switch_success();
-
-            s32TestCount++;
-            RK_LOGE("-------------------vpss_destroy_ubind_test success Total: %d Now Count: "
-                    "%d-------------------",
-                    s32Testloop, s32TestCount);
-            if (s32Testloop > 0 && s32TestCount >= s32Testloop)
-            {
-                RK_LOGE("------------------vpss_destroy_ubind_test end(pass/success) count: "
-                        "%d-----------------",
-                        s32TestCount);
-                gModeTest->bModuleTestIfopen = RK_FALSE;
-                program_normal_exit(__func__, __LINE__);
-                break;
-            }
-        }
-        RK_LOGE("vpss_destroy_ubind_test exit !!!!");
-        return;
-    }
-
-    static void vpss_switch_resolution_test(RK_S32 s32Testloop)
-    {
-        RK_S32 s32Ret = RK_FAILURE;
-        RK_S32 s32TestCount = 0;
-        RK_S32 s32SrcWidth = ctx->vpss.stVpssChnAttr[0].u32Width;
-        RK_S32 s32SrcHeight = ctx->vpss.stVpssChnAttr[0].u32Height;
-        VPSS_CHN_ATTR_S stChnAttr;
-
-        while (!gModeTest->bModuleTestThreadQuit)
-        {
-            memset(&stChnAttr, 0, sizeof(VPSS_CHN_ATTR_S));
-            s32Ret =
-                RK_MPI_VPSS_GetChnAttr(ctx->vpss.s32GrpId, ctx->vpss.s32ChnId, &stChnAttr);
-            if (s32Ret != RK_SUCCESS)
-            {
-                RK_LOGE("RK_MPI_VPSS_GetChnAttr failure:%#X", s32Ret);
-                program_handle_error(__func__, __LINE__);
-                break;
-            }
-
-            /* set vpss resolution */
-            if (stChnAttr.u32Width == s32SrcWidth)
-            {
-                stChnAttr.u32Width = gModeTest->u32VpssModeTestDstWidth;
-                stChnAttr.u32Height = gModeTest->u32VpssModeTestDstHeight;
-            }
-            else
-            {
-                stChnAttr.u32Width = s32SrcWidth;
-                stChnAttr.u32Height = s32SrcHeight;
-            }
-
-            s32Ret =
-                RK_MPI_VPSS_SetChnAttr(ctx->vpss.s32GrpId, ctx->vpss.s32ChnId, &stChnAttr);
-            if (s32Ret != RK_SUCCESS)
-            {
-                RK_LOGE("RK_MPI_VPSS_SetChnAttr failure:%#X", s32Ret);
-                program_handle_error(__func__, __LINE__);
-                break;
-            }
-
-            wait_module_test_switch_success();
-
-            s32TestCount++;
-            RK_LOGE("-------------------vpss_switch_resolution_test:%dX%d success Total: %d "
-                    "Now Count: "
-                    "%d-------------------",
-                    stChnAttr.u32Width, stChnAttr.u32Height, s32Testloop, s32TestCount);
-            if (s32Testloop > 0 && s32TestCount >= s32Testloop)
-            {
-                RK_LOGE("------------------vpss_switch_resolution_test end(pass/success) "
-                        "count: %d-----------------",
-                        s32TestCount);
-                gModeTest->bModuleTestIfopen = RK_FALSE;
-                program_normal_exit(__func__, __LINE__);
-                break;
-            }
-        }
-
-        RK_LOGE("vpss_switch_resolution_test exit !!!");
-        return;
-    }
-
-    static void *sample_vpss_stress_test(void *pArgs)
-    {
-
-        prctl(PR_SET_NAME, "vpss_stress_test");
-        wait_module_test_switch_success();
-
-        SAMPLE_COMM_DumpMeminfo("Enter sample_vpss_stress_test", gModeTest->s32ModuleTestType);
-        switch (gModeTest->s32ModuleTestType)
-        {
-        case 1:
-            vpss_destroy_ubind_test(gModeTest->s32ModuleTestLoop);
-            break;
-        case 2:
-            vpss_switch_resolution_test(gModeTest->s32ModuleTestLoop);
-            break;
-        default:
-            RK_LOGE("mode test type:%d is unsupported", gModeTest->s32ModuleTestType);
-        }
-        SAMPLE_COMM_DumpMeminfo("Exit sample_vpss_stress_test", gModeTest->s32ModuleTestType);
-        RK_LOGE("sample_vpss_stress_test exit");
         return RK_NULL;
     }
 
@@ -486,6 +414,7 @@ extern "C"
      ******************************************************************************/
     int main(int argc, char *argv[])
     {
+        MPP_CHN_S stvpssChn, stvencChn;
         RK_S32 s32Ret = RK_FAILURE;
         RK_U32 u32ViWidth = 1920;
         RK_U32 u32ViHeight = 1080;
@@ -515,6 +444,8 @@ extern "C"
 
         printf("#Rkaiq XML DirPath: %s\n", iq_file_dir);
         rk_aiq_working_mode_t eHdrMode = RK_AIQ_WORKING_MODE_NORMAL;
+
+        // init_rtsp();
 
         s32Ret = SAMPLE_COMM_ISP_Init(s32CamId, eHdrMode, bMultictx, iq_file_dir);
         s32Ret |= SAMPLE_COMM_ISP_Run(s32CamId);
@@ -546,6 +477,7 @@ extern "C"
         ctx->vi.stChnAttr.stFrameRate.s32DstFrameRate = -1;
         SAMPLE_COMM_VI_CreateChn(&ctx->vi);
 
+        printf("111111111111111111111111111111111111111111111\n");
         /* Init VPSS */
         ctx->vpss.s32GrpId = 0;
         ctx->vpss.s32ChnId = 0;
@@ -563,6 +495,10 @@ extern "C"
         ctx->vpss.stVpssChnAttr[0].stFrameRate.s32DstFrameRate = -1;
         ctx->vpss.stVpssChnAttr[0].u32Width = 640;
         ctx->vpss.stVpssChnAttr[0].u32Height = 640;
+
+        ctx->vpss.stVpssChnAttr[1].u32Width = 1920;
+        ctx->vpss.stVpssChnAttr[1].u32Height = 1080;
+        ctx->vpss.stVpssChnAttr[1].enPixelFormat = RK_FMT_YUV420SP;
         s32Ret = SAMPLE_COMM_VPSS_CreateChn(&ctx->vpss);
         if (s32Ret != RK_SUCCESS)
         {
@@ -570,6 +506,18 @@ extern "C"
             program_handle_error(__func__, __LINE__);
         }
 
+        printf("2222222222222222222222222222222222222222222222222222\n");
+
+        /* launch vpss get frame thread */
+        pthread_create(&gModeTest->vpss_thread_id, 0, vpss_get_stream, (void *)(&ctx->vpss));
+
+        // 初始化venc通道0
+        // test_venc_init(0, 1920, 1080, RK_VIDEO_ID_AVC);
+        init_venc(1920, 1080, 0, venc_get_stream);
+
+        printf("333333333333333333333333333333333333333333\n");
+
+        ////////////////////////////////////////////////
         /* Bind VI and VPSS */
         stSrcChn.enModId = RK_ID_VI;
         stSrcChn.s32DevId = ctx->vi.s32DevId;
@@ -579,17 +527,30 @@ extern "C"
         stDestChn.s32ChnId = ctx->vpss.s32ChnId;
         SAMPLE_COMM_Bind(&stSrcChn, &stDestChn);
 
+        stvpssChn.enModId = RK_ID_VPSS;
+        stvpssChn.s32DevId = 0;
+        stvpssChn.s32ChnId = 1; // VPSS 通道1
+
+        stvencChn.enModId = RK_ID_VENC;
+        stvencChn.s32DevId = 0;
+        stvencChn.s32ChnId = 0; // VENC通道0
+        SAMPLE_COMM_Bind(&stvpssChn, &stvencChn);
+
         /* launch vpss get frame thread */
-        pthread_create(&gModeTest->vpss_thread_id, 0, vpss_get_stream, (void *)(&ctx->vpss));
+        // pthread_create(&gModeTest->venc_thread_id, 0, venc_get_stream, NULL);
 
         printf("%s initial finish\n", __func__);
+
+        printf("4444444444444444444444444444444444444444444444444444444444444444444\n");
 
         while (!gModeTest->bIfMainThreadQuit)
         {
             sleep(1);
         }
 
+    finshed:
         printf("%s exit!\n", __func__);
+        rtsp_del_demo(g_rtsplive);
 
         /* vpss get frame thread exit */
         gModeTest->bIfVpssTHreadQuit = RK_TRUE;
@@ -603,20 +564,18 @@ extern "C"
         stDestChn.s32DevId = ctx->vpss.s32GrpId;
         stDestChn.s32ChnId = ctx->vpss.s32ChnId;
         SAMPLE_COMM_UnBind(&stSrcChn, &stDestChn);
+        SAMPLE_COMM_UnBind(&stvpssChn, &stvencChn);
 
         /* Destroy VPSS */
         SAMPLE_COMM_VPSS_DestroyChn(&ctx->vpss);
         /* Destroy VI[0] */
         SAMPLE_COMM_VI_DestroyChn(&ctx->vi);
+        /* Destroy VPSS[1] */
+        // SAMPLE_COMM_VPSS_DestroyChn(&ctx->vpss2Venc);
 
     __FAILED:
         RK_MPI_SYS_Exit();
-        if (iq_file_dir)
-        {
-#ifdef RKAIQ
-            SAMPLE_COMM_ISP_Stop(s32CamId);
-#endif
-        }
+        SAMPLE_COMM_ISP_Stop(0);
     __FAILED2:
         global_param_deinit();
 

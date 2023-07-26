@@ -50,4 +50,30 @@ add_executable(vi_vpss_demo src/vi_vpss.c
                             src/samples/sample_comm_vi.c 
                             src/samples/sample_comm_venc.c
                             src/samples/sample_comm.c)
-target_link_libraries(vi_vpss_demo pthread rockit_full dl stdc++ rockchip_mpp rkaiq rga test_lib)
+target_link_libraries(vi_vpss_demo pthread rockit_full dl stdc++ rockchip_mpp rkaiq rga test_lib rtsp)
+
+#####################################
+add_executable(vi_2_vpss_venc_rtsp src/vi_2_vpss_venc_rtsp.c  
+                            src/samples/sample_comm_vpss.c
+                            src/samples/sample_comm_isp.c 
+                            src/samples/sample_comm_vi.c 
+                            src/samples/sample_comm_venc.c
+                            src/samples/sample_comm_rgn.c
+                            src/samples/sample_comm_vo.c
+                            src/samples/fillimage.c
+                            src/samples/loadbmp.c
+                            src/samples/sample_comm.c)
+target_link_libraries(vi_2_vpss_venc_rtsp pthread rockit_full dl stdc++ rockchip_mpp rkaiq rga test_lib rtsp)
+
+add_executable(no_bind src/no_bind_process.c  
+                            src/samples/sample_comm_vpss.c
+                            src/samples/sample_comm_isp.c 
+                            src/samples/sample_comm_vi.c 
+                            src/samples/sample_comm_venc.c
+                            src/samples/sample_comm_rgn.c
+                            src/samples/sample_comm_vo.c
+                            src/samples/fillimage.c
+                            src/samples/loadbmp.c
+                            src/samples/sample_comm.c)
+target_link_libraries(no_bind pthread rockit_full dl stdc++ rockchip_mpp rkaiq rga test_lib rtsp)
+

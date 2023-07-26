@@ -239,11 +239,11 @@ extern "C"
 		PIC_BUF_ATTR_S stPicBufAttr;
 		MB_PIC_CAL_S stMbPicCalResult;
 
-		s32Ret =
-			RK_MPI_VPSS_GetChnFrame(ctx->s32GrpId, ctx->s32ChnId, &ctx->stChnFrameInfos, -1);
+		s32Ret = RK_MPI_VPSS_GetChnFrame(ctx->s32GrpId, ctx->s32ChnId, &ctx->stChnFrameInfos, -1);
 		if (s32Ret != RK_SUCCESS)
 		{
 			RK_LOGE("RK_MPI_VPSS_GetChnFrame fail %x", s32Ret);
+			return s32Ret;
 		}
 
 		stPicBufAttr.u32Width = ctx->stChnFrameInfos.stVFrame.u32VirWidth;
