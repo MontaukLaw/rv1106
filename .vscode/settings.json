@@ -5,6 +5,7 @@
         "sample_comm.h": "c",
         "sample_comm_isp.h": "c",
         "rockiva_image.h": "c",
-        "signal.h": "c"
+        "signal.h": "c",
+        "rknn_api.h": "c"
     }
 }

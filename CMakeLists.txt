@@ -11,6 +11,8 @@ set(SYSROOT /home/marc/rv1106/sysroot)
 set(MEDIA_ROOT /home/marc/rv1106/media/out)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/rga)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/test)
 include_directories(${MEDIA_ROOT}/include)
 include_directories(${MEDIA_ROOT}/include/rkaiq/uAPI2)
 include_directories(${MEDIA_ROOT}/include/rkaiq/common)
@@ -23,12 +25,29 @@ include_directories(/home/marc/rv1106/media/samples/example/common/)
 set(CMAKE_CXX_STANDARD 11)
 add_definitions(-DRKAIQ)
 
-add_executable(app src/main.c src/sample_comm_isp.c 
-                              src/sample_comm_vi.c 
-                              src/sample_comm_venc.c
-                              src/sample_comm.c) 
-                   
+add_executable(app src/main.cc src/postprocess.cc 
+                              src/rknn_detect.cc
+                              src/samples/sample_comm_isp.c 
+                              src/samples/sample_comm_vi.c 
+                              src/samples/sample_comm_venc.c
+                              src/samples/sample_comm.c
+                              src/utils.cc ) 
+
+set(LIB_PATH ${CMAKE_SOURCE_DIR}/libs)
+add_library(test_lib STATIC IMPORTED)
+set_target_properties(test_lib PROPERTIES IMPORTED_LOCATION ${LIB_PATH}/librt_test_comm.a)
+
 # target_link_libraries(app rockchip_mpp m pthread rockit_full dl stdc++ rtsp rkaiq rga)
-target_link_libraries(app rockchip_mpp m pthread rockit_full dl stdc++ rtsp rkaiq rga)
+target_link_libraries(app rockchip_mpp m pthread rockit_full dl stdc++ rtsp rkaiq rga rknnmrt)
 target_include_directories(app PUBLIC "${MEDIA_ROOT}/lib" ${CMAKE_CURRENT_SOURCE_DIR}/libs)
 
+add_executable(test_vpss src/vpss_demo.cc src/utils.cc)
+target_link_libraries(test_vpss pthread rockit_full dl stdc++ rockchip_mpp rkaiq rga test_lib)
+
+add_executable(vi_vpss_demo src/vi_vpss.c  
+                            src/samples/sample_comm_vpss.c
+                            src/samples/sample_comm_isp.c 
+                            src/samples/sample_comm_vi.c 
+                            src/samples/sample_comm_venc.c
+                            src/samples/sample_comm.c)
+target_link_libraries(vi_vpss_demo pthread rockit_full dl stdc++ rockchip_mpp rkaiq rga test_lib)
