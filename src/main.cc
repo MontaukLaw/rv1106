@@ -481,6 +481,7 @@ int main_bak(int argc, char *argv[])
     signal(SIGINT, sigterm_handler);
 
     printf("model path :%s\n", argv[1]);
+    
     init_model(argv[1]);
 
     int c;

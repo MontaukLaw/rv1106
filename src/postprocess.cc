@@ -21,11 +21,9 @@
 #include <set>
 #include "postprocess.h"
 #include <stdint.h>
-#define LABEL_NALE_TXT_PATH "hat_label.txt"
+#define LABEL_NALE_TXT_PATH   "/data/coco.txt"
 
-static char *labels[OBJ_CLASS_NUM] = {
-    "person",
-    "hat"};
+static char *labels[OBJ_CLASS_NUM];
 
 const int anchor0[6] = {10, 13, 16, 30, 33, 23};
 const int anchor1[6] = {30, 61, 62, 45, 59, 119};
@@ -274,7 +272,7 @@ int post_process(int8_t *input0, int8_t *input1, int8_t *input2, int model_in_h,
     if (init == -1)
     {
         int ret = 0;
-        // ret = loadLabelName(LABEL_NALE_TXT_PATH, labels);
+        ret = loadLabelName(LABEL_NALE_TXT_PATH, labels);
         if (ret < 0)
         {
             return -1;

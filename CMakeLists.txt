@@ -65,7 +65,10 @@ add_executable(vi_2_vpss_venc_rtsp src/vi_2_vpss_venc_rtsp.c
                             src/samples/sample_comm.c)
 target_link_libraries(vi_2_vpss_venc_rtsp pthread rockit_full dl stdc++ rockchip_mpp rkaiq rga test_lib rtsp)
 
-add_executable(no_bind src/no_bind_process.c  
+add_executable(no_bind src/no_bind_process.cc  
+                            src/rknn_detect.cc 
+                            src/postprocess.cc 
+                            src/utils.cc
                             src/samples/sample_comm_vpss.c
                             src/samples/sample_comm_isp.c 
                             src/samples/sample_comm_vi.c 
@@ -75,5 +78,5 @@ add_executable(no_bind src/no_bind_process.c
                             src/samples/fillimage.c
                             src/samples/loadbmp.c
                             src/samples/sample_comm.c)
-target_link_libraries(no_bind pthread rockit_full dl stdc++ rockchip_mpp rkaiq rga test_lib rtsp)
+target_link_libraries(no_bind pthread rockit_full dl stdc++ rockchip_mpp rkaiq rga test_lib rtsp rknnmrt)
 

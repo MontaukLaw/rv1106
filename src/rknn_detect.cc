@@ -7,15 +7,19 @@
 #include <vector>
 #include <stdlib.h>
 
+#include "comm.h"
+
 #define IMAGE_INPUT_WIDTH 640
 #define IMAGE_INPUT_HEIGHT 640
+#define IO_IN_NUMBER 1
+#define IO_OUT_NUMBER 3
 
 ////////////// static funcs //////////////
-static void dump_tensor_attr(rknn_tensor_attr *attr);
+// static void dump_tensor_attr(rknn_tensor_attr *attr);
 static rknn_context ctx = 0;
 static rknn_input_output_num io_num;
-static rknn_tensor_attr input_attrs[1];
-static rknn_tensor_attr output_attrs[3];
+static rknn_tensor_attr input_attrs[IO_IN_NUMBER];
+static rknn_tensor_attr output_attrs[IO_OUT_NUMBER];
 // static inline int64_t getCurrentTimeUs();
 
 /////////////// static ver //////////////
@@ -53,8 +57,8 @@ int init_model(char *model_path)
 
     printf("input tensors:\n");
 
-    memset(input_attrs, 0, io_num.n_input * sizeof(rknn_tensor_attr));
-    for (uint32_t i = 0; i < io_num.n_input; i++)
+    memset(input_attrs, 0, IO_IN_NUMBER * sizeof(rknn_tensor_attr));
+    for (uint32_t i = 0; i < IO_IN_NUMBER; i++)
     {
         input_attrs[i].index = i;
         // query info
@@ -64,13 +68,13 @@ int init_model(char *model_path)
             printf("rknn_init error! ret=%d\n", ret);
             return -1;
         }
-        dump_tensor_attr(&input_attrs[i]);
+        // dump_tensor_attr(&input_attrs[i]);
     }
 
     printf("output tensors:\n");
 
-    memset(output_attrs, 0, io_num.n_output * sizeof(rknn_tensor_attr));
-    for (uint32_t i = 0; i < io_num.n_output; i++)
+    memset(output_attrs, 0, IO_OUT_NUMBER * sizeof(rknn_tensor_attr));
+    for (uint32_t i = 0; i < IO_OUT_NUMBER; i++)
     {
         output_attrs[i].index = i;
         // query info
@@ -80,18 +84,8 @@ int init_model(char *model_path)
             printf("rknn_query fail! ret=%d\n", ret);
             return -1;
         }
-        dump_tensor_attr(&output_attrs[i]);
+        // dump_tensor_attr(&output_attrs[i]);
     }
-
-    // Get custom string
-    rknn_custom_string custom_string;
-    ret = rknn_query(ctx, RKNN_QUERY_CUSTOM_STRING, &custom_string, sizeof(custom_string));
-    if (ret != RKNN_SUCC)
-    {
-        printf("rknn_query fail! ret=%d\n", ret);
-        return -1;
-    }
-    printf("custom string: %s\n", custom_string.string);
 
     return 0;
 }
@@ -126,7 +120,7 @@ int NC1HWC2_int8_to_NCHW_int8(const int8_t *src, int8_t *dst, int *dims, int cha
     return 0;
 }
 
-int detect(unsigned char *input_data)
+int rknn_detect(unsigned char *input_data, detect_result_group_t *detect_result_group)
 {
 
     int ret = 0;
@@ -151,7 +145,7 @@ int detect(unsigned char *input_data)
     printf("input width: %d, stride: %d\n", width, stride);
     // input_mems[0]->virt_addr = input_data;
     printf("cpdata len: %d\n", width * input_attrs[0].dims[1] * input_attrs[0].dims[3]);
-    
+
     if (width == stride)
     {
         printf("memcpy start\n");
@@ -161,15 +155,23 @@ int detect(unsigned char *input_data)
 
     printf("memcpy done\n");
     // Create output tensor memory
-    rknn_tensor_mem *output_mems[io_num.n_output];
-    for (uint32_t i = 0; i < io_num.n_output; ++i)
+    rknn_tensor_mem *output_mems[IO_OUT_NUMBER];
+    for (uint32_t i = 0; i < IO_OUT_NUMBER; ++i)
     {
         output_mems[i] = rknn_create_mem(ctx, output_attrs[i].size_with_stride);
     }
     printf("rknn_create_mem done\n");
 
+    // Set input tensor memory
+    ret = rknn_set_io_mem(ctx, input_mems[0], &input_attrs[0]);
+    if (ret < 0)
+    {
+        printf("rknn_set_io_mem fail! ret=%d\n", ret);
+        return -1;
+    }
+
     // Set output tensor memory
-    for (uint32_t i = 0; i < io_num.n_output; ++i)
+    for (uint32_t i = 0; i < IO_OUT_NUMBER; ++i)
     {
         // set output memory and attribute
         ret = rknn_set_io_mem(ctx, output_mems[i], &output_attrs[i]);
@@ -192,7 +194,7 @@ int detect(unsigned char *input_data)
     }
     printf("Elapse Time = %.2fms, FPS = %.2f\n", elapse_us / 1000.f, 1000.f * 1000.f / elapse_us);
 
-    printf("output origin tensors:\n");
+    // printf("output origin tensors:\n");
     rknn_tensor_attr orig_output_attrs[io_num.n_output];
     memset(orig_output_attrs, 0, io_num.n_output * sizeof(rknn_tensor_attr));
     for (uint32_t i = 0; i < io_num.n_output; i++)
@@ -205,24 +207,25 @@ int detect(unsigned char *input_data)
             printf("rknn_query fail! ret=%d\n", ret);
             return -1;
         }
-        dump_tensor_attr(&orig_output_attrs[i]);
+        // dump_tensor_attr(&orig_output_attrs[i]);
     }
 
-    int8_t *output_mems_nchw[io_num.n_output];
-    for (uint32_t i = 0; i < io_num.n_output; ++i)
+    int8_t *output_mems_nchw[IO_OUT_NUMBER];
+    for (uint32_t i = 0; i < IO_OUT_NUMBER; ++i)
     {
         int size = orig_output_attrs[i].size_with_stride;
         output_mems_nchw[i] = (int8_t *)malloc(size);
     }
 
-    for (uint32_t i = 0; i < io_num.n_output; i++)
+    for (uint32_t i = 0; i < IO_OUT_NUMBER; i++)
     {
         int channel = orig_output_attrs[i].dims[1];
         int h = orig_output_attrs[i].n_dims > 2 ? orig_output_attrs[i].dims[2] : 1;
         int w = orig_output_attrs[i].n_dims > 3 ? orig_output_attrs[i].dims[3] : 1;
         int hw = h * w;
-        NC1HWC2_int8_to_NCHW_int8((int8_t *)output_mems[i]->virt_addr, (int8_t *)output_mems_nchw[i], (int *)output_attrs[i].dims,
-                                  channel, h, w);
+        NC1HWC2_int8_to_NCHW_int8((int8_t *)output_mems[i]->virt_addr,
+                                  (int8_t *)output_mems_nchw[i],
+                                  (int *)output_attrs[i].dims, channel, h, w);
     }
 
     int model_width = 0;
@@ -245,7 +248,8 @@ int detect(unsigned char *input_data)
     float scale_w = (float)model_width / IMAGE_INPUT_WIDTH;
     float scale_h = (float)model_height / IMAGE_INPUT_HEIGHT;
 
-    detect_result_group_t detect_result_group;
+    // detect_result_group_t detect_result_group;
+
     std::vector<float> out_scales;
     std::vector<int32_t> out_zps;
     for (int i = 0; i < io_num.n_output; ++i)
@@ -255,15 +259,18 @@ int detect(unsigned char *input_data)
     }
 
     printf("start pp\n");
-    post_process((int8_t *)output_mems_nchw[0], (int8_t *)output_mems_nchw[1], (int8_t *)output_mems_nchw[2], 640, 640,
-                 box_conf_threshold, nms_threshold, scale_w, scale_h, out_zps, out_scales, &detect_result_group);
+
+    // detect_result_group_t detect_result_group;
+
+    post_process(output_mems_nchw[0], output_mems_nchw[1], output_mems_nchw[2], 640, 640,
+                 box_conf_threshold, nms_threshold, scale_w, scale_h, out_zps, out_scales, detect_result_group);
 
     printf("pp end\n");
 
     char text[256];
-    for (int i = 0; i < detect_result_group.count; i++)
+    for (int i = 0; i < detect_result_group->count; i++)
     {
-        detect_result_t *det_result = &(detect_result_group.results[i]);
+        detect_result_t *det_result = &(detect_result_group->results[i]);
         sprintf(text, "%s %.1f%%", det_result->name, det_result->prop * 100);
         printf("%s @ (%d %d %d %d) %f\n",
                det_result->name,
@@ -273,7 +280,7 @@ int detect(unsigned char *input_data)
 
     // Destroy rknn memory
     rknn_destroy_mem(ctx, input_mems[0]);
-    for (uint32_t i = 0; i < io_num.n_output; ++i)
+    for (uint32_t i = 0; i < IO_OUT_NUMBER; ++i)
     {
         rknn_destroy_mem(ctx, output_mems[i]);
         free(output_mems_nchw[i]);
@@ -290,17 +297,92 @@ void quit_rknn(void)
 /*-------------------------------------------
                   Functions
 -------------------------------------------*/
-static void dump_tensor_attr(rknn_tensor_attr *attr)
+
+// static void dump_tensor_attr(rknn_tensor_attr *attr)
+// {
+//     char dims[128] = {0};
+//     for (int i = 0; i < attr->n_dims; ++i)
+//     {
+//         int idx = strlen(dims);
+//         sprintf(&dims[idx], "%d%s", attr->dims[i], (i == attr->n_dims - 1) ? "" : ", ");
+//     }
+//     printf("  index=%d, name=%s, n_dims=%d, dims=[%s], n_elems=%d, size=%d, fmt=%s, type=%s, qnt_type=%s, "
+//            "zp=%d, scale=%f\n",
+//            attr->index, attr->name, attr->n_dims, dims, attr->n_elems, attr->size, get_format_string(attr->fmt),
+//            get_type_string(attr->type), get_qnt_type_string(attr->qnt_type), attr->zp, attr->scale);
+// }
+
+void destory_rknn_list(rknn_list_t **s)
 {
-    char dims[128] = {0};
-    for (int i = 0; i < attr->n_dims; ++i)
+    Node *t = NULL;
+    if (*s == NULL)
+        return;
+    while ((*s)->top)
     {
-        int idx = strlen(dims);
-        sprintf(&dims[idx], "%d%s", attr->dims[i], (i == attr->n_dims - 1) ? "" : ", ");
+        t = (*s)->top;
+        (*s)->top = t->next;
+        free(t);
     }
-    printf("  index=%d, name=%s, n_dims=%d, dims=[%s], n_elems=%d, size=%d, fmt=%s, type=%s, qnt_type=%s, "
-           "zp=%d, scale=%f\n",
-           attr->index, attr->name, attr->n_dims, dims, attr->n_elems, attr->size, get_format_string(attr->fmt),
-           get_type_string(attr->type), get_qnt_type_string(attr->qnt_type), attr->zp, attr->scale);
+    free(*s);
+    *s = NULL;
 }
 
+void rknn_list_push(rknn_list_t *s, long timeval, detect_result_group_t detect_result_group)
+{
+    Node *t = NULL;
+    t = (Node *)malloc(sizeof(Node));
+    t->timeval = timeval;
+    t->detect_result_group = detect_result_group;
+    if (s->top == NULL)
+    {
+        s->top = t;
+        t->next = NULL;
+    }
+    else
+    {
+        t->next = s->top;
+        s->top = t;
+    }
+    s->size++;
+}
+
+int rknn_list_size(rknn_list_t *rknnList)
+{
+    if (rknnList == NULL)
+        return -1;
+    return rknnList->size;
+}
+
+void rknn_list_drop(rknn_list_t *rknnList)
+{
+    Node *t = NULL;
+    if (rknnList == NULL || rknnList->top == NULL)
+        return;
+    t = rknnList->top;
+    rknnList->top = t->next;
+    free(t);
+    rknnList->size--;
+}
+
+void create_rknn_list(rknn_list_t **s)
+{
+    if (*s != NULL)
+        return;
+    *s = (rknn_list_t *)malloc(sizeof(rknn_list_t));
+    (*s)->top = NULL;
+    (*s)->size = 0;
+    printf("create rknn_list success\n");
+}
+
+void rknn_list_pop(rknn_list_t *s, long *timeval, detect_result_group_t *detect_result_group)
+{
+    Node *t = NULL;
+    if (s == NULL || s->top == NULL)
+        return;
+    t = s->top;
+    *timeval = t->timeval;
+    *detect_result_group = t->detect_result_group;
+    s->top = t->next;
+    free(t);
+    s->size--;
+}

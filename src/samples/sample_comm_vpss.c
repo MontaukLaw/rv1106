@@ -92,8 +92,7 @@ extern "C"
 
 		for (chnIndex = 0; chnIndex < VPSS_MAX_CHN_NUM; chnIndex++)
 		{
-			if (ctx->stVpssChnAttr[chnIndex].u32Width &&
-				ctx->stVpssChnAttr[chnIndex].u32Height)
+			if (ctx->stVpssChnAttr[chnIndex].u32Width && ctx->stVpssChnAttr[chnIndex].u32Height)
 			{
 
 				s32Ret = RK_MPI_VPSS_SetChnCrop(ctx->s32GrpId, chnIndex,
@@ -111,8 +110,7 @@ extern "C"
 					return s32Ret;
 				}
 
-				s32Ret = RK_MPI_VPSS_SetChnRotation(
-					ctx->s32GrpId, chnIndex, (ROTATION_E)ctx->s32ChnRotation[chnIndex]);
+				s32Ret = RK_MPI_VPSS_SetChnRotation(ctx->s32GrpId, chnIndex, (ROTATION_E)ctx->s32ChnRotation[chnIndex]);
 				if (s32Ret != RK_SUCCESS)
 				{
 					RK_LOGE("RK_MPI_VPSS_SetChnRotation failed with %#x!\n", s32Ret);
@@ -130,26 +128,6 @@ extern "C"
 					s32Ret = RK_FAILURE;
 					return s32Ret;
 				}
-#if 0   
-            VPSS_ROTATION_EX_ATTR_S stRotationEx;
-            stRotationEx.stRotationEx.u32Angle = ctx->stRotationEx[chnIndex].stRotationEx.u32Angle;
-            s32Ret = RK_MPI_VPSS_SetChnRotationEx(ctx->s32GrpId, chnIndex, &stRotationEx);
-            if (s32Ret != RK_SUCCESS) {
-                RK_LOGE("RK_MPI_VPSS_SetChnRotationEx failed with %#x!\n", s32Ret);
-                return s32Ret;
-            }
-            s32Ret = RK_MPI_VPSS_GetChnRotationEx(ctx->s32GrpId, chnIndex, &stRotationEx);
-            if (s32Ret != RK_SUCCESS) {
-                RK_LOGE("RK_MPI_VPSS_GetChnRotationEx failed with %#x!\n", s32Ret);
-                return s32Ret;
-            }
-            if (ctx->stRotationEx[chnIndex].stRotationEx.u32Angle != 
-                    stRotationEx.stRotationEx.u32Angle) {
-                s32Ret = RK_FAILURE;
-                RK_LOGE("Set Angle failed with %#x!\n", s32Ret);
-                return s32Ret;
-            }
-#endif
 				s32Ret = RK_MPI_VPSS_SetChnAttr(ctx->s32GrpId, chnIndex,
 												&ctx->stVpssChnAttr[chnIndex]);
 				if (s32Ret != RK_SUCCESS)

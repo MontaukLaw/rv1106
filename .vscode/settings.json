@@ -8,6 +8,10 @@
         "signal.h": "c",
         "rknn_api.h": "c",
         "time.h": "c",
-        "unistd.h": "c"
+        "unistd.h": "c",
+        "array": "cpp",
+        "string_view": "cpp",
+        "initializer_list": "cpp",
+        "utility": "cpp"
     }
 }
