@@ -3,7 +3,7 @@
 
 #include "postprocess.h"
 
-void init_model(char *model_path);
+int init_model(char *model_path);
 
 int rknn_detect(unsigned char *input_data, detect_result_group_t *detect_result_group);
 

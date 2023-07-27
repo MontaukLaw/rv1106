@@ -16,6 +16,8 @@
 #include "sample_comm.h"
 #include "rknn_detect.h"
 #include "utils.h"
+#include "tde.h"
+#include "comm.h"
 
 #define VI_CHN_0 0
 #define VENC_CHN_0 0
@@ -25,9 +27,6 @@
 #define SEND_FRAME_TIMEOUT 2000
 #define GET_FRAME_TIMEOUT 2000
 #define MODLE_WIDTH 640
-
-#define RTSP_INPUT_VI_WIDTH 1920
-#define RTSP_INPUT_VI_HEIGHT 1080
 
 #define X_START ((RTSP_INPUT_VI_WIDTH - MODLE_WIDTH) / 2)
 #define Y_START ((RTSP_INPUT_VI_HEIGHT - MODLE_WIDTH) / 2)
@@ -120,10 +119,10 @@ void count_box_info(char *data)
             // int y = detect_result_group.results[j].box.top + Y_START;
             // int w = (detect_result_group.results[j].box.right - detect_result_group.results[j].box.left);
             // int h = (detect_result_group.results[j].box.bottom - detect_result_group.results[j].box.top);
-            int x = detect_result_group.results[j].box.left * RTSP_INPUT_VI_WIDTH / MODLE_WIDTH;
-            int y = detect_result_group.results[j].box.top * RTSP_INPUT_VI_HEIGHT / MODLE_WIDTH;
-            int w = (detect_result_group.results[j].box.right * RTSP_INPUT_VI_WIDTH / MODLE_WIDTH) - x;
-            int h = (detect_result_group.results[j].box.bottom * RTSP_INPUT_VI_HEIGHT / MODLE_WIDTH) - y;
+            int x = detect_result_group.results[j].box.left * RTSP_INPUT_VI_WIDTH / RKNN_VI_WIDTH;
+            int y = detect_result_group.results[j].box.top * RTSP_INPUT_VI_HEIGHT / RKNN_VI_HEIGHT;
+            int w = detect_result_group.results[j].box.right * RTSP_INPUT_VI_WIDTH / RKNN_VI_WIDTH - x;
+            int h = detect_result_group.results[j].box.bottom * RTSP_INPUT_VI_HEIGHT / RKNN_VI_HEIGHT - y;
             while ((uint32_t)(x + w) >= RTSP_INPUT_VI_WIDTH)
             {
                 w -= 16;
@@ -225,25 +224,32 @@ static RK_VOID *venc_get_stream(RK_VOID *pArgs)
     return RK_NULL;
 }
 
-static void *vpss_get_starem(void *arg)
+// 从vpss获取数据帧的线程
+static void *get_vpss_starem(void *arg)
 {
     RK_S32 s32Ret = RK_SUCCESS;
-    VIDEO_FRAME_INFO_S pstVideoFrame;
-    memset(&pstVideoFrame, 0, sizeof(VIDEO_FRAME_INFO_S));
-    void *pData = RK_NULL;
+    VIDEO_FRAME_INFO_S pstVideoFrameVpss;
+    memset(&pstVideoFrameVpss, 0, sizeof(VIDEO_FRAME_INFO_S));
+    RK_VOID *pData = RK_NULL;
     RK_U32 counter = 0;
+
+    MB_BLK dstBlk = RK_NULL;
 
     while (!quit)
     {
-        s32Ret = RK_MPI_VPSS_GetChnFrame(VPSS_GRP_0, VPSS_CHN_0, &pstVideoFrame, 200);
+        // 不断从vpss group0, chn0拿数据帧
+        s32Ret = RK_MPI_VPSS_GetChnFrame(VPSS_GRP_0, VPSS_CHN_0, &pstVideoFrameVpss, 200);
         if (s32Ret != RK_SUCCESS)
         {
             usleep(1000);
             continue;
         }
 
-        RK_MPI_SYS_MmzFlushCache(pstVideoFrame.stVFrame.pMbBlk, RK_TRUE);
-        pData = RK_MPI_MB_Handle2VirAddr(pstVideoFrame.stVFrame.pMbBlk);
+        // 获取数据的物理内存地址
+        // RK_MPI_SYS_MmzFlushCache(pstVideoFrame.stVFrame.pMbBlk, RK_TRUE);
+        // pData = RK_MPI_MB_Handle2VirAddr(pstVideoFrame.stVFrame.pMbBlk);
+
+        // so far, 图像是640x360的, 需要转成640x640并上下填充灰色
 
         if (counter % 10 == 0)
         {
@@ -253,9 +259,14 @@ static void *vpss_get_starem(void *arg)
         memset(&detect_result_group, 0, sizeof(detect_result_group_t));
         int64_t start_us = getCurrentTimeUs();
         int64_t elapse_us = 0;
-        rknn_detect((unsigned char *)pData, &detect_result_group);
+
+        trans_640x360_to_640x640(pstVideoFrameVpss, &dstBlk);
+
+        // 进行推理
+        rknn_detect((unsigned char *)(RK_MPI_MB_Handle2VirAddr(dstBlk)), &detect_result_group);
+
         elapse_us = getCurrentTimeUs() - start_us;
-        printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>detect spend = %.2fms, FPS = %.2f\n", elapse_us / 1000.f, 1000.f * 1000.f / elapse_us);
+        // printf("detect spend = %.2fms, FPS = %.2f\n", elapse_us / 1000.f, 1000.f * 1000.f / elapse_us);
 
         // put detect result to list
         if (detect_result_group.count > 0)
@@ -269,20 +280,25 @@ static void *vpss_get_starem(void *arg)
             }
             printf("size is %d\n", size);
         }
-        // if (counter == 10)
-        // {
-        //     printf("creating data\n");
-        //     // 写成一个文件
-        //     FILE *fp = fopen("/userdata/640.rgb", "wb");
-        //     if (fp)
-        //     {
-        //         fwrite(pData, 1, MODLE_WIDTH * MODLE_WIDTH * 3, fp);
-        //         fclose(fp);
-        //     }
-        // }
+        if (counter == 10)
+        {
+            printf("creating data\n");
+            // 写成一个文件
+            FILE *fp = fopen("/userdata/640x640.rgb", "wb");
+            if (fp)
+            {
+                fwrite(RK_MPI_MB_Handle2VirAddr(dstBlk), 1, MODLE_WIDTH * MODLE_WIDTH * 3, fp);
+                fclose(fp);
+            }
+        }
+
+        if (dstBlk)
+        {
+            RK_MPI_SYS_Free(dstBlk);
+        }
 
         counter++;
-        s32Ret = RK_MPI_VPSS_ReleaseChnFrame(VPSS_GRP_0, VPSS_CHN_0, &(pstVideoFrame));
+        s32Ret = RK_MPI_VPSS_ReleaseChnFrame(VPSS_GRP_0, VPSS_CHN_0, &(pstVideoFrameVpss));
         if (s32Ret != RK_SUCCESS)
         {
             printf("%d RK_MPI_VPSS_ReleaseChnFrame failed with 0x%x", s32Ret);
@@ -291,6 +307,7 @@ static void *vpss_get_starem(void *arg)
     }
 }
 
+// 创建vpss chn 0, 并与vi绑定
 int create_vi_vpss(void)
 {
     // RK_S32 chnIndex = VPSS_CHN_0;
@@ -324,8 +341,8 @@ int create_vi_vpss(void)
     vpssCtx.stVpssChnAttr[0].enPixelFormat = RK_FMT_RGB888;
     vpssCtx.stVpssChnAttr[0].stFrameRate.s32SrcFrameRate = -1;
     vpssCtx.stVpssChnAttr[0].stFrameRate.s32DstFrameRate = -1;
-    vpssCtx.stVpssChnAttr[0].u32Width = 640;
-    vpssCtx.stVpssChnAttr[0].u32Height = 640;
+    vpssCtx.stVpssChnAttr[0].u32Width = RKNN_VI_WIDTH;
+    vpssCtx.stVpssChnAttr[0].u32Height = RKNN_VI_HEIGHT;
 
     // 设置vpss处理方式
     s32Ret = RK_MPI_VPSS_SetVProcDev(VPSS_GRP_0, VIDEO_PROC_DEV_RGA);
@@ -395,6 +412,13 @@ int create_vi_vpss(void)
     return s32Ret;
 }
 
+void init_isp(void)
+{
+    SAMPLE_COMM_ISP_Init(0, RK_AIQ_WORKING_MODE_NORMAL, RK_FALSE, "/etc/iqfiles/");
+    SAMPLE_COMM_ISP_Run(0);
+}
+
+// 解绑vi和vpss
 void unbind_vi_vpss(void)
 {
     RK_S32 s32Ret = RK_SUCCESS;
@@ -416,6 +440,100 @@ void unbind_vi_vpss(void)
     }
 }
 
+// 初始化rtsp
+void init_rtsp(void)
+{
+    g_rtsplive = create_rtsp_demo(554);
+    g_rtsp_session = rtsp_new_session(g_rtsplive, "/live/0");
+    rtsp_set_video(g_rtsp_session, RTSP_CODEC_ID_VIDEO_H264, NULL, 0);
+    rtsp_sync_video_ts(g_rtsp_session, rtsp_get_reltime(), rtsp_get_ntptime());
+}
+
+// vi chn0 用于rtsp推流
+int init_vi_chn0(SAMPLE_VI_CTX_S *viCtx)
+{
+    int s32Ret = RK_SUCCESS;
+    viCtx[0].u32Width = RTSP_INPUT_VI_WIDTH;
+    viCtx[0].u32Height = RTSP_INPUT_VI_HEIGHT;
+    viCtx[0].s32DevId = 0;
+    viCtx[0].u32PipeId = viCtx[0].s32DevId;
+    viCtx[0].s32ChnId = VI_CHN_0;
+    viCtx[0].stChnAttr.stIspOpt.u32BufCount = 3;
+    viCtx[0].stChnAttr.stIspOpt.enMemoryType = VI_V4L2_MEMORY_TYPE_DMABUF;
+    viCtx[0].stChnAttr.u32Depth = 1;
+    viCtx[0].stChnAttr.enPixelFormat = RK_FMT_YUV420SP;
+    viCtx[0].stChnAttr.stFrameRate.s32SrcFrameRate = -1;
+    viCtx[0].stChnAttr.stFrameRate.s32DstFrameRate = -1;
+    s32Ret = SAMPLE_COMM_VI_CreateChn(&viCtx[0]);
+    return s32Ret;
+}
+
+// vi chn1 用于给rknn推理的数据
+int init_vi_chn1(SAMPLE_VI_CTX_S *viCtx)
+{
+    int s32Ret = RK_SUCCESS;
+    viCtx[1].u32Width = RKNN_VI_WIDTH;
+    viCtx[1].u32Height = RKNN_VI_HEIGHT;
+    viCtx[1].s32DevId = 0;
+    viCtx[1].u32PipeId = viCtx[0].s32DevId;
+    viCtx[1].s32ChnId = VI_CHN_1;
+    viCtx[1].stChnAttr.stIspOpt.u32BufCount = 3;
+    viCtx[1].stChnAttr.stIspOpt.enMemoryType = VI_V4L2_MEMORY_TYPE_DMABUF;
+    viCtx[1].stChnAttr.u32Depth = 1;
+    viCtx[1].stChnAttr.enPixelFormat = RK_FMT_YUV420SP;
+    viCtx[1].stChnAttr.stFrameRate.s32SrcFrameRate = -1;
+    viCtx[1].stChnAttr.stFrameRate.s32DstFrameRate = -1;
+    s32Ret = SAMPLE_COMM_VI_CreateChn(&viCtx[1]);
+    return s32Ret;
+}
+
+static int init_vi(SAMPLE_VI_CTX_S *viCtx)
+{
+    int s32Ret = RK_SUCCESS;
+    s32Ret = init_vi_chn0(viCtx);
+    if (s32Ret != RK_SUCCESS)
+    {
+        printf("SAMPLE_COMM_VI_CreateChn 0:$#X ", s32Ret);
+        return s32Ret;
+    }
+
+    s32Ret = init_vi_chn1(viCtx);
+    if (s32Ret != RK_SUCCESS)
+    {
+        printf("SAMPLE_COMM_VI_CreateChn 1:$#X ", s32Ret);
+        return s32Ret;
+    }
+    return s32Ret;
+}
+
+int init_venc(SAMPLE_VENC_CTX_S *vencCtx)
+{
+    int s32Ret = RK_SUCCESS;
+
+    vencCtx->s32ChnId = VENC_CHN_0;
+    vencCtx->u32Width = RTSP_INPUT_VI_WIDTH;
+    vencCtx->u32Height = RTSP_INPUT_VI_HEIGHT;
+    vencCtx->u32Gop = 50;
+    vencCtx->u32BitRate = 4 * 1024;
+
+    vencCtx->enCodecType = RK_CODEC_TYPE_H264;
+    vencCtx->enRcMode = VENC_RC_MODE_H264CBR;
+    vencCtx->enable_buf_share = 1;
+    vencCtx->getStreamCbFunc = venc_get_stream;
+    vencCtx->dstFilePath = "/data/";
+    /*
+    H264  66：Baseline  77：Main Profile 100：High Profile
+    H265  0：Main Profile  1：Main 10 Profile
+    MJPEG 0：Baseline
+    */
+    vencCtx->stChnAttr.stVencAttr.u32Profile = 100;
+    /* VENC_GOPMODE_SMARTP */
+    vencCtx->stChnAttr.stGopAttr.enGopMode = VENC_GOPMODE_NORMALP;
+    s32Ret = SAMPLE_COMM_VENC_CreateChn(vencCtx);
+
+    return s32Ret;
+}
+
 int main(int argc, char *argv[])
 {
     int s32Ret = RK_SUCCESS;
@@ -427,6 +545,15 @@ int main(int argc, char *argv[])
 
     int venc_width = video_width;
     int venc_height = video_height;
+    char *model_path = NULL;
+    // 要求输入模型名称
+    if (argc < 2)
+    {
+        printf("Usage: %s model_path\n", argv[0]);
+        return -1;
+    }
+    printf("model path :%s\n", argv[1]);
+    model_path = argv[1];
 
     // int disp_width = 1920;
     // int disp_height = 1080;
@@ -435,69 +562,39 @@ int main(int argc, char *argv[])
     memset(&vencCtx, 0, sizeof(SAMPLE_VENC_CTX_S));
 
     signal(SIGINT, sigterm_handler);
-    RK_BOOL bMultictx = RK_FALSE;
-    SAMPLE_COMM_ISP_Init(0, RK_AIQ_WORKING_MODE_NORMAL, RK_FALSE, "/etc/iqfiles/");
-    SAMPLE_COMM_ISP_Run(0);
+
+    // 初始化isp
+    init_isp();
 
     // 创建rknn推理结果的列表
     create_rknn_list(&rknn_list_);
 
-    // init rtsp
-    g_rtsplive = create_rtsp_demo(554);
-    g_rtsp_session = rtsp_new_session(g_rtsplive, "/live/0");
-    rtsp_set_video(g_rtsp_session, RTSP_CODEC_ID_VIDEO_H264, NULL, 0);
-    rtsp_sync_video_ts(g_rtsp_session, rtsp_get_reltime(), rtsp_get_ntptime());
+    // 初始化 rtsp
+    init_rtsp();
 
+    // 初始化mpi
     if (RK_MPI_SYS_Init() != RK_SUCCESS)
     {
         goto __FAILED;
     }
 
-    if (argc < 2)
-    {
-        printf("Usage: %s model_path\n", argv[0]);
-        return -1;
-    }
-
-    printf("model path :%s\n", argv[1]);
-    init_model(argv[1]);
-
-    viCtx[0].u32Width = video_width;
-    viCtx[0].u32Height = video_height;
-    viCtx[0].s32DevId = 0;
-    viCtx[0].u32PipeId = viCtx[0].s32DevId;
-    viCtx[0].s32ChnId = VI_CHN_0;
-    viCtx[0].stChnAttr.stIspOpt.u32BufCount = 3;
-    viCtx[0].stChnAttr.stIspOpt.enMemoryType = VI_V4L2_MEMORY_TYPE_DMABUF;
-    viCtx[0].stChnAttr.u32Depth = 1;
-    viCtx[0].stChnAttr.enPixelFormat = RK_FMT_YUV420SP;
-    viCtx[0].stChnAttr.stFrameRate.s32SrcFrameRate = -1;
-    viCtx[0].stChnAttr.stFrameRate.s32DstFrameRate = -1;
-    s32Ret = SAMPLE_COMM_VI_CreateChn(&viCtx[0]);
+    // 加载并初始化模型
+    s32Ret = init_model(model_path);
     if (s32Ret != RK_SUCCESS)
     {
-        printf("SAMPLE_COMM_VI_CreateChn:$#X ", s32Ret);
+        printf("init model failed\n");
+        goto __FAILED;
+    }
+
+    // 初始两个vi通道
+    s32Ret = init_vi(viCtx);
+    if (s32Ret != RK_SUCCESS)
+    {
+        printf("SAMPLE_COMM_VI_CreateChn $#X ", s32Ret);
         goto __FINISHED;
     }
 
-    viCtx[1].u32Width = video_width;
-    viCtx[1].u32Height = video_height;
-    viCtx[1].s32DevId = 0;
-    viCtx[1].u32PipeId = viCtx[0].s32DevId;
-    viCtx[1].s32ChnId = VI_CHN_1;
-    viCtx[1].stChnAttr.stIspOpt.u32BufCount = 3;
-    viCtx[1].stChnAttr.stIspOpt.enMemoryType = VI_V4L2_MEMORY_TYPE_DMABUF;
-    viCtx[1].stChnAttr.u32Depth = 1;
-    viCtx[1].stChnAttr.enPixelFormat = RK_FMT_YUV420SP;
-    viCtx[1].stChnAttr.stFrameRate.s32SrcFrameRate = -1;
-    viCtx[1].stChnAttr.stFrameRate.s32DstFrameRate = -1;
-    s32Ret = SAMPLE_COMM_VI_CreateChn(&viCtx[1]);
-    if (s32Ret != RK_SUCCESS)
-    {
-        printf("SAMPLE_COMM_VI_CreateChn:$#X ", s32Ret);
-        goto __FINISHED;
-    }
-
+    // 启动vi pip0
     s32Ret = RK_MPI_VI_StartPipe(0);
     if (s32Ret != RK_SUCCESS)
     {
@@ -505,29 +602,10 @@ int main(int argc, char *argv[])
         goto __FINISHED;
     }
 
-    /* init venc */
-    vencCtx.s32ChnId = VENC_CHN_0;
-    vencCtx.u32Width = video_width;
-    vencCtx.u32Height = video_height;
-    vencCtx.u32Gop = 50;
-    vencCtx.u32BitRate = 4 * 1024;
+    // 初始化venc
+    init_venc(&vencCtx);
 
-    vencCtx.enCodecType = RK_CODEC_TYPE_H264;
-    vencCtx.enRcMode = VENC_RC_MODE_H264CBR;
-    vencCtx.enable_buf_share = 1;
-    vencCtx.getStreamCbFunc = venc_get_stream;
-    vencCtx.dstFilePath = "/data/";
-    /*
-    H264  66：Baseline  77：Main Profile 100：High Profile
-    H265  0：Main Profile  1：Main 10 Profile
-    MJPEG 0：Baseline
-    */
-    vencCtx.stChnAttr.stVencAttr.u32Profile = 100;
-    /* VENC_GOPMODE_SMARTP */
-    vencCtx.stChnAttr.stGopAttr.enGopMode = VENC_GOPMODE_NORMALP;
-    s32Ret = SAMPLE_COMM_VENC_CreateChn(&vencCtx);
-
-    // vi 取流的线程
+    // vi ch0 取流的线程
     pthread_t get_vi_stream_thread;
     pthread_create(&get_vi_stream_thread, NULL, get_vi_stream, NULL);
 
@@ -540,13 +618,14 @@ int main(int argc, char *argv[])
 
     // vpss 取流线程
     pthread_t vpss_get_starem_thread;
-    pthread_create(&vpss_get_starem_thread, NULL, vpss_get_starem, NULL);
+    pthread_create(&vpss_get_starem_thread, NULL, get_vpss_starem, NULL);
 
     getchar();
 
 __FINISHED:
     quit = true;
 
+    // 关闭线程
     pthread_join(vpss_get_starem_thread, RK_NULL);
 
     pthread_join(get_vi_stream_thread, RK_NULL);
@@ -556,13 +635,17 @@ __FINISHED:
     // 解绑
     unbind_vi_vpss();
 
+    // 销毁
     SAMPLE_COMM_VENC_DestroyChn(&vencCtx);
     SAMPLE_COMM_VI_DestroyChn(&viCtx[0]);
 
+    // 结束rtsp, 避免tcp端口占用
     rtsp_del_demo(g_rtsplive);
 __FAILED:
 
+    // 退出mpi
     RK_MPI_SYS_Exit();
+    // 停止isp
     SAMPLE_COMM_ISP_Stop(0);
 
     destory_rknn_list(&rknn_list_);

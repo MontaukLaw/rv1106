@@ -407,7 +407,7 @@ static void fill_MPP_FMT_BGRA5551(RK_U8 *p, RK_U32 R, RK_U32 G, RK_U32 B, RK_U32
 
 typedef void (*FillRgbFunc)(RK_U8 *p, RK_U32 R, RK_U32 G, RK_U32 B, RK_U32 be);
 
-FillRgbFunc fill_rgb_funcs[] = {fill_MPP_FMT_RGB565,
+FillRgbFunc fill_rgb_funcs_e[] = {fill_MPP_FMT_RGB565,
                                 fill_MPP_FMT_BGR565,
                                 fill_MPP_FMT_RGB555,
                                 fill_MPP_FMT_BGR555,
@@ -656,7 +656,7 @@ RK_S32 SAMPLE_COMM_FillImage(RK_U8 *buf, RK_U32 width, RK_U32 height, RK_U32 hor
 	case RK_FMT_BGRA4444: {
 		RK_U8 *p = buf_y;
 		RK_U32 pix_w = 2;
-		FillRgbFunc fill = fill_rgb_funcs[fmt - RK_VIDEO_FMT_RGB];
+		FillRgbFunc fill = fill_rgb_funcs_e[fmt - RK_VIDEO_FMT_RGB];
 
 		if (util_check_stride_by_pixel(is_pixel_stride, width, hor_stride, pix_w)) {
 			hor_stride *= pix_w;
@@ -685,7 +685,7 @@ RK_S32 SAMPLE_COMM_FillImage(RK_U8 *buf, RK_U32 width, RK_U32 height, RK_U32 hor
 	case RK_FMT_RGBA8888: {
 		RK_U8 *p = buf_y;
 		RK_U32 pix_w = 4;
-		FillRgbFunc fill = fill_rgb_funcs[fmt - RK_VIDEO_FMT_RGB];
+		FillRgbFunc fill = fill_rgb_funcs_e[fmt - RK_VIDEO_FMT_RGB];
 
 		if (util_check_stride_by_pixel(is_pixel_stride, width, hor_stride, pix_w)) {
 			hor_stride *= pix_w;
@@ -710,7 +710,7 @@ RK_S32 SAMPLE_COMM_FillImage(RK_U8 *buf, RK_U32 width, RK_U32 height, RK_U32 hor
 	case RK_FMT_RGB888: {
 		RK_U8 *p = buf_y;
 		RK_U32 pix_w = 3;
-		FillRgbFunc fill = fill_rgb_funcs[fmt - RK_VIDEO_FMT_RGB];
+		FillRgbFunc fill = fill_rgb_funcs_e[fmt - RK_VIDEO_FMT_RGB];
 
 		if (util_check_stride_by_pixel(is_pixel_stride, width, hor_stride, pix_w)) {
 			hor_stride *= pix_w;

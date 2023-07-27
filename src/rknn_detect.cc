@@ -142,25 +142,25 @@ int rknn_detect(unsigned char *input_data, detect_result_group_t *detect_result_
     int width = input_attrs[0].dims[2];
     int stride = input_attrs[0].w_stride;
 
-    printf("input width: %d, stride: %d\n", width, stride);
+    // printf("input width: %d, stride: %d\n", width, stride);
     // input_mems[0]->virt_addr = input_data;
-    printf("cpdata len: %d\n", width * input_attrs[0].dims[1] * input_attrs[0].dims[3]);
+    // printf("cpdata len: %d\n", width * input_attrs[0].dims[1] * input_attrs[0].dims[3]);
 
     if (width == stride)
     {
-        printf("memcpy start\n");
+        // printf("memcpy start\n");
         memcpy(input_mems[0]->virt_addr, input_data, width * input_attrs[0].dims[1] * input_attrs[0].dims[3]);
-        printf("memcpy end\n");
+        // printf("memcpy end\n");
     }
 
-    printf("memcpy done\n");
+    // printf("memcpy done\n");
     // Create output tensor memory
     rknn_tensor_mem *output_mems[IO_OUT_NUMBER];
     for (uint32_t i = 0; i < IO_OUT_NUMBER; ++i)
     {
         output_mems[i] = rknn_create_mem(ctx, output_attrs[i].size_with_stride);
     }
-    printf("rknn_create_mem done\n");
+    // printf("rknn_create_mem done\n");
 
     // Set input tensor memory
     ret = rknn_set_io_mem(ctx, input_mems[0], &input_attrs[0]);
@@ -183,7 +183,7 @@ int rknn_detect(unsigned char *input_data, detect_result_group_t *detect_result_
     }
 
     // Run
-    printf("Begin perf ...\n");
+    // printf("Begin perf ...\n");
     int64_t start_us = getCurrentTimeUs();
     ret = rknn_run(ctx, NULL);
     int64_t elapse_us = getCurrentTimeUs() - start_us;
@@ -242,7 +242,7 @@ int rknn_detect(unsigned char *input_data, detect_result_group_t *detect_result_
         model_width = input_attrs[0].dims[1];
         model_height = input_attrs[0].dims[2];
     }
-    printf("model_width: %d, model_height: %d\n", model_width, model_height);
+    // printf("model_width: %d, model_height: %d\n", model_width, model_height);
 
     // post process
     float scale_w = (float)model_width / IMAGE_INPUT_WIDTH;
@@ -258,14 +258,14 @@ int rknn_detect(unsigned char *input_data, detect_result_group_t *detect_result_
         out_zps.push_back(output_attrs[i].zp);
     }
 
-    printf("start pp\n");
+    // printf("start pp\n");
 
     // detect_result_group_t detect_result_group;
 
     post_process(output_mems_nchw[0], output_mems_nchw[1], output_mems_nchw[2], 640, 640,
                  box_conf_threshold, nms_threshold, scale_w, scale_h, out_zps, out_scales, detect_result_group);
 
-    printf("pp end\n");
+    // printf("pp end\n");
 
     char text[256];
     for (int i = 0; i < detect_result_group->count; i++)
