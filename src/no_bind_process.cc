@@ -42,7 +42,7 @@ typedef struct _rkMpiCtx
 
 static rknn_list_t *rknn_list_;
 
-static bool quit = false;
+bool quit = false;
 
 rtsp_demo_handle g_rtsplive = NULL;
 static rtsp_session_handle g_rtsp_session;
@@ -63,6 +63,8 @@ typedef struct g_box_info_t
 
 box_info_t boxInfoList[10];
 int boxInfoListNumber = 0;
+// rknn推理结果的刷新
+RK_U32 rknnDetectRefreshCounter = 0;
 
 // 直接在nv12的内存上画框
 static int nv12_border(char *pic, int pic_w, int pic_h, int rect_x, int rect_y, int rect_w, int rect_h, int R, int G, int B)
@@ -100,47 +102,38 @@ static int nv12_border(char *pic, int pic_w, int pic_h, int rect_x, int rect_y, 
     return 0;
 }
 
-void count_box_info(char *data)
+// 计算推理结果的框的信息, x,y,w,h, 并画框
+void count_box_info(char *data, RK_U8 rknnObjNumber, detect_result_group_t detectResultGroup)
 {
-    if (rknn_list_size(rknn_list_))
+    RK_U8 idx;
+    long time_before;
+
+    for (int j = 0; j < detectResultGroup.count; j++)
     {
-
-        long time_before;
-        detect_result_group_t detect_result_group;
-        memset(&detect_result_group, 0, sizeof(detect_result_group));
-
-        // pick up the first one
-        rknn_list_pop(rknn_list_, &time_before, &detect_result_group);
-        // printf("result count:%d \n", detect_result_group.count);
-
-        for (int j = 0; j < detect_result_group.count; j++)
+        int x = detectResultGroup.results[j].box.left * RTSP_INPUT_VI_WIDTH / RKNN_VI_WIDTH;
+        int y = (detectResultGroup.results[j].box.top - DETECT_X_START) * RTSP_INPUT_VI_HEIGHT / RKNN_VI_HEIGHT;
+        int w = detectResultGroup.results[j].box.right * RTSP_INPUT_VI_WIDTH / RKNN_VI_WIDTH - x;
+        int h = detectResultGroup.results[j].box.bottom * RTSP_INPUT_VI_HEIGHT / RKNN_VI_HEIGHT - y;
+        while ((uint32_t)(x + w) >= RTSP_INPUT_VI_WIDTH)
         {
-            // int x = detect_result_group.results[j].box.left + X_START;
-            // int y = detect_result_group.results[j].box.top + Y_START;
-            // int w = (detect_result_group.results[j].box.right - detect_result_group.results[j].box.left);
-            // int h = (detect_result_group.results[j].box.bottom - detect_result_group.results[j].box.top);
-            int x = detect_result_group.results[j].box.left * RTSP_INPUT_VI_WIDTH / RKNN_VI_WIDTH;
-            int y = detect_result_group.results[j].box.top * RTSP_INPUT_VI_HEIGHT / RKNN_VI_HEIGHT;
-            int w = detect_result_group.results[j].box.right * RTSP_INPUT_VI_WIDTH / RKNN_VI_WIDTH - x;
-            int h = detect_result_group.results[j].box.bottom * RTSP_INPUT_VI_HEIGHT / RKNN_VI_HEIGHT - y;
-            while ((uint32_t)(x + w) >= RTSP_INPUT_VI_WIDTH)
-            {
-                w -= 16;
-            }
-            while ((uint32_t)(y + h) >= RTSP_INPUT_VI_HEIGHT)
-            {
-                h -= 16;
-            }
-            printf("border=(%d %d %d %d)\n", x, y, w, h);
-            boxInfoList[j] = {x, y, w, h};
-            boxInfoListNumber++;
-
-            nv12_border(data, RTSP_INPUT_VI_WIDTH, RTSP_INPUT_VI_HEIGHT,
-                        boxInfoList[j].x, boxInfoList[j].y, boxInfoList[j].w, boxInfoList[j].h, 0, 0, 255);
+            w -= 16;
         }
+        while ((uint32_t)(y + h) >= RTSP_INPUT_VI_HEIGHT)
+        {
+            h -= 16;
+        }
+
+        // printf("border=(%d %d %d %d)\n", x, y, w, h);
+        boxInfoList[j] = {x, y, w, h};
+        boxInfoListNumber++;
+
+        // 使用的颜色是蓝色
+        nv12_border(data, RTSP_INPUT_VI_WIDTH, RTSP_INPUT_VI_HEIGHT,
+                    boxInfoList[j].x, boxInfoList[j].y, boxInfoList[j].w, boxInfoList[j].h, 0, 0, 255);
     }
 }
 
+// 从vi直接拿到数据帧, send去编码
 static void *get_vi_stream(void *arg)
 {
     printf("#Start %s thread, arg:%p\n", __func__, arg);
@@ -148,6 +141,13 @@ static void *get_vi_stream(void *arg)
     int32_t loopCount = 0;
     VIDEO_FRAME_INFO_S stViFrame;
 
+    RK_U8 rknnListIdx = 0;
+    RK_U8 rknnObjNumber = 0;
+
+    RK_U32 lastRknnDetectRefreshCounter = 0;
+    detect_result_group_t detectResultGroup; // [MAX_RKNN_LIST_NUM];
+
+    long time_before;
     int ret = 0;
 
     while (!quit)
@@ -162,32 +162,57 @@ static void *get_vi_stream(void *arg)
             // fd为dma buf的fd
             int32_t fd = RK_MPI_MB_Handle2Fd(stViFrame.stVFrame.pMbBlk);
 
-            if (loopCount == 10)
-            {
-                printf("creating data\n");
-                // 写成一个文件
-                FILE *fp = fopen("/userdata/vi_to_npu.yuv", "wb");
-                if (fp)
-                {
-                    // fwrite(data, 1, stViFrame.stVFrame.u32Width * stViFrame.stVFrame.u32Height * 3 / 2, fp);
-                    fclose(fp);
-                }
-            }
+            // if (loopCount == 10)
+            // {
+            //     printf("creating data\n");
+            //     // 写成一个文件
+            //     FILE *fp = fopen("/userdata/vi_to_npu.yuv", "wb");
+            //     if (fp)
+            //     {
+            //         // fwrite(data, 1, stViFrame.stVFrame.u32Width * stViFrame.stVFrame.u32Height * 3 / 2, fp);
+            //         fclose(fp);
+            //     }
+            // }
 
             if (loopCount % 10 == 0)
             {
                 printf("loopCount:%d, fd:%d, data:%p\n", loopCount, fd, data);
             }
 
-            count_box_info((char *)data);
+            // 当有新的推理结果的时候
+            if (lastRknnDetectRefreshCounter != rknnDetectRefreshCounter)
+            {
 
-            /* send frame to venc */
+                // 清理列表
+                memset(&detectResultGroup, 0, sizeof(detectResultGroup));
+
+                // rknnObjNumber = rknn_list_size(rknn_list_);
+                // printf("Get new rknn detect result rknnObjNumber :%d\n", rknnObjNumber);
+
+                // 复制列表
+                rknn_list_pop(rknn_list_, &time_before, &detectResultGroup);
+
+                // for (rknnListIdx = 0; rknnListIdx < rknnObjNumber; rknnListIdx++)
+                // {
+                //     rknn_list_pop(rknn_list_, &time_before, &detectResultGroup);
+                //     // detect_result_group[rknnListIdx] = rknn_list_[rknnListIdx].detect_result_group;
+                // }
+
+                lastRknnDetectRefreshCounter = rknnDetectRefreshCounter;
+            }
+            // 这里其实就是做了一个缓存, 在两个推理结果之间, 会有多次的vi数据帧, 在没有收到新的rknn推理结果之前, 会一直使用上一次的推理结果
+
+            // 计算框的信息, 并画框
+            count_box_info((char *)data, rknnObjNumber, detectResultGroup);
+
+            // 发送到编码器
             s32Ret = RK_MPI_VENC_SendFrame(VENC_CHN_0, &stViFrame, SEND_FRAME_TIMEOUT);
             if (s32Ret != RK_SUCCESS)
             {
                 printf("RK_MPI_VENC_SendFrame timeout:%#X vi index:%d", s32Ret, VI_CHN_0);
             }
 
+            // 释放数据帧
             s32Ret = RK_MPI_VI_ReleaseChnFrame(0, VI_CHN_0, &stViFrame);
             if (s32Ret != RK_SUCCESS)
             {
@@ -199,6 +224,7 @@ static void *get_vi_stream(void *arg)
     return NULL;
 }
 
+// 编码并rtsp推流
 static RK_VOID *venc_get_stream(RK_VOID *pArgs)
 {
     SAMPLE_VENC_CTX_S *ctx = (SAMPLE_VENC_CTX_S *)pArgs;
@@ -213,6 +239,7 @@ static RK_VOID *venc_get_stream(RK_VOID *pArgs)
         s32Ret = SAMPLE_COMM_VENC_GetStream(ctx, &pData);
         if (s32Ret == RK_SUCCESS)
         {
+            // 往rtsp推视频
             rtsp_tx_video(g_rtsp_session, (uint8_t *)pData, ctx->stFrame.pstPack->u32Len, ctx->stFrame.pstPack->u64PTS);
             rtsp_do_event(g_rtsplive);
             SAMPLE_COMM_VENC_ReleaseStream(ctx);
@@ -225,13 +252,13 @@ static RK_VOID *venc_get_stream(RK_VOID *pArgs)
 }
 
 // 从vpss获取数据帧的线程
+// 这里从vpss获取的数据帧, 经过vi(长宽为640x360 NV12), 转为长宽640x360, RGB24格式
 static void *get_vpss_starem(void *arg)
 {
     RK_S32 s32Ret = RK_SUCCESS;
     VIDEO_FRAME_INFO_S pstVideoFrameVpss;
     memset(&pstVideoFrameVpss, 0, sizeof(VIDEO_FRAME_INFO_S));
     RK_VOID *pData = RK_NULL;
-    RK_U32 counter = 0;
 
     MB_BLK dstBlk = RK_NULL;
 
@@ -251,24 +278,22 @@ static void *get_vpss_starem(void *arg)
 
         // so far, 图像是640x360的, 需要转成640x640并上下填充灰色
 
-        if (counter % 10 == 0)
-        {
-            printf("VPSS running: %d\n", counter);
-        }
         detect_result_group_t detect_result_group;
         memset(&detect_result_group, 0, sizeof(detect_result_group_t));
-        int64_t start_us = getCurrentTimeUs();
-        int64_t elapse_us = 0;
+        // int64_t start_us = getCurrentTimeUs();
+        // int64_t elapse_us = 0;
 
+        // 从640x360转换成640x640
         trans_640x360_to_640x640(pstVideoFrameVpss, &dstBlk);
 
         // 进行推理
         rknn_detect((unsigned char *)(RK_MPI_MB_Handle2VirAddr(dstBlk)), &detect_result_group);
 
-        elapse_us = getCurrentTimeUs() - start_us;
+        // elapse_us = getCurrentTimeUs() - start_us;
         // printf("detect spend = %.2fms, FPS = %.2f\n", elapse_us / 1000.f, 1000.f * 1000.f / elapse_us);
 
         // put detect result to list
+        // 将推理结果放到列表中, 相当于异步的过程
         if (detect_result_group.count > 0)
         {
 
@@ -278,26 +303,30 @@ static void *get_vpss_starem(void *arg)
             {
                 rknn_list_drop(rknn_list_);
             }
-            printf("size is %d\n", size);
-        }
-        if (counter == 10)
-        {
-            printf("creating data\n");
-            // 写成一个文件
-            FILE *fp = fopen("/userdata/640x640.rgb", "wb");
-            if (fp)
-            {
-                fwrite(RK_MPI_MB_Handle2VirAddr(dstBlk), 1, MODLE_WIDTH * MODLE_WIDTH * 3, fp);
-                fclose(fp);
-            }
+            // printf("size is %d\n", size);
         }
 
+        // 写文件观察rga转图片的效果.
+        // if (rknnDetectRefreshCounter == 10)
+        // {
+        //     printf("creating data\n");
+        //     // 写成一个文件
+        //     FILE *fp = fopen("/userdata/640x640.rgb", "wb");
+        //     if (fp)
+        //     {
+        //         fwrite(RK_MPI_MB_Handle2VirAddr(dstBlk), 1, MODLE_WIDTH * MODLE_WIDTH * 3, fp);
+        //         fclose(fp);
+        //     }
+        // }
+
+        // 释放内存, 防止泄露
         if (dstBlk)
         {
             RK_MPI_SYS_Free(dstBlk);
         }
 
-        counter++;
+        // 推理完之后把计数器刷新
+        rknnDetectRefreshCounter++;
         s32Ret = RK_MPI_VPSS_ReleaseChnFrame(VPSS_GRP_0, VPSS_CHN_0, &(pstVideoFrameVpss));
         if (s32Ret != RK_SUCCESS)
         {
@@ -344,7 +373,7 @@ int create_vi_vpss(void)
     vpssCtx.stVpssChnAttr[0].u32Width = RKNN_VI_WIDTH;
     vpssCtx.stVpssChnAttr[0].u32Height = RKNN_VI_HEIGHT;
 
-    // 设置vpss处理方式
+    // 设置vpss处理方式, 1106是用RGA的, 3588用GPU
     s32Ret = RK_MPI_VPSS_SetVProcDev(VPSS_GRP_0, VIDEO_PROC_DEV_RGA);
     if (s32Ret != RK_SUCCESS)
     {
@@ -394,7 +423,7 @@ int create_vi_vpss(void)
 
     // return RK_SUCCESS;
 
-    // bind vi to vpss
+    // 把vi通道1跟vpss通道0绑定
     stViChn.enModId = RK_ID_VI;
     stViChn.s32DevId = 0;
     stViChn.s32ChnId = VI_CHN_1;
@@ -412,6 +441,7 @@ int create_vi_vpss(void)
     return s32Ret;
 }
 
+// 初始化isp
 void init_isp(void)
 {
     SAMPLE_COMM_ISP_Init(0, RK_AIQ_WORKING_MODE_NORMAL, RK_FALSE, "/etc/iqfiles/");
@@ -449,7 +479,7 @@ void init_rtsp(void)
     rtsp_sync_video_ts(g_rtsp_session, rtsp_get_reltime(), rtsp_get_ntptime());
 }
 
-// vi chn0 用于rtsp推流
+// vi 通道0 用于rtsp推流
 int init_vi_chn0(SAMPLE_VI_CTX_S *viCtx)
 {
     int s32Ret = RK_SUCCESS;
@@ -468,7 +498,7 @@ int init_vi_chn0(SAMPLE_VI_CTX_S *viCtx)
     return s32Ret;
 }
 
-// vi chn1 用于给rknn推理的数据
+// vi 通道1 用于给rknn推理的数据
 int init_vi_chn1(SAMPLE_VI_CTX_S *viCtx)
 {
     int s32Ret = RK_SUCCESS;
@@ -487,6 +517,7 @@ int init_vi_chn1(SAMPLE_VI_CTX_S *viCtx)
     return s32Ret;
 }
 
+// 初始化两个vi通道, 一个用于rtsp推流, 一个用于rknn推理
 static int init_vi(SAMPLE_VI_CTX_S *viCtx)
 {
     int s32Ret = RK_SUCCESS;
@@ -506,28 +537,30 @@ static int init_vi(SAMPLE_VI_CTX_S *viCtx)
     return s32Ret;
 }
 
+// 初始化编码器
 int init_venc(SAMPLE_VENC_CTX_S *vencCtx)
 {
     int s32Ret = RK_SUCCESS;
 
+    // venc通道0
     vencCtx->s32ChnId = VENC_CHN_0;
     vencCtx->u32Width = RTSP_INPUT_VI_WIDTH;
     vencCtx->u32Height = RTSP_INPUT_VI_HEIGHT;
     vencCtx->u32Gop = 50;
     vencCtx->u32BitRate = 4 * 1024;
 
+    // 使用h264编码
     vencCtx->enCodecType = RK_CODEC_TYPE_H264;
     vencCtx->enRcMode = VENC_RC_MODE_H264CBR;
     vencCtx->enable_buf_share = 1;
-    vencCtx->getStreamCbFunc = venc_get_stream;
+    vencCtx->getStreamCbFunc = venc_get_stream; // 注册venc回调. 编码完成之后就会调用这个函数
     vencCtx->dstFilePath = "/data/";
     /*
     H264  66：Baseline  77：Main Profile 100：High Profile
     H265  0：Main Profile  1：Main 10 Profile
     MJPEG 0：Baseline
     */
-    vencCtx->stChnAttr.stVencAttr.u32Profile = 100;
-    /* VENC_GOPMODE_SMARTP */
+    vencCtx->stChnAttr.stVencAttr.u32Profile = 100; // 编码器的profile为高级profile
     vencCtx->stChnAttr.stGopAttr.enGopMode = VENC_GOPMODE_NORMALP;
     s32Ret = SAMPLE_COMM_VENC_CreateChn(vencCtx);
 
@@ -605,9 +638,13 @@ int main(int argc, char *argv[])
     // 初始化venc
     init_venc(&vencCtx);
 
+    // 绑定rgn
+    bind_rgn_to_venc();
+
     // vi ch0 取流的线程
     pthread_t get_vi_stream_thread;
     pthread_create(&get_vi_stream_thread, NULL, get_vi_stream, NULL);
+    
 
     s32Ret = create_vi_vpss();
     if (s32Ret != RK_SUCCESS)
@@ -620,6 +657,9 @@ int main(int argc, char *argv[])
     pthread_t vpss_get_starem_thread;
     pthread_create(&vpss_get_starem_thread, NULL, get_vpss_starem, NULL);
 
+    pthread_t rgn_ts_thread;
+    pthread_create(&rgn_ts_thread, NULL, add_ts_thread, NULL);
+
     getchar();
 
 __FINISHED:
@@ -631,6 +671,8 @@ __FINISHED:
     pthread_join(get_vi_stream_thread, RK_NULL);
 
     pthread_join(vencCtx.getStreamThread, RK_NULL);
+
+    pthread_join(rgn_ts_thread, RK_NULL);
 
     // 解绑
     unbind_vi_vpss();

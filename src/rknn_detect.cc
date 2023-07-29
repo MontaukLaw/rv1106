@@ -186,13 +186,12 @@ int rknn_detect(unsigned char *input_data, detect_result_group_t *detect_result_
     // printf("Begin perf ...\n");
     int64_t start_us = getCurrentTimeUs();
     ret = rknn_run(ctx, NULL);
-    int64_t elapse_us = getCurrentTimeUs() - start_us;
+
     if (ret < 0)
     {
         printf("rknn run error %d\n", ret);
         return -1;
     }
-    printf("Elapse Time = %.2fms, FPS = %.2f\n", elapse_us / 1000.f, 1000.f * 1000.f / elapse_us);
 
     // printf("output origin tensors:\n");
     rknn_tensor_attr orig_output_attrs[io_num.n_output];
@@ -232,13 +231,13 @@ int rknn_detect(unsigned char *input_data, detect_result_group_t *detect_result_
     int model_height = 0;
     if (input_attrs[0].fmt == RKNN_TENSOR_NCHW)
     {
-        printf("model is NCHW input fmt\n");
+        // printf("model is NCHW input fmt\n");
         model_width = input_attrs[0].dims[2];
         model_height = input_attrs[0].dims[3];
     }
     else
     {
-        printf("model is NHWC input fmt\n");
+        // printf("model is NHWC input fmt\n");
         model_width = input_attrs[0].dims[1];
         model_height = input_attrs[0].dims[2];
     }
@@ -259,7 +258,6 @@ int rknn_detect(unsigned char *input_data, detect_result_group_t *detect_result_
     }
 
     // printf("start pp\n");
-
     // detect_result_group_t detect_result_group;
 
     post_process(output_mems_nchw[0], output_mems_nchw[1], output_mems_nchw[2], 640, 640,
@@ -277,6 +275,9 @@ int rknn_detect(unsigned char *input_data, detect_result_group_t *detect_result_
                det_result->box.left, det_result->box.top, det_result->box.right, det_result->box.bottom,
                det_result->prop);
     }
+
+    int64_t elapse_us = getCurrentTimeUs() - start_us;
+    printf("Elapse Time = %.2fms, FPS = %.2f\n", elapse_us / 1000.f, 1000.f * 1000.f / elapse_us);
 
     // Destroy rknn memory
     rknn_destroy_mem(ctx, input_mems[0]);
@@ -386,3 +387,46 @@ void rknn_list_pop(rknn_list_t *s, long *timeval, detect_result_group_t *detect_
     free(t);
     s->size--;
 }
+
+#if 0
+
+bool count_box_info(char *data, RK_U8 rknnObjNumber, detect_result_group_t *detectResultGroupList)
+{
+    if (rknnObjNumber)
+    {
+        long time_before;
+        detect_result_group_t detect_result_group;
+        memset(&detect_result_group, 0, sizeof(detect_result_group));
+
+        // pick up the first one
+        rknn_list_pop(rknn_list_, &time_before, &detect_result_group);
+        // printf("result count:%d \n", detect_result_group.count);
+
+        for (int j = 0; j < detect_result_group.count; j++)
+        {
+            int x = detect_result_group.results[j].box.left * RTSP_INPUT_VI_WIDTH / RKNN_VI_WIDTH;
+            int y = (detect_result_group.results[j].box.top - DETECT_X_START) * RTSP_INPUT_VI_HEIGHT / RKNN_VI_HEIGHT;
+            int w = detect_result_group.results[j].box.right * RTSP_INPUT_VI_WIDTH / RKNN_VI_WIDTH - x;
+            int h = detect_result_group.results[j].box.bottom * RTSP_INPUT_VI_HEIGHT / RKNN_VI_HEIGHT - y;
+            while ((uint32_t)(x + w) >= RTSP_INPUT_VI_WIDTH)
+            {
+                w -= 16;
+            }
+            while ((uint32_t)(y + h) >= RTSP_INPUT_VI_HEIGHT)
+            {
+                h -= 16;
+            }
+            printf("border=(%d %d %d %d)\n", x, y, w, h);
+            boxInfoList[j] = {x, y, w, h};
+            boxInfoListNumber++;
+
+            nv12_border(data, RTSP_INPUT_VI_WIDTH, RTSP_INPUT_VI_HEIGHT,
+                        boxInfoList[j].x, boxInfoList[j].y, boxInfoList[j].w, boxInfoList[j].h, 0, 0, 255);
+        }
+
+        return true;
+    }
+
+    return false;
+}
+#endif

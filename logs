@@ -1,82 +1,200 @@
-sensor 0: main:1920*1080, sub:720*576
-#CodecName:H265
-#IQ Path: /oem/usr/share/iqfiles
-#Rkaiq XML DirPath: /oem/usr/share/iqfiles
-#bMultictx: 1
-
+      chnId  :      0
+        buffcnt:      0
+        buffSize:     0
+        width:        0
+        height:       0
+        Maxwidth:     0
+        Maxwidth:     0
+        streaming:    0
+RKViChn          02:59:00-332 {prepareRuntime    :334} --------------------------------------------------                             -------
+RKViChn          02:59:00-342 {prepareRuntime    :336} vi version: 1.98, name:vvi
+RKViChn          02:59:00-350 {prepareRuntime    :337} rockit-ko version: vmpi:c130c8959511
+RKViChn          02:59:00-358 {prepareRuntime    :338} rockit-ko building: -2023-04-13-17:04:15
+RKViChn          02:59:00-366 {prepareRuntime    :339} --------------------------------------------------                             -------
+RKViChn          02:59:00-376 {prepareRuntime    :358} mb pool create success, MBCnt= 3
+RTIsp3x          02:59:00-385 {ispInitDevice     :317} sensor name = m00_b_sc230ai 4-0030-1
+RTIsp3x          02:59:00-393 {ispInitDevice     :320} sensor_index = 0
+                Sensor link info dump:
+         media name           : /dev/media1
+         model name           : rkisp0
+         camera id            : 0
+         sensor name          : m00_b_sc230ai 4-0030-1
+         mainpath video name  : /dev/video11
+         selfpath video name  : /dev/video12
+         bypasspath video name: /dev/video13
+         sensor type :2:
+cmpi             02:59:00-428 {createRuntime     :582} [non-WRAP MODE]: buff size = 3133440
+RTIsp3x          02:59:00-440 {ispInitDevice     :317} sensor name = m00_b_sc230ai 4-0030-1
+RTIsp3x          02:59:00-445 {ispInitDevice     :320} sensor_index = 0
+RTDeviceV4L2     02:59:00-455 {open              :135} cameraIndex:0, entityName:rkisp_mainpath
+RTDeviceV4L2     02:59:00-462 {open              :141} open video name(/dev/video11)
+RTDeviceV4L2     02:59:00-471 {ispCameraInfo     :554} current device:/dev/video11 isn't compatible(cap:0                             x84201000) device,memoryType:4, retry:0
+RTDeviceV4L2     02:59:00-485 {ispInitFormat     :731} ioctl VIDIOC_S_FMT OK
+[10740.1RKViChn          02:59:00-494 {start             :883} =========== vi Start startRuntime ========                             ===
+RTDeviceV4L2     02:59:00-504 {ispStreamOn       :445} do ispStreamOn start
+93834] vsys dev open 26
+[10740.493713] rkisp queue buf done
+[10740.511728] rkisp_hw ffa00000.rkisp: set isp clk = 198000000Hz
+[10740.511761] rkcif-mipi-lvds: sditf_reinit_mode, mode->rdbk_mode 0, mode->name rkisp-vir0, link_modRTDe                             viceV4L2     02:59:00-532 {ispStreamOn       :e 1
+[10740498} do ispStreamOn done
+=== 0 ===
+cmpi             02:59:00-541 {SAMPLE_COMM_VI_Cre:.513045} RK_MPI_VI_SetDevAttr already!
+cmpi             02:59:00-549 {SAMPLE_COMM_VI_Cre:066} RK_MPI_VI_EnableDev already!
+  === VI ATTRS INFO: ===
+        devId  :      0
+        chnId  :      0
+        buffcnt:      0
+        buffSize:     0
+        width:        0
+        height:       0372] rkcif-mip
+        Maxwidth:     0
+        Maxwidth:     0
+        streaming:    0
+RKViChn         i- 02:59:00-574 {prepareRuntime    :334} ------------lvds: stream[0] start strea---------                             ------------------------------------
+=== 1 ===
+RKViChn          02:59:00-588 {prepareRuntime    :336} vi version: 1.98, name:vvi
+RKViChn          02:59:00-595 {prepareRuntime    :337} rockit-ko version: vmpi:c130c8959511
+RKViChn          02:59:00-603 {prepareRuntime    :338} rockit-ko buming
+[10740.5ilding: -2023-04-13-17:04:15
+RKViChn          02:59:00-613 {prepareRuntime    :339} -----------------------------13480] rockchip-mipi-                             ----------------------------
+RKViChn          02:59:00-625 {prepareRuntime    :358} mb pool create success, MBCnt= 3
+csi2 ffa20RTIsp3x          02:59:00-633 {ispInitDevice     :317} sensor name = m00_b_sc230ai 4-0030-1
+RTIsp3x          02:59:00-643 {ispInitDevice     :320} sen000.mipi-csi2:sor_index = 0
+ stream on, src_sd: 5fb454              Sensor link info9e dump:
+         media name     , sd_name:rockchip-c      : /dev/media1
+         model name           : rkisp0
+         camera id            : 0
+         sensor name          : m00_b_sc230ai 4-0030-1
+         mainpath video name  : /dev/video11
+         selfpath video name  : /dev/video12
+         bypasspath video name: /dev/video13
+         sensor type :2:
+cmpi             02:59:00-682 {createRuntime     :582} [non-WRAP MOsi2-dphy0
+[10DE]: buff size = 353280
+740.513491] rockchRTIsp3x          02:59:00-693 {isippInitDevice     :317} sensor name = m00_b_-mipi-csi2                              ffa20000.misc230ai 4-0030-1
+RTIsp3x          02:59:00-705 {ispInitDevice     :320} sensor_index = 0
+pi-csi2: stream ON
+[10740RTDeviceV4L2     02:59:00-715 {open              :135} cameraIndex:0, entityName:rkisp_selfpath
+RTDeviceV4L2     02:59:00-724 {open              :.513558] rockc141} open video name(/dev/video12)
+hipRTDeviceV4L2    -c 02:59:00-734 {ispCameraInfo     :554} cursi2-dphy0: dphy0, datrent device:/dev/vide                             o12 isn't compatible(cap:0x84201000) device,memoryType:4, retry:0
+RTDeviceV4L2     02:59:00-750 {ispInitFormat     :731} ioctl VIDIOC_S_FMT OK
+a_rate_mbps 37   02:59:00-758 {start             :883} =========== vi Start startRuntime ===========
+1RTDeviceV4L2     02:59:00-769 {ispStreamOn       :445} do
+ispStreamOn start
+[10740.513585] rockchip-RTDeviceV4L2     02:59:00-779 {ispStreamOn       :498} do ispStreamOn done
+cmpi             02:59:00-787 {SAMPLE_COMM_VENC_C:129} V_C:0 bufferCnt:3
+MpiAdapterEncode 02:59:00-794 {ma_encode_create  :1653} ringbuf buf_size 3112960
+csi2-dphy csi2-dphy0: csi2_dphy_s_stream stream on:1, dphy0
+[10740.513594] rockcmpi             02:59:00-807 {mb_create_pool    :222} allocated buffer(this=0x24297ch                             8, data=0xa359600ip0, size=49152, id-csi2-dphy csi2-dphy0=206)
+: ccmpi             02:59:00-822 {mb_create_pool    :222} allocated buffer(this=0x245818, data=0xa358a000                             , size=49152, id=207)
+cmpi             02:59:00-833 {bind_rgn_to_venc  :102} The handle: 0, create success!
+cmpi             02:59:00-841 {attachToChn       :480} The channel attr attach mapidsi2_dphy_s_str: 0x0.
+cmpi             02:59:00-850 {bind_rgn_to_venc  :144} Display regieaon to chn success!
+m stream on:1, dphy0
+[10740.758204] rkisp queue buf done
+[1074stSize.u32Width:0.802384 stSize.u32Height:32
+u32Width:-1554423808, u32Height:384
+rga_api version 1.9.1_[5]
+cmpi             02:59:00-873 {cr186eate_vi_vpss    :390} vpss Grp 0's work unit is 1
+#Start get_vi_stream thread, arg:(nil)
+read bmp success
+read bmp success
+] mpp_vcodec: 44: num_chan = 0read bmp success
+[1
+read bmp success0740.8022
+read bmp success
+94] mpp_vcodec: 368: attread bmp success
+read bmp success
+read bmp success
+read bmp success
+read bmp success
+read bmp success
+read bmp success
+read bmp success
+read bmp success
+read bmp success
+read bmp success
+read bmp success
+read bmp success
+r->max_width = 1920, attr->max_height = 1080
+[10740.805270] mpp_vcodec: 103: chan_entry->handle 7e35e3a4, enc 7e35e3a4
+[10740.806254] 755: MPP_ENC_SET_CFG in
+[10740.806280] 524: MPP_ENC_SET_RC_CFG bps 7776000 [7290000 : 8262000] fps [30:30] gop 60
+[10740.806291] 329: MPP_ENC_SET_PREP_CFG w:h [1920:1080] stride [1920:1080]
+[10740.806303] 271: send header for set cfg change input/format
+[10740.806471] 755: MPP_ENC_SET_CFG in
+[10740.806487] 524: MPP_ENC_SET_RC_CFG bps 4096000 [3840000 : 4352000] fps [30:30] gop 50
+[10740.806497] 271: send header for set cfg change rc_mode/fps/gop
+[10740.806705] 755: MPP_ENC_SET_CFG in
+[10740.806720] 524: MPP_ENC_SET_RC_CFG bps 4096000 [3840000 : 4352000] fps [30:30] gop 50
+[10740.806730] 271: send header for set cfg change rc_mode/fps/gop
+[10740.806795] 755: MPP_ENC_SET_CFG in
+[10740.806807] 524: MPP_ENC_SET_RC_CFG bps 4096000 [3840000 : 4352000] fps [30:30] gop 50
+[10740.806814] 271: send header for set cfg change rc_mode/fps/gop
+[10740.891707] create vpss node = 691200
+[10740.930101] rga_job: [tgid:1000 pid:1018] destroy request[37] when the user exits
+[10740.930134] rga_job: [tgid:1000 pid:1018] destroy request[38] when the user exits
+[10740.930146] rga_job: [tgid:1000 pid:1018] destroy request[39] when the user exits
+[10740.930154] rga_job: [tgid:1000 pid:1018] destroy request[40] when the user exits
+[10740.930163] rga_job: [tgid:1000 pid:1018] destroy request[41] when the user exits
+[10741.007776] rkcif-mipi-lvds: stream[0] start stopping, total modeSegmentation fault (core dumped)
+ 0x# 2, cur 0x2
+[10741.047122] rockchip-mipi-csi2 ffa20000.mipi-csi2: stream off, src_sd: 5fb4549e, sd_name:rockchip-csi2                             -dphy0
+[10741.047161] rockchip-mipi-csi2 ffa20000.mipi-csi2: stream OFF
+[10741.047931] rockchip-csi2-dphy csi2-dphy0: csi2_dphy_s_stream_stop stream stop, dphy0
+[10741.047968] rockchip-csi2-dphy csi2-dphy0: csi2_dphy_s_stream stream on:0, dphy0
+[10741.048020] rockchip-csi2-dphy csi2-dphy0: csi2_dphy_s_stream stream on:0, dphy0
+[10741.048246] rkcif-mipi-lvds: stream[0] stopping finished, dma_en 0x0
+[10741.051697] rockit isp stream off
+[10741.051762] rockit isp stream off
+[10741.052519] stream_cif_mipi_id1: close video, entity use_count 0
+[10741.052632] stream_cif_mipi_id0: close video, entity use_count 1
+[10741.052925] stream_cif_mipi_id0: s_power 0, entity use_count 0
+# /data/no_bind /data/yolov5s-640-640_origin_good.rknn
+model path :/data/yolov5s-640-640_origin_good.rknn
 rkaiq log level ff0
-[ 4668.345027] stream_cif_mipi_id0: s_power 1, entity use_count 1
+[10916.515993] stream_cif_mipi_id0: s_power 1, entity use_count 1
 
 ************************** VERSION INFOS **************************
 version release date: 2023-03-02
          AIQ:       AIQ v5.0x1.2-rc2
    IQ PARSER:       Calib v1.4.8,magicCode:1170944
 ************************ VERSION INFOS END ************************
-ID: 0, sensor_name is m00_b_sc230ai 4-0030-3, iqfiles is /oem/usr/share/iqfiles
-[ 4668.345931] stream_cif_mipi_id0: s_power 0, entity use_count 0
-[ 4668.698998] stream_cif_mipi_id0: s_power 1, entity use_count 1
-[ 4668.700421] stream_cif_mipi_id0: open video, entity use_countt 2
-[ 4668.700658] stream_cif_mipi_id1: open video, erk_aiq_uapi2_sysctl_init/prepare succeed
-ntity use_countt 1
-[ 4668.704446] rkcif-miprk_aiq_uapi2_sysctl_start succeed
+ID: 0, sensor_name is m00_b_sc230ai 4-0030-1, iqfiles is /etc/iqfiles/
+[10916.516723] stream_cif_mipi_id0: s_power 0, entity use_count 0
+[10916.870395] stream_cif_mipi_id0: s_power 1, entity use_count 1
+[10916.872303] stream_cif_mipi_id0: open video, entity use_countt 2
+[10916.872609] stream_cif_mipi_id1: open vidrk_aiq_uapi2_sysctl_init/prepare succeed
+eo, entity use_countt 1
+[10916.886248] rkrk_aiq_uapi2_sysctl_start succeed
+create rknn_list success
 [INFO  rtsp_demo.c:280:rtsp_new_demo] rtsp server demo starting on port 554
 [DEBUG rtsp_demo.c:480:rtsp_new_session] add session path: /live/0
-[DEBUG rtsp_demo.c:480:rtsp_new_session] add session path: /live/1
-rtsp streamq_alloc size is 1753484
-i-lvdrtsp streamq_alloc size is 1753484
+isp rrtsp streamq_alloc size is 1753484
 rockit log path (null), log_size = 0, can use export rt_log_path=, export rt_log_size= change
 log_file = (nil)
-RTVersion        01:17:48-744 {dump              :064} ---------------------------------------------------------
-RTVersion        01:17:48-764 {dump              :065} rockit version: git-56434d252 Tue Apr 4 15:06:22 2023 +0800
-RTVersion        01:17:48-775 {dump              :066} rockit building: built- 2023-04-04 15:22:18
-RTVersion        01:17:48-783 {dump              :067} ---------------------------------------------------------
-(null)           01:17:48-793 {log_level_init    :206}
+RTVersion        03:01:56-909 {dump              :064} ---------------------------------------------------------
+RTVersion        03:01:56-930 {dump              :065} rockit version: git-8040d59d5 Mon Mar 27 09:56:43 2023 +0800
+RTVersion        03:01:56-940 {dump              :066} rockit building: built- 2023-03-27 10:57:39
+RTVersion        03:01:56-949 {dump              :067} ---------------------------------------------------------
+(null)           03:01:56-959 {log_level_init    :206}
 
  please use echo name=level > /tmp/rt_log_level set log level
         name: all cmpi mb sys vdec venc rgn vpss vgs tde avs wbc vo vi ai ao aenc adec
         log_level: 0 1 2 3 4 5 6
 
 rockit default level 4, can use export rt_log_level=x, x=0,1,2,3,4,5,6 change
-(null)           01:17:48-823 {read_log_level    :097} text is all=6
-
-(null)           01:17:48-829 {read_log_level    :099} module is all, log_level is 6
-s: sdRKSockServer     01:17:48-837 {initServer        :056} proto:tcp, hostname:127.0.0.1, path:, port:3893
-(null)           01:17:48-846 {monitor_log_level :148} #Start monitor_log_level thread, arg:(nil)
-RKSockServer     01:17:48-855 {initNetServer     :071} binding to host:127.0.0.1, port:3893
-RKSockServer     01:17:48-863 {initNetServer     :093} sock server initialize succeed
-itrt_pthread       01:17:48-871 {start             :155} create thread(name=ipcs_server, err=0) completed
-cmpi             01:17:48-880 {sys_runtime_librar:084} success to open /dev/mpi/valloc,fd = 39
-rt_pthread       01:17:48-883 {thread_looping    :069} call, pthread_looper(name:ipcs_server tid:4816)
-cmpi             01:17:48-893 {sys_runtime_librar:084} success to open /dev/mpi/vsys,fd = 40
-cmpi             01:17:48-906 {sys_runtime_librar:084} success to open /dev/mpi/vrgn,fd = 41
-cmpi             01:17:48-914 {sys_runtime_librar:084} success to open /dev/mpi/venc,fd = 42
-cmpi             01:17:48-922 {sys_runtime_librar:084} success to open /dev/mpi/vpss,fd = 43
-cmpi             01:17:48-930 {sys_runtime_librar:084} success to open /dev/mpi/vvi,fd = 44
-cmpi             01:17:48-939 {sys_runtime_librar:084} success to open /dev/mpi/avs,fd = 45
-cmpi             01:17:48-947 {sys_runtime_librar:084} success to open /dev/mpi/vrga,fd = 46
-cmpi             01:17:48-955 {sys_runtime_librar:084} success to open /dev/mpi/venc,fd = 47
-cmpi             01:17:48-963 {sys_runtime_librar:092} VSYS_IOCTL_VERSION
-cmpi             01:17:48-970 {sys_runtime_librar:095} vsys version: 1.0, name:vsys
-f_reinit_modeRTIsp3x          01:17:48-978 {ispInitDevice     :317} sensor name = m00_b_sc230ai 4-0030-3
-RTIsp3x          01:17:48-988 {ispInitDevice     :320} sensor_index = 0
-RTIsp3x          01:17:48-996 {getLinkVideoNode  :223} find /dev/media1: model:rkcif-mipi-lvds
-, mode->rdbk_mode 1, mode->nRKViDev          01:17:49-006 {vi_get_dev_pipe_st:276} attr.devStatus = 00000000
-RKViDev          01:17:49-013 {vi_get_dev_pipe_st:276} attr.devStatus = 00000000
-RKViDev          01:17:49-020 {vi_set_dev_attr   :445} VI_DEV_ATTR_S all parameter reserved
-RKViDev          01:17:49-030 {vi_set_status     :289} attr.devStatus = 00000001
-RKViDev          01:17:49-037 {vi_get_dev_pipe_st:276} attr.devStatus = 00000001
-RKViDev          01:17:49-044 {vi_get_dev_pipe_st:276} attr.devStatus = 00000001
-RTIsp3x          01:17:49-051 {getIspHwInfo      :357} getIspHwInfo enter >>>
-aTIsp3x          01:17:49-058 {getIspHwInfo      :359} find isp count: 1, Current selected: 0
-RTIsp3x          01:17:49-067 {getVideoName      :396} entityName = rkisp_mainpath
-RTIsp3x          01:17:49-074 {getIspHwInfo      :357} getIspHwInfo enter >>>
-RTIsp3x          01:17:49-081 {getIspHwInfo      :359} find isp count: 1, Current selected: 0
-RTIsp3x          01:17:49-089 {getVideoName      :396} entityName = rkisp_selfpath
-RTIsp3x          01:17:49-097 {getIspHwInfo      :357} getIspHwInfo enter >>>
-RTIsp3x          01:17:49-104 {getIspHwInfo      :359} find isp count: 1, Current selected: 0
-RTIsp3x          01:17:49-112 {getVideoName      :396} entityName = rkisp_bypasspath
-RKViDev          01:17:49-119 {vi_set_status     :289} attr.devStatus = 00000003
-rt_valloc        01:17:49-127 {drm_open          :044} success to open drm device(/dev/mpi/valloc)
+(null)           03:01:56-989 {read_log_level    :097} text is all=4
+(null)           03:01:56-995 {read_log_level    :099} module is all, log_level is 4
+kisp-vir0: first params buf qRTIsp3x          03:01:57-005 {ispInitDevice     :317} sensor name = m00_b_sc230ai 4-0030-1
+(null)           03:01:57-014 {monitor_log_level :148} #Start monitor_log_level thread, arg:(nil)
+RTIsp3x          03:01:57-023 {ispInitDevice     :320} sensor_index = 0
+ueue
+rknn_api/rknnrt version: 1.4.1b9 (09eb4be80@2022-10-19T09:51:39), driver version: 0.8.5
+model input num: 1, output num: 3
+input tensors:
+output tensors:
+RKViDev          03:01:57-119 {vi_set_dev_attr   :445} VI_DEV_ATTR_S all parameter reserved
   === VI ATTRS INFO: ===
         devId  :      0
         chnId  :      0
@@ -87,635 +205,153 @@ rt_valloc        01:17:49-127 {drm_open          :044} success to open drm devic
         Maxwidth:     0
         Maxwidth:     0
         streaming:    0
-RKViChn          01:17:49-152 {RKVIChannel       :197} vi chn:0 mChnState = 1 (not create yet)
-cmpi             01:17:49-160 {prepareRuntime    :329} VVI_IOCTL_VERSION
-RKViChn          01:17:49-167 {prepareRuntime    :334} ---------------------------------------------------------
-RKViChn          01:17:49-177 {prepareRuntime    :336} vi version: 1.98, name:vvi
-RKViChn          01:17:49-184 {prepareRuntime    :337} rockit-ko version: vmpi:99bd87e6f209
-RKViChn          01:17:49-192 {prepareRuntime    :338} rockit-ko building: -2023-04-07-09:55:00
-RKViChn          01:17:49-201 {prepareRuntime    :339} ----------------------------------------------me rkisp-vir0, li---nk_mo---
-de 0
-[ 4rt_valloc       668.7150 01:17:49-213 {dr69] rkisp rkisp-m_open          :vir0: first params buf queue
-044} success to open drm device(/dev/mpi/valloc)
-RTAllocatorStore 01:17:49-227 {fetchCommAllocator:151} create common allocator[0x6b4850], type 0, flag 0
-RKViChn          01:17:49-236 {prepareRuntime    :358} mb pool create success, MBCnt= 2
-RKViDev          01:17:49-247 {vi_get_ch_status  :307} pipe = 0, ch = 0, enable = 0, streamOn=0
-RTIsp3x          01:17:49-257 {ispInitDevice     :317} sensor name = m00_b_sc230ai 4-0030-3
-RTIsp3x          01:17:49-262 {ispInitDevice     :320} sensor_index = 0
-RTIsp3x          01:17:49-271 {getLinkVideoNode  :223} find /dev/media1: model:rkcif-mipi-lvds
-RTIsp3x          01:17:49-278 {getIspHwInfo      :357} getIspHwInfo enter >>>
-RTIsp3x          01:17:49-284 {getIspHwInfo      :359} find isp count: 1, Current selected: 0
+RKViChn          03:01:57-145 {prepareRuntime    :334} ---------------------------------------------------------
+RKViChn          03:01:57-155 {prepareRuntime    :336} vi version: 1.98, name:vvi
+RKViChn          03:01:57-162 {prepareRuntime    :337} rockit-ko version: vmpi:c130c8959511
+RKViChn          03:01:57-170 {prepareRuntime    :338} rockit-ko building: -2023-04-13-17:04:15
+RKViChn          03:01:57-179 {prepareRuntime    :339} ---------------------------------------------------------
+RKViChn          03:01:57-189 {prepareRuntime    :358} mb pool create success, MBCnt= 3
+RTIsp3x          03:01:57-197 {ispInitDevice     :317} sensor name = m00_b_sc230ai 4-0030-1
+RTIsp3x          03:01:57-206 {ispInitDevice     :320} sensor_index = 0
                 Sensor link info dump:
          media name           : /dev/media1
          model name           : rkisp0
          camera id            : 0
-         sensor name          : m00_b_sc230ai 4-0030-3
+         sensor name          : m00_b_sc230ai 4-0030-1
          mainpath video name  : /dev/video11
          selfpath video name  : /dev/video12
          bypasspath video name: /dev/video13
          sensor type :2:
-cmpi             01:17:49-320 {createRuntime     :582} [non-WRAP MODE]: buff size = 3133440
-cmpi             01:17:49-328 {createRuntime     :593} viNodeInf.buffSize = 3133440, viNodeInf.buffCnt = 2
-cmpi             01:17:49-337 {createRuntime     :603} video model type is: isp
-cmpi             01:17:49-344 {createRuntime     :605} VVI_IOCTL_NODE_CREATE
-RKViChn          01:17:49-354 {open              :686} enCaptureType = 1
-RKViChn          01:17:49-358 {open              :810} vi chn:0, mChnState = 1
-RTDeviceV4L2     01:17:49-365 {ispInitParams     :672} camera init paremeters1:
-                 resolution   : 1920 * 1080
-                 bufferCnt    : 0
-                 useLibV4l2   : 1
-                 pixFormat    : 0x0
-                 memoryType   : 0x4
-                 captureType  : 0x1
-                 colorSpace   : 0
-RTDeviceV4L2     01:17:49-386 {ispInitParams     :687} camera init paremeters2:
-                 entityName   : rkisp_mainpath
-                 cameraIndex  : 0
-                 fbcMode      : 0x0
-                 runInko      : 1
-                 chnState     : 1
-                 wrapLine     : 0
-                 fps          : 0
-
-RTIsp3x          01:17:49-409 {ispInitDevice     :317} sensor name = m00_b_sc230ai 4-0030-3
-RTIsp3x          01:17:49-418 {ispInitDevice     :320} sensor_index = 0
-RTIsp3x          01:17:49-427 {getLinkVideoNode  :223} find /dev/media1: model:rkcif-mipi-lvds
-RTDeviceV4L2     01:17:49-434 {open              :135} cameraIndex:0, entityName:rkisp_mainpath
-RTIsp3x          01:17:49-443 {getIspHwInfo      :357} getIspHwInfo enter >>>
-RTIsp3x          01:17:49-450 {getIspHwInfo      :359} find isp count: 1, Current selected: 0
-RTIsp3x          01:17:49-458 {getVideoName      :396} entityName = rkisp_mainpath
-RTDeviceV4L2     01:17:49-466 {open              :141} open video name(/dev/video11)
-RTDeviceV4L2     01:17:49-475 {ispOpenDevice     :526} v4l2_open(/dev/video11), handler=53
-RTIsp3x          01:17:49-483 {setIspFps         :630} setIspFps enter >>>
-RTIsp3x          01:17:49-489 {setIspFps         :637} isp set fps:-1
-RTIsp3x          01:17:49-495 {setIspFps         :640} setIspFps leave <<<
-RKViChn          01:17:49-502 {prepare           :952} start dev:0 chn:0 prepare
-RTDeviceV4L2     01:17:49-509 {ispCameraInfo     :543} camera information:
-RTDeviceV4L2     01:17:49-516 {ispCameraInfo     :544} device name : /dev/video11
-RTDeviceV4L2     01:17:49-523 {ispCameraInfo     :545} driver name : rkisp_v7
-RTDeviceV4L2     01:17:49-530 {ispCameraInfo     :546} card name   : rkisp_mainpath
-RTDeviceV4L2     01:17:49-538 {ispCameraInfo     :547} bus info    : platform:rkisp-vir0
-RTDeviceV4L2     01:17:49-546 {ispCameraInfo     :549} version     : 2.1.0
-RTDeviceV4L2     01:17:49-552 {ispCameraInfo     :554} current device:/dev/video11 isn't compatible(cap:0x84201000) device,memoryType:4, retry:0
-RTDeviceV4L2     01:17:49-566 {prepare           :424} mV4L2Ctx->wrapInfo->height = 0 width = 0
-RTDeviceV4L2     01:17:49-575 {ispInitFormat     :738} ioctl VIDIOC_S_FMT OK
-cmpi             01:17:49-583 {startRuntime      :630} VVI_IOCTL_NODE_START
-RKViChn          01:17:49-590 {start             :883} =========== vi Start startRuntime ===========
-RKViChn          01:17:49-599 {streamOn          :977} start dev:0 chn:0 stream on
-RTDeviceV4L2     01:17:49-607 {ispStreamOn       :445} do ispStreamOn start
-RTDeviceV4L2     01:17:49-615 {ispStreamOn       :461} setIspFps -1 to isp driver
-RTIsp3x          01:17:49-622 {setIspFps         :630} setIspFps enter >>>
-RTIsp3x          01:17:49-629 {setIspFps         :637} isp set fps:-1
-RTIsp3x          01:17:49-635 {setIspFps         :640} setIspFps leave <<<
-RTIsp3x          01:17:49-642 {setIspMirrorFlip  :610} setIspMirrorFlip enter >>>
-RTIsp3x          01:17:49-649 {setIspMirrorFlip  :611} mirror = 0 flip = 0
-RTIsp3x          01:17:49-655 {setIspMirrorFlip  :619} isp set mirror flip: mirror:0 fip: 0
-RTIsp3x          01:17:49-664 {setIspMirrorFlip  :622} setIspMirrorFlip leave <<<
-[ 4668.894568] vsys dev open 26
-[ 4669.591679] rkisp queue buf done
-[ 4669.672770] rkisp_hw ffa00000.rkisp: set isp clk = 198000000Hz
- 01:17:49-691 {ispStreamOn       :itf_reinit_mode, mode->rdbk_mode 1, mode->name rkisp-vir0,RTDeviceV4L2     link_mode 0
-                                  [498} do ispStreamOn done
+cmpi             03:01:57-240 {createRuntime     :582} [non-WRAP MODE]: buff size = 3133440
+RTIsp3x          03:01:57-253 {ispInitDevice     :317} sensor name = m00_b_sc230ai 4-0030-1
+RTIsp3x          03:01:57-257 {ispInitDevice     :320} sensor_index = 0
+RTDeviceV4L2     03:01:57-267 {open              :135} cameraIndex:0, entityName:rkisp_mainpath
+RTDeviceV4L2     03:01:57-275 {open              :141} open video name(/dev/video11)
+RTDeviceV4L2     03:01:57-283 {ispCameraInfo     :554} current device:/dev/video11 isn't compatible(cap:0x84201000) device,memoryType:4, retry:0
+RTDeviceV4L2     03:01:57-297 {ispInitFormat     :731} ioctl VIDIOC_S_FMT OK
+[10917.00RKViChn          03:01:57-306 {start             :883} =========== vi Start startRuntime ===========
+RTDeviceV4L2     03:01:57-316 {ispStreamOn       :445} do ispStreamOn start
+3313] vsys dev open 26
+[10917.305915] rkisp queue buf done
+[10917.324008] rkisp_hw ffa00000.rkisp: set isp clk = 198000000Hz
+[10917.324041] rkcif-mipi-lvds: sditf_reinit_mode, mode->rdbk_mode 0, mode->name rkisp-vir0, link_modeRTDeviceV4L2     03:01:57-344 {ispStreamOn       : 1
+[1091498} do ispStreamOn done
 === 0 ===
-RKViDev           46601:17:49-701 {vi_set_ch_status  :323} pipe = 0, ch = 0, enable = 1, streamOn=1
-cmpi             01:17:49-710 {SAMPLE_COMM_VENC_C:129} V_C:0 bufferCnt:3
-9.6MpiHwInterface   01:17:49-717 {MpiHwInterface    :034} MpiHwInterface
-cmpi             01:17:49-723 {ve73078] nc_create_chn   :193} venc version: 1.0, name:venc
-d to be rebuild  01:17:49-731 {crrkcif-mipeate            :358} venc chn neei-lvds: stream[0] start streaming
-=== 1 ===
-
-[ MpiHwInterface   01:17:49-743 {create            :079} create: type = 3
-MpiAdapterEncode 01:17:49-750 {ma_encode_create  :1654} ringbuf buf_size 3112960
-4669.673182] rockchip-mipi-csi2 ffa20000.mipiEncRc            01:17:49-762 {ma_encode_set_rc_a:-csi2: strea276} not find rc attr!
-EncRc            01:17:49-769 {ma_encode_calculat:m 166} bps_target:7776000, min:7290000, max:8262000, on, src_sd: b4d86bd8, sd_name:rockchstat_time:3
-ip-MpiHwInterface   01:17:49-783 {control           :381} control
-MpiAdapterEncode 01:17:49-789 {ma_encode_change_c:837} set rc attr
-EncRc            01:17:49-794 {ma_encode_set_rc_a:271} find rc attr!
-EncRc            01:17:49-801 {ma_encode_calculat:1csi2-dph66} bps_target:4096000, min:3840000, max:4352000, stat_time:3
-MpiHwInterface  y0 01:17:49-811 {control           :381} control
-[ 4669.673192] rockchip-mipi-csi
-MpiAdapterEncode 01:17:49-820 {ma_encode_change_c:797} set gop_mode
-MpiHwInterface   01:17:49-826 {control           :381} control
-MpiAdapterEncode 01:17:49-832 {ma_encode_change_c:968} fps setting, in-num(30), in-dem(1), out-num(30), out-dem(1)
-MpiHwInterface   01:17:49-842 {control           :2 ffa2381} control
-MpiAdapterEncode 01:17:49-848 {ma_encode_change_c:943} qp_init=0, q00p_step=0, qp_min=10, qp_max=51, qp_min_i=10, qp_max00.mipi-csi2: stream ON
-[ 4669.67323_i=51, qp_ip=0, max_reenc_times=0, frm_qp_min 28, frm_qp_max 42, frm_qp_min_i 28, frm_qp_max_i 42
-1MpiHwInterface   01:17:49-870 {control           :381} control
-]MpiAdapterEncode 01:17:49-876 {ma_encode_change_c:1145} crop_cfg(0),change crop s32Width(0 to 1920), s32Height(0 to 10 rockc80)s32X(0 to 0), s32Y(0 to 0)
-cmpi             01:17:49-890 {startRecvFrame    :hi1633} VENC_IOCTL_NODE_CREATE
-p-csi2-dphcmpi            y0: dphy0, data_rate_mbps 371 01:17:49-898 {startRecvFrame    :1658} VENC_IOCTL_NODE_START
-
-[venc[0]:u32BufSize:3110400
-cmpi             01:17:49-910 {SAMPLE_COMM_VI_Cre:045} RK_MPI_VI_SetDevAttr already!
-cmpi             01:17:49-917 {SAMPLE_COMM_VI_Cre:066} RK_MPI_VI_EnableDev already!
-#Start rkipc_get_vi_to_npu thread, arg:(nil)
-#Start venc0_get_stream , arg:0x3ff60
-255] rockchip-csi2-dphy csi2-32 {control           :669.673381} control
-RKViDev          01:17:49-941 {vi_get_ch_status  :307} pipe = 0, ch = 1, enable = 0, streamOn=0
-cmpi             01:17:49-950 {mb_get_buffer_time:385} allocated buffer(this=0x6bbf90, data=(nil), size=0, id=-1)
-rt_valloc        01:17:49-953 {drm_open          :044} success to odphy0: pen drm device(/dev/mpi/valloc)
-RK_MPI_VI_GetChnFrame timeout a0088005
-i2_dphy_s_strea  01:17:49-973 {dequeue           :cs266} dequeue
-m stream on:1, dphy0  === VI ATTRS INFO: ===
+cmpi             03:01:57-353 {SA7.32MPLE_COMM_VI_Cre:045} RK_MPI_VI_SetDevAttr already!
+cmpi             03:01:57-361 {SAMPLE_COMM_VI_Cre:066} RK_MPI_VI_EnableDev already!
+  === VI ATTRS INFO: ===
         devId  :      0
         chnId  :      0
         buffcnt:      0
         buffSize:     0
         width:        0
-        height:       0
+        height:       05645] rkcif-mi
         Maxwidth:     0
         Maxwidth:     0
         streaming:    0
-RKViChn          01:17:49-998 {RKVIChannel       :197} vi chn:1 mChnState = 1 (not c
-[ 46reate yet)
-69pi             01:17:50-007 {prepareRuntime    :329} VVI_IOCTL_VERSION
-.RKViChn         673265] 01:17:50-013 {pr rockchip-csi2-dphy csi2-dphy0epareRuntime    :334} ---------------------------------------------------------
-RKViChn          01:17:50-027 {prepareRuntime    :336} vi version: 1.98, name:vvi
-RKViChn          01:17:50-034 {prepareRuntime    :337} rockit-ko version: vmpi:99bd87e6f209
-RKViChn          01:17:50-042 {pre: csi2pareRuntime    :338} rockit-ko building: -2023-04-07-09:55:00
-RKViChn          01:17:50-051 {pr_depareRuntime    :339} ------------phy_s_stream st-----------------ream on:1, dphy0
-[ ----------------------------
-RKViChn          01:17:50-064 {prepareRuntime    :358} mb pool create success, MBCnt= 3
-RKViDev          01:17:50-072 {vi_get_ch_status  :307} pipe = 0, ch = 1, enable = 0, streamOn=0
-RK_MPI_VI_GetChnFrame timeout a0088007
-75ViDev         4669. 01:17:50-083 {vi_get_ch_status  :307} pipe = 0, ch = 1, enable = 0, streamOn=0
-9777] mpp_vcodec: 44:RTIsp3x          01:17:50-095 {is num_chan = 0
-[ 4669.759899] pInitDevice     :317} sensor name = m00_b_sc230ai 4-0030-3
-RTIsp3x          01:17:50-107 {ispInitDevice     :320} sensor_index = 0
-mpp_vcodec: 368:RTIsp3x          01:17:50-116 {getLinkVideoNode  :223} find /dev/media1: model:rkcif-mipi-lvds
-RTIsp3x          attr-> 01:17:50-125 {getIspHwInfo      :357} getIspHwInfo enter >>>
-RTIsp3x         ma 01:17:50-132 {getIspHwInfo      :359} find isp coux_width = 1920, attr->max_height =nt: 1, Current selected: 0
-                Sensor link info dump:
-         media name           : /dev/media1
+RKViChn          03:01:57-386 {prepareRuntime    :334} ------------pi-lvds: stream[0] start st---------------------------------------------
+=== 1 ===
+RKViChn          03:01:57-400 {prepareRuntime    :336} vi version: 1.98, name:vvi
+RKViChn          03:01:57-407 {prepareRuntime    :337} rockit-ko version: vmpi:c130c8959511
+RKViChn          03:01:57-415 {prepareRuntime    :338} rockit-ko bureaming
+[1091ilding: -2023-04-13-17:04:15
+RKViChn          03:01:57-425 {pr7.epareRuntime    :339} -----------------------------325760] rockchip-mip----------------------------
+RKViChn          03:01:57-437 {prepareRuntime    :358} mb pool create success, MBCnt= 3
+i-csi2 ffa2RTIsp3x          03:01:57-445 {ispInitDevice     :317} sensor name = m00_b_sc230ai 4-0030-1
+RTIsp3x          03:01:57-455 {ispInitDevice     :320} sen0000.mipi-csi2sor_index = 0
+: stream on, src_sd: 5fb45              Sensor link info dump:
+         media name     49e, sd_name:rockchi      : /dev/media1
          model name           : rkisp0
          camera id            : 0
-         sensor name          : m00_b_sc230ai 4-0030-3
+         sensor name          : m00_b_sc230ai 4-0030-1
          mainpath video name  : /dev/video11
          selfpath video name  : /dev/video12
- bypasspath video name: /dev/video13
+         bypasspath video name: /dev/video13
          sensor type :2:
-cmpi             01:17:50-171 {cr
-                                 [ eateRuntime     :582} [non-WRAP MO4669.762933] mpp_vcodec: 103: chan_entDE]: buff size = 622080
-cmpi             01:17:50-182 {createRuntime     :593} viNodeInf.buffSize = 622080, viNodeInf.buffCnt = 3
-cmpi             01:17:50-192 {createRuntime     :603} video model type is: isp
-ry->han          01:17:50-199 {createRuntime     :605} VVI_IOCTL_NODE_CREATE
-dle acffb716, enRKViChn          01:17:50-208 {open              :686} enCaptureTypc ae = 1
-cffb716RKViChn          01:17:50-215 {op
-[ 4669.784534] 755: MPP_ENen              :810} vi chn:1, mChnState = 1
-RTDeviceV4L2     01:17:50-225 {ispInitParams     :672} camera init paremeters1:
-                 resolution   : 720 * 576
-                 bufferCnt    : 0
-                 useLibV4l2   : 1
-                 pixFormat    : 0x0
-                 memoryType   : 0x4
-                 captureType  : 0x1
-                 colorSpace   : C_SET0
-RTDeviceV4L2     01:17:50-246 {ispInitParams     :687} camera init paremeters2:_C
-rkisp_selfpath   entityName   : FG in
+cmpi             03:01:57-494 {createRuntime     :582} [non-WRAP MOp-csi2-dphy0
+DE]: buff size = 353280
+[10917.325783] rockRTIsp3x          03:01:57-505 {ispInitDevice     :317} sensor name = m00_b_chip-mipi-csi2 ffa200sc230ai 4-0030-1
+RTIsp3x          03:01:57-516 {ispInitDevice     :320} sensor_index = 0
+RTDeviceV4L2     03:01:57-526 {open              :135} cameraIndex:0, entityName:rkisp_selfpath
+RTDeviceV4L2     03:01:57-536 {open              :
+                                                  [10917.325841]141} open video name(/dev/video12)
+ roRTDeviceV4L2     03:01:57-546 {ispCameraInfo     :554} curckchip-csi2-dphy0: dprent device:/dev/video12 isn't compatible(cap:0x84201000) device,memoryType:4, retry:0
+RTDeviceV4L2     03:01:57-562 {ispInitFormat     :731} ioctl VIDIOC_S_FMT OK
+RKViChn          03:01:57-570 {start             :883} =========== vi Start startRuntime ===========
+RTDeviceV4L2    hy0, data_rate 03:01:57-580 {ispStreamOn       :445} do ispStreamOn start
+_mbps 371
+[10917.3258RTDeviceV4L2     03:01:57-591 {ispStreamOn       :498} do ispStreamOn done
+cmpi             03:01:57-598 {SAMPLE_COMM_VENC_C:129} V_C:0 bufferCnt:3
+68] rockMpiAdapterEncode 03:01:57-606 {ma_encode_create  :1653} ringbuf buf_size 3112960
+chip-csi2-dphy csi2-dphy0: csi2_dphy_s_stream stream on:1, dphy0cmpi
+ rockchip-csi2-dphy csi19 {mb_create_pool    :222} allocated buffer(this=0x242957]0, data=0xa3584000, size=49152, id=211)
+2-dpcmpi             03:01:57-634 {mb_create_pool    :222} allocated buffer(this=0x22f2f8, data=0xa3578000, size=49152, id=212)
+cmpi             03:01:57-645 {bind_rgn_to_venc  :102} The handle: 0, create success!
+cmpi             03:01:57-653 {attachToChn       :480} The channel attr attach mapidhy0: csi2_dphy_: 0x0.
+cmpi             03:01:57-662 {bind_rgn_to_venc  :144} Display regis_on to chn success!
+stream stream on:1, dphy0
+stSize.u32Width:kisp queue buf done
+                [384 stSize.u32Height:32
+#Start get_vi_stream thread, arg:(nil)
+rga_api version 1.9.1_[5]
+10917.read bmp success
+read bmp success
+read bmp success
+read bmp success
+cmpi             03:01:57-690 {create_vi_vpss    :390} vpss Grp 0's work unit is 1
+read bmp success613957] mpp_vcod
+cmpi             03:01:57-702 {mb_get_buffer_by_i:ec: 44: n426} allocated buum_chan = 0
+[10917.614064] ffer(this=0x26f0dmpp_vco8, data=(nil), sidec: 368ze=0, id=-1)
+read bmp success
+read bmp success
+read bmp success
+: attr->maxRKViChn          03:01:57-723 {getFrameRuntime   :1124} -------------------------------vviBuf->buf_size: 3133440
+read bmp success
+read bmp success
+read bmp success
+loopCount:0, fd:_width = 1920, attr->m59, data:0xa247b000
+cmpi             03:01:57-741 {mb_get_buffer_by_i:ax_height = 1080
+[10917.617109] mpp_vcodec: 103: chan_entry->h426} allocated buffer(this=0x243478, data=(nil), size=0, id=-1)
+read bmp success
+read bmp successandle
+262MpiAdapterEncode 03:01:57-763 {ma_encode_get_pack:1978} map ptr: 0xa1e8b000
+read bmp success58824, e
+ncread bmp success 26258824
 
-                [ 4669.784560] 524: MPP_ENC_SET cameraIndex  : 0
-                 fbcMode      : 0x0
-                 runInko      : 1
-                 chnState     : 1
-                 wrapLine     : 0
-                 fps          : 0
-
-_RC_CFG bpRTIsp3x          01:17:50-273 {ispInitDevice     :317} sensor name = m00_b_sc230ai 4-0030-3
-RTIsp3x          01:17:50-282 {isps 7776InitDevice     :320} sensor_index = 0
-000 [7290000 : 826RTIsp3x         200 01:17:50-292 {getLinkVideoNode  :223} find /dev/me0] fps [30:30] gop 60
-[ 4669.7845dia1: model:rkcif-mipi-lvds
-74] h265e_pRTDeviceV4L2     01:17:50-304 {open              :135} cameraIndex:0, entityName:rkisp_selfpath
-RTIsp3x          01:17:50-314 {getIspHwInfo      :357} getIspHwInfo enter >>>
-RTIsp3x          01:17:50-321 {getIspHwInfo      :roc_pr359} find isp count: 1, Current selected: 0
-cfg:414: MPP_ENC_SET_PREP_CFG w:h VideoName      :ep_396} entityName = rkisp_selfpath
-RTDeviceV4L2     01:17:50-340 {open              :141} open video name(/dev/video12)
-RTDeviceV4L2     01:17:50-349 {ispOpenDevice     :526} v4l2_open(/dev/video12), handler=61
-RTIsp3x          01:17:50-357 {setIspFps         :630} setIspFps enter >>>
-RTIsp3x         [1920: 01:17:50-364 {setIspFps         :637} isp set fps:-1
-80] stride [1920:1080]:50-370 {se10tIspFps         :640} setIspFps leave <<<
-[ 4669.784
-RKViChn          01:17:50-380 {prepare           :952} start dev:0 chn:1 prepare
-RTDeviceV4L2     01:17:50-387 {ispCameraInfo     :543} camera information:
-RTDeviceV4L2     01:17:50-394 {ispCameraInfo     :544} device name : /dev/video12
-RTDeviceV4L2     01:17:50-401 {ispCameraInfo     :584] 2545} driver name : rkisp_v7
-RTDeviceV4L2     01:17:50-409 {ispCameraInfo     :71546} card name   : rkisp_selfpath
-: send RTDeviceV4L2    header for set cfg change in 01:17:50-417 {ispCameraInfo     :547} bus info    : platform:rkisp-vir0
-RTDeviceV4L2     01:17:50-427 {ispCameraInfo     :549} version     : 2.1.0
-RTDeviceV4L2     01:17:50-434 {ispCameraInfo     :554} current device:/dev/video12 isn't compatible(cap:0x84201000) device,memput/fooryType:4, retry:0
-at eviceV4L2     01:17:50-448 {prepare           :rm424} mV4L2Ctx->wrapInfo->height = 0 width = 0
-[ 4669.813147] 755: MPP_ENC_SET_CFG
-RTDeviceV4L2     01:17:50-461 {ispInitFormat     :738} ioctl VIDIOC_S_FMT OK
-cmpi             01:17:50-469 {startRuntime      :630} VVI_IOCTL_NODE_START
-n RKViChn          01:17:50-476 {start             :883} =========== vi Start startRuntime ===========
-[ 4
-669iChn          01:17:50-486 {streamOn          :977} start dev:0 chn:1 stream on
-RTDeviceV4L2     01:17:50-494 {is.813173] 524: MPP_ENC_SET_RC_CFG bpspStreamOn       :445} do ispStreamOn start
-RTDeviceV4L2     01:17:50-505 {ispStreamOn       :461} setIspFps -1 to isp driver
-RTIsp3x          01:17:50-512 {setIspFps         :630} setIspFps enter >>>
-RTIsp3x          01:17:50-519 {setIspFps         :637} isp set fps:-1
-RTIsp3x          40960 01:17:50-525 {setIspFps         :640} setIspFps leave <<<
-RTIsp3x         00 [3840 01:17:50-532 {setIspMirrorFlip  :610} setIspMirror000 : 4352000] fps [30:30]Flip enter >>>
-RTIsp3x          01:17:50-542 {setIspMirrorFlip  :611} mirror = 0 flip = 0
-RTIsp3x          01:17:50-549 {setIspMirrorFlip  :619} isp set mirror flip: mirror:0 fip: 0
-RTIsp3x          01:17:50-557 {setIspMirrorFlip  :622} setIspMirrorFlip leave <<<
-RTDeviceV4L2     gop  01:17:50-564 {ispStreamOn       :498} do ispStreamOn done
-50
-[ 46RKViDev          01:17:50-573 {vi_set_ch_status  :69.813188] 271: send heade323} pipe = 0, ch = 1, enable = 1, streamOn=1
-rcmpi             01:17:50-584 {SAMPLE_COMM_VENC_C:129} V_C:1 bufferCnt:3
-MpiHwInterface   01:17:50-591 {MpiHwInterface    :034} MpiHwInterface
-cmpi             01:17:50-597 {venc_create_chn   :193} venc version: 1.0, name:venc
-RKVencChannel    for s 01:17:50-604 {create            :358} venc chn need to be rebuild
-eMpiHwInterface  t cfg cha 01:17:50-612 {create            :nge rc_mode/fps/gop
-[ 4669.079} create: type = 3
-MpiAdapterEncode 01:17:50-622 {ma_encode_create  :1654} ringbuf buf_size 622592
-EncRc            01:17:50-631 {ma_encode_set_rc_a:276} not find rc attr!
-EncRc            01:17:50-637 {ma_encode_calculat:166} bps_target:1555200, min:1458000, max:1652400, 843691stat_time:3
-55: MPP_Enterface   01:17:50-648 {control           :381} control
-MpiAdapterEncode 01:17:50-654 {ma_encode_change_c:NC_SET_CFG in
-[ 4669.843715]837} set rc attr
-cmpi             01:17:50-661 {mb_get_buffer_by_i:421} allocated buffer(this=0x688930, data=(nil), size=0, id=-1)
-EncRc            01:17:50-667 {ma_encode_set_rc_a:271} find rc attr!
-EncRc            01:17:50-679 {ma_encode_calculat:166} bps_target:4096000, min:38400 524:00, max:4352000, stat_time:3
-RKViChn          01:17:50-689 {getFrameRuntime   : MPP_ENC_SET1111} buffer fd = -1 mpi_id = 177
-_RC_CFG bps 4096000 [384000MpiHwInterface   01:17:50-698 {control           :381} control
-MpiAdapterEncode 01:17:50-706 {ma_encode_change_c:797} set gop_mode
-0 RKViChn          01:17:50-712 {getFrameRuntime   :1118} get fd = 64 from id = 177
-MpiHwInterface   01:17:50-719 {control           :381} control
-RKViChn         : 4352 01:17:50-725 {getFrameRuntime   :1124} -------------------------------vviBu000] fps f->buf_size: 622592
-MpiAdapterEncode[30:30] gop 50
-[ 4669.8 01:17:50-737 {ma_encode_change_c:968} fps setting, in-num(30), in-dem(1), out-num(30), out-dem(1)
-cmpi             01:17:50-745 {rkipc_get_vi_to_np:43242} loopCount is 0, w is 720, h is 576, seq is 23, pts is 4670613
-
-729] 2nterface   01:17:50-754 {control           :381} control
-7MediaBufferPool  01:17:50-766 {onBufferAvailable :099} buffer(0x688930) is available1: send
-MpiAdapterEncode 01:17:50-774 {maheader for set cfg chang_encode_change_c:943} qp_init=0, qp_step=0, qp_min=10, qp_max=51, qp_min_i=10, qp_max_i=51, qp_ip=0, max_reenc_times=0, frm_qp_min 28, frm_qp_max 42, frm_qp_min_i 28, frm_qp_max_i 42
-MpiHwInterface   01:17:50-795 {control           :381} control
-MpiAdapterEncode 01:17:50-801 {ma_encode_change_c:e rc_m1145} crop_cfg(0),change crop s32Width(0 to 720), s32Height(0 to 576)s32X(0 to 0), s3ode/fps/2Y(0 to 0)
-cmpi             01:17:50-815 {stgop
-[ 4669.872140] 755: MPPartRecvFrame    :1633} VENC_IOCTL_NODE_CREATE
-cmpi             01:17:50-820 {mb_get_buffer_by_i:421} allocated buffer(this=0x6d2688, data=(nil), size=0, id=-1)
-cmpi             01:17:50-830 {startRecvFrame    :1658} VENC_IOCTL_NODE_START
-RKViChn          01:17:50-840 {getFrameRuntime   :_ENC_SET_1111} buffer fd = -1 mpi_id = 179
-venc[1]:u32BufSize:622080
-main initial finCFG in
-[ 4ish
-#Start venc1_get_stream , arg:0x4669.872169] 524: MPP_ENC_SET_RC_CFG bps 4096000 [3840000 : 4352000] 01f0
-RKViChn          01:17:50-854 {getFrameRuntime   :1118} get fd = 65 from id = 179
-MpiHwInterface  fps  01:17:50-871 {control           :[381} control
-30:30]pterEncode 01:17:50-877 {ma_encode_get_pack:1979} map ptr: 0xa30b1000
-cmpi             01:17:50-883 {mb_get_buffer_time: gop 5385} allocated buffer(this=0x6bf8a0
-.872183] 271: send header for set cfg change
-RKViChn          01:17:50-890 {getFrameRuntime   :1124} -------------------------------vviBuf->buf_size: 622592
-MpiAdapterEncode 01:17:50-912 {ma_encode_get_pack:2032} enc_packet->offset=128
-cmpi             01:17:50-918 {rkipc_get_vi_to_np:242} loopCount is 1, w is 720, h i rc_mos 576, seq is 27, pts is 4670773
-
-MpiHwInterface   01:17:50-923 {dede/fps/gqueue           :266} dequeue
-MpiAdapterEncode 01:17:50-936 {maop
-[ 4669.877859] 755: MPP_ENC_SET_C_encode_get_pack:2064} tracebuffer(buffer=0x6bbf90, pts=4670813 ms, time=4670923 ms) is received from mpp
-MediaBufferPool  01:17:50-952 {onBufferAvailable :F099} buffer(0x6d2688) is available
-MpiAdapterEncode 01:17:50-959 {ma_encode_get_pack:1979} maG inp ptr: 0xa2ee9000
-RKVencChannel    01:17:50-968 {getStreamReference:252} gop:1 nal:4,
-[ 4669.8 id:0, type:0
-MpiAdapterEncode77886] 524: MPP_ENC_SET_RC_CFG bps 4096000 [ 01:17:50-976 {ma_encode_get_pack:2032} enc_packet->offset=128
-cmpi             01:17:50-981 {mb_get_buffer_by_i:421} allocated buffer(this=0x6bd87388, data=(nil), size=0, id=-1)
-cmpi             01:17:50-983 {venc0_get_stream  :067} chn:0, loopCount:0 wd:56306
-
-MpiAdapterEncode 01:17:50-993 {ma_encode_get_pack:2064} tracebuffer(buffer=0x6bf8a8, pts=4670813 ms, 40000 : 4time=4670993 ms) is received from mpp
-[DEBUG utils.c:186:rtsp_codec_data_parse_from_user_h265] vps 23
-[DEBUG utils.c:194:rtsp_codec_data_parse_from_user_h265] sps 44
-RKViChn          01:17:51-023 {getFrameRuntime   :1111} buffer fd =3 -1 mpi_id = 178
-RKVencChannel    01:17:51-036 {getStreamReference:252} gop:1 nal:4, id:0, type:0
-cmpi             01:17:51-043 {ve52000]nc1_get_stream  :106} chn:1, loopCount:0 wd:40844
-
- fps [30:30] gop 50:17:51-047 {getFrameRuntime   :1118} get fd = 68 from id = 178
-[ 4669.877897] 271
-: se[DEBUG utils.c:202:rtsp_codec_data_parse_from_user_h265] pps 7
-RKViChn          01:17:51-067 {getFrameRuntime   :nd header for se1124} --t -----------------------------vviBuf->buf_size: 622592
-[DEBUG utils.c:186:rtsp_codec_data_parse_from_user_cfg chh265] vps 23
-MediaBufferPool  01:17:51-086 {onBufferAvailable :099} buffer(0x6bbfange rc_m90) is available
-cmpi             01:17:51-086 {rkode/fps/gop
-[ 4670.477328] rkisp queue ipc_get_vi_to_np:242} loopCount is 2, w is 720, h is 576, seq is 31, pts is 4670933
-
-[DEBUG utils.c:194:rtsp_codec_datbufa_parse_from_user_h265] sps 43
-MpiHwInterface   01:17:51-107 {control           :381} control
-[DEBUG utils.c:202:rtsp_codec_data_parse_from_user_done
-h265] pps 7
-MediaBufferPool  01:17:51-124 {onBufferAvailable :099} buffer(0x6bd878) is available[ 4670.632017] mpp_v
-MpiHwInterface   01:17:51-136 {dequeue           :266} dequeue
-MpiAdapterEncode 01:17:51-142 {ma_encode_get_pack:2032} enc_packet->offset=56448
-MediaBufferPool  01:17:51-149 {onBufferAvailable :099} buffer(0x6bfco8a8) is available
-MpiAdapterEncode 01:17:51-157 {ma_encode_get_pack:2064} tracebuffer(buffer=0x6bbf90, pts=4670853 ms, dec: 4time=4671153 ms) is received from mpp
-MpiHwInterface   01:17:51-169 {control           :4: num_ch381} control
-MpiHwInterface  an = 1
-[ 4670.632152] mpp_vcodec: 368: at 01:17:51-176 {dequeue           :266} dequeue
-RKViChn          01:17:51-185 {getFrameRuntime   :1111} buffer fd =tr- 65 mpi_id = 179
-RKVencChannel   > 01:17:51-193 {getStreamReference:252} gop:1 nal:2, id:0, type:2
-cmpi             01:17:51-197 {rkipc_get_vi_to_np:242} loopCount ismax_wi 3, w is 720, h is 576, seq is 36, pts is 4671133
-
-MpiAdapterEncode 01:17:51-203 {madth = 72_encode_get_pack:2032} enc_packet-0, attr->max_height = 576
-[ 4670.633037] mpp>offset=41088
-cmpi             01:17:51-203 {venc0_get_stream  :067} chn:0, loopCount:1 wd:10533
-
-MediaBufferPool  01:17:51-227 {onBufferAvailable :_v099} buffer(0x6d2co688) is available
-MpiAdapterEncode 01:17:51-238 {ma_encode_get_pack:2064} tracebuffer(buffer=0x6bf8a8,dec: 1 pts=4670853 ms, time=4671227 ms) is received from mpp
-MediaBufferPool  01:17:51-251 {onBufferAvailable :099} buffer(0x6bbf90) is available03: chan_entry->handle 5f778d03, enc 5f
-778d03           01:17:51-262 {getFrameRuntime   :1111} buffer fd = 64 mpi_id = 177
-[ 4670.649160]
-MpiHwInterface  755 01:17:51-271 {control           ::381} control
-RKVencChannel    01:17:51-277 {ge MPP_ENC_SET_CFG in
-[ 4670.649191] 524: MPPtStreamReference:_ENC_SET_RC_CFG bps 1555200 [252} gop:1 nal:2,1458000 : 1652400] fps [30: id:0, t30] gop 60
-[ 4670
-cmpi             01:17:51-283 {rk.649206] h265e_proc_prep_cfg:414: MPP_ipc_get_vi_to_np:ENC_SET_PREP_CFG w:242} loopCount is 4, w is 720, h is 576, seq is 38, pts is 4671213h [720:576] stride [720:576]
-
-
-MpiHwInterface   01:17:51-303 {de[ queue           :266} dequeue
-cmpi             01:17:51-303 {venc1_get_stream  :4670.649217] 271: s106} chn:1, loopCend header for setount:1 wd:5699 cfg
-
-MpiAdapterEncode 01:17:51-323 {machange input/fo_encode_get_pack:rm2032} enc_packet-at
-[ 4670.696036] 755: MPP_ENC_SET_CFG in
-674>offset=67072
-MediaBufferPool  01:17:51-343 {onBufferAvailable :0.696069] 524: MPP_ENC_SE099} buffer(0x688930) is availableT_RC_CFG bps 4096000 [384000
-MediaBufferPool  01:17:51-355 {onBufferAvailable :0 : 4352099} buffer(0x6bf000] 8a8) is availablefps [30:30]
- gop 50
-[ MpiAdapterEncode 01:17:51-366 {ma_encode_get_pack:4670.696085] 271: send h2064} tracebuffereader for set cfg (buffer=0x6bbf90, pts=4670893 ms, change rc_mode/fps/gop
-[ 4670.755359] 755:time=4671349 ms) is received from mpp
-MpiHwInterface   01:17:51-385 {control           :381} control
-RKViChn          01:17:51-391 {getFrameRuntime   : M1111} buffer fd = 65 mpi_id = 179
-PP_ENCChannel    01:17:51-398 {getStreamReference:252} gop:1 nal:2, id:0, type:2
-cmpi             01:17:51-403 {rkipc_get_vi_to_np:242} loopCount is 5, w is 720, h i_SET_CFG s 576, seq is 41, pts is 4671333
-in
-[ 4670.755383] 524: MPP_ENC_SET_RC
-MpiHwInterface   01:17:51-409 {dequeue           :266} dequeue
-cmpi             01:17:51-409 {venc0_get_stream  :_CFG067} chn:0, loopCount:2 wd:7708
-
-MediaBufferPool  01:17:51-431 {onBufferAvailable :099} buffer(0x6d2bp688) is available
-MpiAdapterEncode 01:17:51-442 {ma_encode_get_pack:s 40962032} enc_packet->offset=46848
-MediaBufferPool  01:17:51-450 {onB000 [3840ufferAvailable :099} buffer(0x6bbf90) is available
-000 : 4352000] fps [30:30] gop 50
-[ 4670.755MpiAdapterEncode 01:17:51-462 {ma_encode_get_pack:2064} tracebuffer(buffer=0x6bf8a8, pts=4670893 ms, time=4671455 ms) is received from mpp
-RKViChn          01:17:51-474 {getFrameRuntime   :1111} buffer fd = 68 mpi_id = 178
-MpiHwInterface   01:17:51-482 {control           :396] 2381} control
-cmpi             01:17:51-486 {rkipc_get_vi_to_np:242} loopCount is71: send  6, w is 720, h is 576, seq is 43, pts is 4671413header for set cfg change rc_mode/fps/
-
-MpiHwInterface   01:17:51-491 {dequeue           :266} dequeue
-RKVencChannel    01:17:51-508 {getStreamReference:gop252} gop:1 nal:2, id:0, type:2
-MediaBufferPool  01:17:51-516 {onBufferAvailable :099} buffer(0x6bd878) is available
-cmpi             01:17:51-520 {ve
-                                 [ 467nc1_get_stream  :106} chn:1, loopCount:2 wd:6035
-
-MpiAdapterEncode 01:17:51-528 {ma0.797130]_encode_get_pack:2032} enc_packet- 755: MPP_ENC_SET_CFG in
-[ 4670.797160] 524: >offset=74880
-RKViChn          01:17:51-543 {getFrameRuntime   :1111} buffer fd = 64 mpi_id = 177
-MediaBufferPool  01:17:51-551 {onBufferAvailable :MP099} buffer(0x6bf8a8) is available
-MpiAdapterEncode 01:17:51-558 {ma_encode_get_pack:2064} tracebuffer(buffer=0x6bbf90,P_EN pts=4670933 ms, time=4671549 ms) is received from mpp
-cmpi             01:17:51-558 {rkipc_get_vi_to_np:242} loopCount is 7, w is 720, h iC_SET_RC_CFG bps 4096000 [3840000 : 4s 576, seq is 45, pts is 4671493
-
-MpiHwInterface   01:17:51-583 {control           :381} control
-RKVencChannel    35201:17:51-590 {getStreamReference:0252} gop:1 nal:2, id:0, type:2
-00] fpufferPool  01:17:51-598 {onBufferAvailable :099} buffer(0x688930) is available
-cmpi             01:17:51-603 {venc0_get_stream  :067} chn:0, loopCount:3 wd:11929s [30:30]
-
-MpiHwInterface   01:17:51-610 {de gop 50
- s4670.797171] 271: send header fqueue           :or266} dequeue
-RKViChn          01:17:51-624 {getFrameRuntime   :1111} buffer fd = 65 mpi_id = 179
-MpiAdapterEncode 01:17:51-631 {maet_encode_get_pack:2032} enc_packet->offset=52992
-MediaBufferPool  01:17:51-638 {onBufferAvailable :099} buffer(0x6bbf90) is available cfg c
-cmpi             01:17:51-634 {rkipc_get_vi_to_np:242} loopCount is 8, w is 720, h ihange rcs 576, seq is 47, pts is 4671573
-_mode/fps/gop
-[ 4670.802791] 755: MPP_E
-MpiAdapterEncode 01:17:51-651 {ma_encode_get_pack:2064} tracebuffer(buffer=0x6bf8a8, pts=4670933 ms, time=4671643 ms) NC_is received from mpp
-MpiHwInterface  S 01:17:51-674 {control           :381} control
-MediaBufferPool  01:17:51-679 {onBufferAvailable :099} buffer(0x6d2ET_C688) is available
-RKVencChannel    01:17:51-687 {getStreamReference:252} gop:1 nal:2,FG in
- id:0, type:2
-MpiHwInterface   01:17:51-695 {de[ 4670.802807] 524: MPP_ENC_SET_RC_CFG bpsqueue           :266} dequeue
-RKViChn          01:17:51-704 {getFrameRuntime   :1111} buffer fd = 68 mpi_id = 178
-cmpi             01:17:51-710 {ve 4nc1_get_stream  :106} chn:1, loopCount:3 wd:5113
-
-MpiAdapterEncode 01:17:51-716 {ma_encode_get_pack:092032} enc_packet-6000 [>offset=86912
-cmpi             01:17:51-716 {rkipc_get_vi_to_np:242} loopCount is3840000 : 9, w is 720, h is 576, seq is 49, pts is 4671653 4352000] fps [30:30] gop 50
-[ 4670.
-
-MediaBufferPool  01:17:51-734 {onBufferAvailable :099} buffer(0x6bf8a8) is available
-MpiAdapterEncode 01:17:51-749 {ma802_encode_get_pack:2064} tracebuffer8(buffer=0x6bbf90, pts=4670973 ms, time=4671734 ms) is received from mpp
-MediaBufferPool  01:17:51-762 {onBufferAvailable :17] 27099} buffer(0x6bd878) is available
-MpiHwInterface   01:17:51-770 {control           :381} control
-RKVencChannel    01:17:51-776 {ge1: send header for set cfg change rc_mode/ftStreamReference:252} gop:1 nal:2, id:0, type:2
-MpiHwInterface   01:17:51-787 {dequeue           :266} dequeue
-cmpi             01:17:51-789 {vepsnc0_get_stream  :067} chn:0, loopCount:4 wd:8832
-
-MpiAdapterEncode 01:17:51-795 {ma_encode_get_pack:/g2032} enc_packet-op
-[ >offset=58112
-MediaBufferPool  01:17:51-808 {onBufferAvailable :099} buffer(0x6bb4670.8595f90) is available
-MpiAdapterEncode 65] 1062: mode cbr bps [3840000:4096000:4301:17:51-816 {ma_encode_get_pack:2064} tracebuffer(buffer=0x6bf8a8, pts=4670973 ms, time=4671809 ms) is received from 520mpp
-RKViChn          01:17:51-832 {ge0tFrameRuntime   :1111} buffer fd = 68 mpi_id = 178
-0] fpsnterface   01:17:51-840 {control           :381} control
-cmpi             01:17:51-844 {rkipc_get_vi_to_np:242} loopCount is 10, w is 720, h  fix [30is 576, seq is 52, pts is 4671773
-/1] -> fix [30/1] gop i [50] v [0]
-[ 4
-670RKVencChannel    01:17:51-854 {getStreamReference:252} gop:1 nal:2, id:0, type:2
-.8iHwInterface   01:17:51-868 {dequeue           :266} dequeue
-cmpi             01:17:51-872 {venc1_get_stream  :106} chn:1, loopCount:4 wd:6161
-
-MediaBufferPool  01:17:51-880 {onBufferAvailable :62146] 10099} buffer(0x6bd878) is available
-cbr bps [3840000:4096000:4352000] fps fi_get_pack:62: mode 2032} enc_packet->offset=95872
-MediaBufferPool  01:17:51-901 {onBufferAvailable :099} buffer(0x6bf8a8) is available
-RKViChn          01:17:51-909 {gex [tFrameRuntime   :1111} buffer fd =3 64 mpi_id = 177
-MpiAdapterEncode 01:17:51-916 {ma_encode_get_pack:2064} tracebuffer(buffer=0x6bbf90, pts=4671013 ms, 0/1] -time=4671907 ms) is received from mpp
-cmpi             01:17:51-921 {rkipc_get_vi_to_np:> fix [30242} loopCount is 11, w is 720, h /1] gop i [50] v [0]
-is 576, seq is 54, pts is 4671853
-
-MpiHwInterface   01:17:51-934 {control           :381} control
-RKVencChannel    01:17:51-948 {getStreamReference:252} gop:1 nal:2, id:0, type:2
-MediaBufferPool  01:17:51-955 {onBufferAvailable :099} buffer(0x688930) is available
-cmpi             01:17:51-960 {venc0_get_stream  :067} chn:0, loopCount:5 wd:8814
-
-MpiHwInterface   01:17:51-971 {dequeue           :266} dequeue
-MpiAdapterEncode 01:17:51-976 {ma_encode_get_pack:2032} enc_packet->offset=64384
-RKViChn          01:17:51-983 {getFrameRuntime   :1111} buffer fd = 68 mpi_id = 178
-MediaBufferPool  01:17:51-990 {onBufferAvailable :099} buffer(0x6bbf90) is available
-MpiAdapterEncode 01:17:51-998 {ma_encode_get_pack:2064} tracebuffer(buffer=0x6bf8a8, pts=4671013 ms, time=4671986 ms) is received from mpp
-cmpi             01:17:51-996 {rkipc_get_vi_to_np:242} loopCount is 12, w is 720, h is 576, seq is 56, pts is 4671933
-
-MpiHwInterface   01:17:52-016 {control           :381} control
-RKVencChannel    01:17:52-026 {getStreamReference:252} gop:1 nal:2, id:0, type:2
-MediaBufferPool  01:17:52-034 {onBufferAvailable :099} buffer(0x6bd878) is available
-cmpi             01:17:52-035 {venc1_get_stream  :106} chn:1, loopCount:5 wd:5405
-
-MpiHwInterface   01:17:52-046 {dequeue           :266} dequeue
-MpiAdapterEncode 01:17:52-054 {ma_encode_get_pack:2032} enc_packet->offset=104704
-MediaBufferPool  01:17:52-062 {onBufferAvailable :099} buffer(0x6bf8a8) is available
-RKViChn          01:17:52-069 {getFrameRuntime   :1111} buffer fd = 64 mpi_id = 177
-MpiAdapterEncode 01:17:52-077 {ma_encode_get_pack:2064} tracebuffer(buffer=0x6bbf90, pts=4671053 ms, time=4672066 ms) is received from mpp
-cmpi             01:17:52-081 {rkipc_get_vi_to_np:242} loopCount is 13, w is 720, h is 576, seq is 58, pts is 4672013
-
-MpiHwInterface   01:17:52-094 {control           :381} control
-RKVencChannel    01:17:52-105 {getStreamReference:252} gop:1 nal:2, id:0, type:2
-MpiHwInterface   01:17:52-112 {dequeue           :266} dequeue
-cmpi             01:17:52-116 {venc0_get_stream  :067} chn:0, loopCount:6 wd:11658
-
-MediaBufferPool  01:17:52-119 {onBufferAvailable :099} buffer(0x688930) is available
-MpiAdapterEncode 01:17:52-134 {ma_encode_get_pack:2032} enc_packet->offset=69888
-MediaBufferPool  01:17:52-141 {onBufferAvailable :099} buffer(0x6bbf90) is available
-MpiAdapterEncode 01:17:52-148 {ma_encode_get_pack:2064} tracebuffer(buffer=0x6bf8a8, pts=4671053 ms, time=4672146 ms) is received from mpp
-MpiHwInterface   01:17:52-160 {control           :381} control
-MpiHwInterface   01:17:52-166 {dequeue           :266} dequeue
-RKVencChannel    01:17:52-171 {getStreamReference:252} gop:1 nal:2, id:0, type:2
-RKViChn          01:17:52-181 {getFrameRuntime   :1111} buffer fd = 65 mpi_id = 179
-cmpi             01:17:52-186 {venc1_get_stream  :106} chn:1, loopCount:6 wd:7349
-
-MpiAdapterEncode 01:17:52-187 {ma_encode_get_pack:2032} enc_packet->offset=116480
-cmpi             01:17:52-190 {rkipc_get_vi_to_np:242} loopCount is 14, w is 720, h is 576, seq is 61, pts is 4672133
-
-MediaBufferPool  01:17:52-207 {onBufferAvailable :099} buffer(0x6bf8a8) is available
-MpiAdapterEncode 01:17:52-222 {ma_encode_get_pack:2064} tracebuffer(buffer=0x6bbf90, pts=4671093 ms, time=4672207 ms) is received from mpp
-MediaBufferPool  01:17:52-231 {onBufferAvailable :099} buffer(0x6d2688) is available
-MpiHwInterface   01:17:52-238 {control           :381} control
-RKVencChannel    01:17:52-244 {getStreamReference:252} gop:1 nal:2, id:0, type:2
-MpiHwInterface   01:17:52-251 {dequeue           :266} dequeue
-cmpi             01:17:52-257 {venc0_get_stream  :067} chn:0, loopCount:7 wd:13797
-
-RKViChn          01:17:52-260 {getFrameRuntime   :1111} buffer fd = 68 mpi_id = 178
-MpiAdapterEncode 01:17:52-272 {ma_encode_get_pack:2032} enc_packet->offset=77312
-MediaBufferPool  01:17:52-279 {onBufferAvailable :099} buffer(0x6bbf90) is available
-cmpi             01:17:52-276 {rkipc_get_vi_to_np:242} loopCount is 15, w is 720, h is 576, seq is 63, pts is 4672213
-
-MpiAdapterEncode 01:17:52-292 {ma_encode_get_pack:2064} tracebuffer(buffer=0x6bf8a8, pts=4671093 ms, time=4672283 ms) is received from mpp
-MpiHwInterface   01:17:52-309 {control           :381} control
-MediaBufferPool  01:17:52-315 {onBufferAvailable :099} buffer(0x6bd878) is available
-RKVencChannel    01:17:52-322 {getStreamReference:252} gop:1 nal:2, id:0, type:2
-MpiHwInterface   01:17:52-330 {dequeue           :266} dequeue
-cmpi             01:17:52-335 {venc1_get_stream  :106} chn:1, loopCount:7 wd:5465
-
-MpiAdapterEncode 01:17:52-337 {ma_encode_get_pack:2032} enc_packet->offset=130304
-RKViChn          01:17:52-350 {getFrameRuntime   :1111} buffer fd = 64 mpi_id = 177
-MediaBufferPool  01:17:52-357 {onBufferAvailable :099} buffer(0x6bf8a8) is available
-cmpi             01:17:52-363 {rkipc_get_vi_to_np:242} loopCount is 16, w is 720, h is 576, seq is 65, pts is 4672293
-
-MpiAdapterEncode 01:17:52-369 {ma_encode_get_pack:2064} tracebuffer(buffer=0x6bbf90, pts=4671133 ms, time=4672355 ms) is received from mpp
-MpiHwInterface   01:17:52-388 {control           :381} control
-MediaBufferPool  01:17:52-394 {onBufferAvailable :099} buffer(0x688930) is available
-RKVencChannel    01:17:52-401 {getStreamReference:252} gop:1 nal:2, id:0, type:2
-MpiHwInterface   01:17:52-408 {dequeue           :266} dequeue
-cmpi             01:17:52-413 {venc0_get_stream  :067} chn:0, loopCount:8 wd:12410
-
-RKViChn          01:17:52-422 {getFrameRuntime   :1111} buffer fd = 65 mpi_id = 179
-cmpi             01:17:52-429 {rkipc_get_vi_to_np:242} loopCount is 17, w is 720, h is 576, seq is 67, pts is 4672373
-
-MpiAdapterEncode 01:17:52-430 {ma_encode_get_pack:2032} enc_packet->offset=82816
-MediaBufferPool  01:17:52-447 {onBufferAvailable :099} buffer(0x6bbf90) is available
-MediaBufferPool  01:17:52-455 {onBufferAvailable :099} buffer(0x6d2688) is available
-MpiAdapterEncode 01:17:52-462 {ma_encode_get_pack:2064} tracebuffer(buffer=0x6bf8a8, pts=4671133 ms, time=4672455 ms) is received from mpp
-MpiHwInterface   01:17:52-474 {control           :381} control
-RKVencChannel    01:17:52-480 {getStreamReference:252} gop:1 nal:2, id:0, type:2
-MpiHwInterface   01:17:52-487 {dequeue           :266} dequeue
-cmpi             01:17:52-490 {venc1_get_stream  :106} chn:1, loopCount:8 wd:5805
-
-RKViChn          01:17:52-502 {getFrameRuntime   :1111} buffer fd = 68 mpi_id = 178
-MpiAdapterEncode 01:17:52-507 {ma_encode_get_pack:2032} enc_packet->offset=142720
-cmpi             01:17:52-513 {rkipc_get_vi_to_np:242} loopCount is 18, w is 720, h is 576, seq is 69, pts is 4672453
-
-MediaBufferPool  01:17:52-523 {onBufferAvailable :099} buffer(0x6bf8a8) is available
-MpiAdapterEncode 01:17:52-533 {ma_encode_get_pack:2064} tracebuffer(buffer=0x6bbf90, pts=4671173 ms, time=4672523 ms) is received from mpp
-MediaBufferPool  01:17:52-545 {onBufferAvailable :099} buffer(0x6bd878) is available
-MpiHwInterface   01:17:52-552 {control           :381} control
-RKVencChannel    01:17:52-558 {getStreamReference:252} gop:1 nal:2, id:0, type:2
-MpiHwInterface   01:17:52-566 {dequeue           :266} dequeue
-cmpi             01:17:52-570 {venc0_get_stream  :067} chn:0, loopCount:9 wd:11179
-
-MpiAdapterEncode 01:17:52-575 {ma_encode_get_pack:2032} enc_packet->offset=88704
-RKViChn          01:17:52-586 {getFrameRuntime   :1111} buffer fd = 64 mpi_id = 177
-MediaBufferPool  01:17:52-593 {onBufferAvailable :099} buffer(0x6bbf90) is available
-MpiAdapterEncode 01:17:52-601 {ma_encode_get_pack:2064} tracebuffer(buffer=0x6bf8a8, pts=4671173 ms, time=4672590 ms) is received from mpp
-cmpi             01:17:52-605 {rkipc_get_vi_to_np:242} loopCount is 19, w is 720, h is 576, seq is 71, pts is 4672533
-
-MpiHwInterface   01:17:52-622 {control           :381} control
-RKVencChannel    01:17:52-629 {getStreamReference:252} gop:1 nal:2, id:0, type:2
-MediaBufferPool  01:17:52-636 {onBufferAvailable :099} buffer(0x688930) is available
-cmpi             01:17:52-639 {venc1_get_stream  :106} chn:1, loopCount:9 wd:4475
-
-MpiHwInterface   01:17:52-650 {dequeue           :266} dequeue
-RKViChn          01:17:52-661 {getFrameRuntime   :1111} buffer fd = 65 mpi_id = 179
-cmpi             01:17:52-664 {rkipc_get_vi_to_np:242} loopCount is 20, w is 720, h is 576, seq is 73, pts is 4672613
-
-MediaBufferPool  01:17:52-666 {onBufferAvailable :099} buffer(0x6bf8a8) is available
-MpiAdapterEncode 01:17:52-682 {ma_encode_get_pack:2032} enc_packet->offset=153984
-MediaBufferPool  01:17:52-690 {onBufferAvailable :099} buffer(0x6d2688) is available
-MpiHwInterface   01:17:52-701 {control           :381} control
-MpiAdapterEncode 01:17:52-703 {ma_encode_get_pack:2064} tracebuffer(buffer=0x6bbf90, pts=4671213 ms, time=4672696 ms) is received from mpp
-MpiHwInterface   01:17:52-715 {dequeue           :266} dequeue
-RKVencChannel    01:17:52-721 {getStreamReference:252} gop:1 nal:2, id:0, type:2
-MpiAdapterEncode 01:17:52-728 {ma_encode_get_pack:2032} enc_packet->offset=93184
-cmpi             01:17:52-734 {venc0_get_stream  :067} chn:0, loopCount:10 wd:10882
-
-RKViChn          01:17:52-743 {getFrameRuntime   :1111} buffer fd = 68 mpi_id = 178
-cmpi             01:17:52-750 {rkipc_get_vi_to_np:242} loopCount is 21, w is 720, h is 576, seq is 75, pts is 4672693
-
-MediaBufferPool  01:17:52-753 {onBufferAvailable :099} buffer(0x6bbf90) is available
-MpiAdapterEncode 01:17:52-768 {ma_encode_get_pack:2064} tracebuffer(buffer=0x6bf8a8, pts=4671213 ms, time=4672750 ms) is received from mpp
-MediaBufferPool  01:17:52-781 {onBufferAvailable :099} buffer(0x6bd878) is available
-MpiHwInterface   01:17:52-788 {control           :381} control
-RKVencChannel    01:17:52-794 {getStreamReference:252} gop:1 nal:2, id:0, type:2
-MpiHwInterface   01:17:52-801 {dequeue           :266} dequeue
-cmpi             01:17:52-806 {venc1_get_stream  :106} chn:1, loopCount:10 wd:4322
-
-MpiAdapterEncode 01:17:52-809 {ma_encode_get_pack:2032} enc_packet->offset=164992
-RKViChn          01:17:52-821 {getFrameRuntime   :1111} buffer fd = 64 mpi_id = 177
-MediaBufferPool  01:17:52-829 {onBufferAvailable :099} buffer(0x6bf8a8) is available
-cmpi             01:17:52-833 {rkipc_get_vi_to_np:242} loopCount is 22, w is 720, h is 576, seq is 77, pts is 4672773
-
-MpiAdapterEncode 01:17:52-839 {ma_encode_get_pack:2064} tracebuffer(buffer=0x6bbf90, pts=4671253 ms, time=4672826 ms) is received from mpp
-MpiHwInterface   01:17:52-861 {control           :381} control
-MediaBufferPool  01:17:52-865 {onBufferAvailable :099} buffer(0x688930) is available
-RKVencChannel    01:17:52-872 {getStreamReference:252} gop:1 nal:2, id:0, type:2
-MpiHwInterface   01:17:52-879 {dequeue           :266} dequeue
-MpiAdapterEncode 01:17:52-886 {ma_encode_get_pack:2032} enc_packet->offset=97536
-cmpi             01:17:52-884 {venc0_get_stream  :067} chn:0, loopCount:11 wd:14833
-
-RKViChn          01:17:52-901 {getFrameRuntime   :1111} buffer fd = 65 mpi_id = 179
-MpiAdapterEncode 01:17:52-907 {ma_encode_get_pack:2064} tracebuffer(buffer=0x6bf8a8, pts=4671253 ms, time=4672901 ms) is received from mpp
-cmpi             01:17:52-916 {rkipc_get_vi_to_np:242} loopCount is 23, w is 720, h is 576, seq is 79, pts is 4672853
-
-MediaBufferPool  01:17:52-926 {onBufferAvailable :099} buffer(0x6bbf90) is available
-RKVencChannel    01:17:52-941 {getStreamReference:252} gop:1 nal:2, id:0, type:2
-MediaBufferPool  01:17:52-945 {onBufferAvailable :099} buffer(0x6d2688) is available
-cmpi             01:17:52-949 {venc1_get_stream  :106} chn:1, loopCount:11 wd:3686
-
-MpiHwInterface   01:17:52-955 {control           :381} control
-MediaBufferPool  01:17:52-966 {onBufferAvailable :099} buffer(0x6bf8a8) is available
-MpiHwInterface   01:17:52-974 {dequeue           :266} dequeue
-RKViChn          01:17:52-981 {getFrameRuntime   :1111} buffer fd = 68 mpi_id = 178
-MpiHwInterface   01:17:52-986 {control           :381} control
-cmpi             01:17:52-989 {rkipc_get_vi_to_np:242} loopCount is 24, w is 720, h is 576, seq is 81, pts is 4672933
-
-MpiAdapterEncode 01:17:52-999 {ma_encode_get_pack:2032} enc_packet->offset=179840
-MpiHwInterface   01:17:53-010 {dequeue           :266} dequeue
-^Csignal 2
-main exit!
-MediaBufferPool  01:17:53-021 {onBufferAvailable :099} buffer(0x6bd878) is available
-MpiAdapterEncode 01:17:53-025 {ma_encode_get_pack:2064} tracebuffer(buffer=0x6bbf90, pts=4671293 ms, time=4673014 ms) is received from mpp
-MpiAdapterEncode 01:17:53-037 {ma_encode_get_pack:2032} enc_packet->offset=101248
-RKVencChannel    01:17:53-044 {getStreamReference:252} gop:1 nal:2, id:0, type:2
-cmpi             01:17:53-052 {venc0_get_stream  :067} chn:0, loopCount:12 wd:13718
-
-MpiAdapterEncode 01:17:53-054 {ma_encode_get_pack:2064} tracebuffer(buffer=0x6bf8a8, pts=4671293 ms, time=4673054 ms) is received from mpp
-MediaBufferPool  01:17:53-072 {onBufferAvailable :099} buffer(0x6bbf90) is available
-RKVencChannel    01:17:53-079 {getStreamReference:252} gop:1 nal:2, id:0, type:2
-cmpi             01:17:53-087 {venc1_get_stream  :106} chn:1, loopCount:12 wd:4729
-
-MediaBufferPool  01:17:53-094 {onBufferAvailable :099} buffer(0x6bf8a8) is available
-[DEBUG rtsp_demo.c:645:rtsp_del_session] del session path: /live/0
-[DEBUG rtsp_demo.c:645:rtsp_del_session] del session path: /live/1
-[ 4674.134206] rkisp-vir0: waiting on params stream off event timeout
-[ 4674.136704] rockit isp stream off
-[ 4674.136994] rockit isp stream off
-[ 4674.141493] stream_cif_mipi_id1: close video, entity use_count 0
-[ 4674.141542] rkcif-mipi-lvds: stream[0] start stopping, total mode 0x1, cur 0x1
-[ 4674.667665] rockchip-mipi-csi2 ffa20000.mipi-csi2: stream off, src_sd: b4d86bd8, sd_name:roSegmentation fault (core dumped)
-# ckchip-csi2-dphy0
-[ 4674.667716] rockchip-mipi-csi2 ffa20000.mipi-csi2: stream OFF
-[ 4674.668512] rockchip-csi2-dphy csi2-dphy0: csi2_dphy_s_stream_stop stream stop, dphy0
-[ 4674.668544] rockchip-csi2-dphy csi2-dphy0: csi2_dphy_s_stream stream on:0, dphy0
-[ 4674.668595] rockchip-csi2-dphy csi2-dphy0: csi2_dphy_s_stream stream on:0, dphy0
-[ 4674.668833] rkcif-mipi-lvds: stream[0] stopping finished, dma_en 0x0
-[ 4674.668931] stream_cif_mipi_id0: close video, entit
+[10917.618098] 75read bmp success5:
+ MPP_ENC_SET_CFG in
+[1091cmpi             03:01:57-782 {mb_get_buffer_by_i:7.618125] 426} allocated bu524: MPP_ENC_SET_RC_CFG bps 7776000 [ffer(this=0x26e327290000 : 8262000] fp8, data=(nil), size=0, id=-1)
+read bmp success
+read bmp success
+s [[DEBUG utils.c:134:rtsp_codec_data_parse_from_user30:30] gop 60
+[10917.61813_h264] sps 30
+7] 329: MPP_ENC_SET_PREP_CFG w:h [1920:1080] stride [1920:1080]
+[10917.618150] 271: send header for set cfg change input/format
+[10917.618307] 755: MPP_ENC_SET_CFG in
+[10917.618320] 524: MPP_ENC_SET_RC_CFG bps 4096000 [3840000 : 4352000] fps [30:30] gop 50
+[10917.618333] 271: send header for set cfg change rc_mode/fps/gop
+[10917.618551] 755: MPP_ENC_SET_CFG in
+[10917.618566] 524: MPP_ENC_SET_RC_CFG bps 4096000 [3840000 : 4352000] fps [30:30] gop 50
+[10917.618575] 271: send header for set cfg change rc_mode/fps/gop
+[10917.618646] 755: MPP_ENC_SET_CFG in
+[10917.618659] 524: MPP_ENC_SET_RC_CFG bps 4096000 [3840000 : 4352000] fps [30:30] gop 50
+[10917.618669] 271: send header for set cfg change rc_mode/fps/gop
+[10917.712893] create vpss node = 691200
+[10917.748676] 1062: mode cbr bps [3840000:4096000:4352000] fps fix [30/1] -> fix [30/1] gop i [50] v [0]
+[10917.819051] rga_job: [tgid:1026 pid:1044] destroy request[42] when the user exits
+[10917.819069] rga_job: [tgid:1026 pid:1044] destroy request[43] when the user exits
+[10917.819087] rga_job: [tgid:1026 pid:1044] destroy requesSegmentation fault (core dumped)t[44]
+whe# n the user exits
+[10917.819095] rga_job: [tgid:1026 pid:1044] destroy request[45] when the user exits
+[10917.819103] rga_job: [tgid:1026 pid:1044] destroy request[46] when the user exits
+[10917.860044] rkcif-mipi-lvds: stream[0] start stopping, total mode 0x2, cur 0x2
+[10917.899371] rockchip-mipi-csi2 ffa20000.mipi-csi2: stream off, src_sd: 5fb4549e, sd_name:rockchip-csi2-dphy0
+[10917.899432] rockchip-mipi-csi2 ffa20000.mipi-csi2: stream OFF
+[10917.900201] rockchip-csi2-dphy csi2-dphy0: csi2_dphy_s_stream_stop stream stop, dphy0
+[10917.900237] rockchip-csi2-dphy csi2-dphy0: csi2_dphy_s_stream stream on:0, dphy0
+[10917.900289] rockchip-csi2-dphy csi2-dphy0: csi2_dphy_s_stream stream on:0, dphy0
+[10917.900523] rkcif-mipi-lvds: stream[0] stopping finished, dma_en 0x0
+[10917.903985] rockit isp stream off
+[10917.904045] rockit isp stream off
+[10917.905602] stream_cif_mipi_id1: close video, entity use_count 0
+[10917.905694] stream_cif_mipi_id0: close video, entity use_count 1
