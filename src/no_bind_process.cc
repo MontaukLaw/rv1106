@@ -265,7 +265,7 @@ static void *get_vpss_starem(void *arg)
     while (!quit)
     {
         // 不断从vpss group0, chn0拿数据帧
-        s32Ret = RK_MPI_VPSS_GetChnFrame(VPSS_GRP_0, VPSS_CHN_0, &pstVideoFrameVpss, 200);
+        s32Ret = RK_MPI_VPSS_GetChnFrame(VPSS_GRP_0, VPSS_CHN_0, &pstVideoFrameVpss, GET_FRAME_TIMEOUT);
         if (s32Ret != RK_SUCCESS)
         {
             usleep(1000);
@@ -337,7 +337,7 @@ static void *get_vpss_starem(void *arg)
 }
 
 // 创建vpss chn 0, 并与vi绑定
-int create_vi_vpss(void)
+int create_vpss_bind_to_vi(void)
 {
     // RK_S32 chnIndex = VPSS_CHN_0;
     MPP_CHN_S stViChn, stVpssChn;
@@ -480,6 +480,7 @@ void init_rtsp(void)
 }
 
 // vi 通道0 用于rtsp推流
+// 因为VI 0 后端没有绑定其他模块, 所以深度为2, bufCount也是2
 int init_vi_chn0(SAMPLE_VI_CTX_S *viCtx)
 {
     int s32Ret = RK_SUCCESS;
@@ -488,9 +489,9 @@ int init_vi_chn0(SAMPLE_VI_CTX_S *viCtx)
     viCtx[0].s32DevId = 0;
     viCtx[0].u32PipeId = viCtx[0].s32DevId;
     viCtx[0].s32ChnId = VI_CHN_0;
-    viCtx[0].stChnAttr.stIspOpt.u32BufCount = 3;
+    viCtx[0].stChnAttr.stIspOpt.u32BufCount = 2;
     viCtx[0].stChnAttr.stIspOpt.enMemoryType = VI_V4L2_MEMORY_TYPE_DMABUF;
-    viCtx[0].stChnAttr.u32Depth = 1;
+    viCtx[0].stChnAttr.u32Depth = 2;
     viCtx[0].stChnAttr.enPixelFormat = RK_FMT_YUV420SP;
     viCtx[0].stChnAttr.stFrameRate.s32SrcFrameRate = -1;
     viCtx[0].stChnAttr.stFrameRate.s32DstFrameRate = -1;
@@ -644,12 +645,11 @@ int main(int argc, char *argv[])
     // vi ch0 取流的线程
     pthread_t get_vi_stream_thread;
     pthread_create(&get_vi_stream_thread, NULL, get_vi_stream, NULL);
-    
 
-    s32Ret = create_vi_vpss();
+    s32Ret = create_vpss_bind_to_vi();
     if (s32Ret != RK_SUCCESS)
     {
-        printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> create_vi_vpss failed\n");
+        printf("create_vi_vpss failed\n");
         goto __FINISHED;
     }
 

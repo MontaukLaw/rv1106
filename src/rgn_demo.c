@@ -60,7 +60,7 @@ RK_S32 bind_rgn_to_venc(void)
 
     // int u32Width = 128;
     // int u32Height = 128;
-    int u32Width = 384; // 16 * 24;
+    int u32Width = 500; // 16 * 24;
     int u32Height = 32;
 
     int s32X = 100;
@@ -116,7 +116,7 @@ RK_S32 bind_rgn_to_venc(void)
     // 前景色透明度
     stRgnChnAttr.unChnAttr.stOverlayChn.u32BgAlpha = 0;
     // 背景色透明度
-    stRgnChnAttr.unChnAttr.stOverlayChn.u32FgAlpha = 128;
+    stRgnChnAttr.unChnAttr.stOverlayChn.u32FgAlpha = 0;
     stRgnChnAttr.unChnAttr.stOverlayChn.u32Layer = 0;
 
     // qpInfo设置

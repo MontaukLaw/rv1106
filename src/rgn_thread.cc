@@ -1,10 +1,13 @@
 
 #include "comm.h"
-#define TIME_STAMP_WATER_MARK_STR_LEN 18
+#define TIME_STAMP_WATER_MARK_STR_LEN 19
 #define FIRST_DASH_POS 4
 #define SECOND_DASH_POS 7
-#define FIRST_COLON_POS 12
-#define SECOND_COLON_POS 15
+#define FIRST_COLON_POS 13
+#define SECOND_COLON_POS 16
+#define SPACE_POST 10
+#define SPACE_WIDTH 16
+#define WATER_MARK_ALPHA 200
 
 extern bool quit;
 // 这个文件里面很多东西是从海思移植过来的, 因为RK的RGN连函数名字都是抄袭海思的, 所以直接拿过来改个函数名就能用
@@ -110,24 +113,24 @@ char *get_number_bmp_filename(HI_U16 idx, struct tm *pLocalTime)
         break;
 
     // HH
-    case 10:
+    case 11:
         filename = NUMBER_PICS[(pLocalTime->tm_hour) / 10];
         break;
-    case 11:
+    case 12:
         filename = NUMBER_PICS[(pLocalTime->tm_hour) % 10];
         break;
     // MM
-    case 13:
+    case 14:
         filename = NUMBER_PICS[(pLocalTime->tm_min) / 10];
         break;
-    case 14:
+    case 15:
         filename = NUMBER_PICS[(pLocalTime->tm_min) % 10];
         break;
     // SS
-    case 16:
+    case 17:
         filename = NUMBER_PICS[(pLocalTime->tm_sec) / 10];
         break;
-    case 17:
+    case 18:
         filename = NUMBER_PICS[(pLocalTime->tm_sec) % 10];
         break;
     }
@@ -135,6 +138,7 @@ char *get_number_bmp_filename(HI_U16 idx, struct tm *pLocalTime)
     return filename;
 }
 
+// wasted
 HI_U16 OSD_MAKECOLOR_U16(HI_U8 r, HI_U8 g, HI_U8 b, OSD_COMP_INFO compinfo)
 {
     HI_U8 r1, g1, b1;
@@ -157,13 +161,14 @@ HI_U16 OSD_MAKECOLOR_U16(HI_U8 r, HI_U8 g, HI_U8 b, OSD_COMP_INFO compinfo)
 }
 
 void fill_bitmap_buf(HI_U8 *pRGBBuf, HI_U16 bytesPerPixel, HI_U32 bmpWidth, HI_U32 bmpHeight, HI_U8 *pStart, HI_U16 *pDst,
-                     OSD_LOGO_T *pVideoLogo, HI_U8 *pOrigBMPBuf, HI_U32 stride, HI_U16 k)
+                     OSD_LOGO_T *pVideoLogo, HI_U8 *pOrigBMPBuf, HI_U32 stride)
 {
     const static HI_U8 spa = 16;
     HI_U16 i, j;
+
     // HI_U8 r, g, b;
-    printf("fill_bitmap_buf >>>>>>>>>>>>>>>>>>>>>> k:%d, bmpWidth:%d, bmpHeight:%d, stride:%d\n", k, bmpWidth, bmpHeight, stride);
-    printf("pRGBBuf: %p, pOrigBMPBuf: %p\n", pRGBBuf, pOrigBMPBuf);
+    // printf("fill_bitmap_buf >>>>>>>>>>>>>>>>>>>>>>  bmpWidth:%d, bmpHeight:%d, stride:%d\n", bmpWidth, bmpHeight, stride);
+    // printf("pRGBBuf: %p, pOrigBMPBuf: %p\n", pRGBBuf, pOrigBMPBuf);
 
     for (i = 0; i < bmpHeight; i++) // Bpp:3,enFmt:4
     {
@@ -171,7 +176,12 @@ void fill_bitmap_buf(HI_U8 *pRGBBuf, HI_U16 bytesPerPixel, HI_U32 bmpWidth, HI_U
         for (j = 0; j < bmpWidth; j++)
         {
             memcpy(pRGBBuf + i * pVideoLogo->stride + j * 4, pOrigBMPBuf + ((bmpHeight - 1) - i) * stride + j * bytesPerPixel, bytesPerPixel);
-            *(pRGBBuf + i * pVideoLogo->stride + j * 4 + 3) = 0xff;
+            *(pRGBBuf + i * pVideoLogo->stride + j * 4 + 3) = WATER_MARK_ALPHA; /*alpha*/
+            // 如果是白色, 就改成透明色
+            if (0xff == *(pRGBBuf + i * pVideoLogo->stride + j * 4) && 0xff == *(pRGBBuf + i * pVideoLogo->stride + j * 4 + 1) && 0xff == *(pRGBBuf + i * pVideoLogo->stride + j * 4 + 2))
+            {
+                *(pRGBBuf + i * pVideoLogo->stride + j * 4 + 3) = 0x00; /*alpha*/
+            }
         }
     }
 }
@@ -224,9 +234,15 @@ char *get_filename_by_idx(HI_U16 charIdx, tm *pLocalTime)
     {
         filename = "/userdata/res/-_1080p.bmp";
     }
-    else if (charIdx == FIRST_COLON_POS || charIdx == SECOND_COLON_POS) // 画":"
+    // 画":"
+    else if (charIdx == FIRST_COLON_POS || charIdx == SECOND_COLON_POS)
     {
         filename = "/userdata/res/colon_1080p.bmp";
+    }
+    // 画空格
+    else if (charIdx == SPACE_POST)
+    {
+        filename = "/userdata/res/blank_1080p.bmp";
     }
     else
     {
@@ -276,6 +292,9 @@ int RGN_LoadBMPCanvas_TimeStamp(OSD_LOGO_T *pVideoLogo)
 
     char *filename;
 
+    // 拿到rgn的虚拟内存地址
+    pRGBBuf = pVideoLogo->pRGBBuffer;
+
     // YYYY-MM-DD HH:MM:SS
     // 图片尺寸16*24 因为有18个字符, 所以总宽度是16*18=288
     for (charIdx = 0; charIdx < TIME_STAMP_WATER_MARK_STR_LEN; charIdx++)
@@ -288,7 +307,7 @@ int RGN_LoadBMPCanvas_TimeStamp(OSD_LOGO_T *pVideoLogo)
             return -1;
         }
 
-        // printf("bmp filename: is %s \n", filename);
+        printf("bmp filename: is %s \n", filename);
         // 获取bmp图片信息, bmp文件头和bmp信息头
         if (get_bmp_info(filename, &bmpFileHeader, &bmpInfo) < 0)
         {
@@ -325,8 +344,6 @@ int RGN_LoadBMPCanvas_TimeStamp(OSD_LOGO_T *pVideoLogo)
             return -1;
         }
 
-        // 拿到rgn的虚拟内存地址
-        pRGBBuf = pVideoLogo->pRGBBuffer;
         // printf("pVideoLogo->height:%d, pVideoLogo->width:%d\n", pVideoLogo->height, pVideoLogo->width);
 
         // 从bmp文件的偏移位置开始读取数据
@@ -344,7 +361,8 @@ int RGN_LoadBMPCanvas_TimeStamp(OSD_LOGO_T *pVideoLogo)
         // HI_U8 *pStart, HI_U16 *pDst, OSD_LOGO_T *pVideoLogo, HI_U8 *pOrigBMPBuf,
         // HI_U32 stride
         // fill_bitmap_buf(, bytesPerPixel, bmpWidth, bmpHeight, pStart, pDst, pVideoLogo, pRGBBuf, bmpStride, charIdx);
-        fill_bitmap_buf(pRGBBuf, bytesPerPixel, bmpWidth, bmpHeight, pStart, pDst, pVideoLogo, pOrigBMPBuf, bmpStride, charIdx);
+        fill_bitmap_buf(pRGBBuf, bytesPerPixel, bmpWidth, bmpHeight, pStart, pDst, pVideoLogo, pOrigBMPBuf, bmpStride);
+        pRGBBuf += bmpWidth * 4;
 
 #if 0       
         // Bpp:3,enFmt:4
@@ -502,9 +520,9 @@ static HI_S32 update_canvas(BITMAP_S *pstBitmap, HI_U32 u16FilColor, RK_U32 canv
     // BRGBA8888每像素字节数为4
     stLogo.stride = canvasWidth * 4;
 
-    printf("create_surface_by_canvas >>>>>>>>>>>>>>>>>>>>>> u32Width:%d, u32Height:%d\n", canvasWidth, canvasHeight);
+    // printf("create_surface_by_canvas >>>>>>>>>>>>>>>>>>>>>> u32Width:%d, u32Height:%d\n", canvasWidth, canvasHeight);
     // printf("pstBitmap->u32Width:%d, pstBitmap->u32Height:%d, pstBitmap->enPixelFormat:%d\n", pstBitmap->u32Width, pstBitmap->u32Height, pstBitmap->enPixelFormat);
-    printf("stLogo.width: %d, stLogo.height: %d\n", stLogo.width, stLogo.height);
+    // printf("stLogo.width: %d, stLogo.height: %d\n", stLogo.width, stLogo.height);
 
     nRet = RGN_LoadBMPCanvas_TimeStamp(&stLogo);
     if (nRet != HI_SUCCESS)
@@ -678,7 +696,7 @@ HI_S32 rgn_add(unsigned int Handle)
     RK_U32 canvasHeight = stCanvasInfo.stSize.u32Height;
     RK_U32 canvasWidth = stCanvasInfo.stSize.u32Width;
 
-    printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>> stSize.u32Width:%d stSize.u32Height:%d \n", stSize.u32Width, stSize.u32Height);
+    printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>> canvas.u32Width:%d canvas.u32Height:%d \n", stSize.u32Width, stSize.u32Height);
     s32Ret = update_canvas(&stBitmap, 0x0000, canvasHeight, canvasWidth);
     // s32Ret = update_canvas(Type, &stBitmap, HI_TRUE, 0x0000, &stSize, stCanvasInfo.u32Stride, stRgnAttrSet.unAttr.stOverlayEx.enPixelFmt);
 
