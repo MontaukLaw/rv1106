@@ -333,7 +333,7 @@ int post_process(int8_t *input0, int8_t *input1, int8_t *input2, int model_in_h,
     }
 
     int last_count = 0;
-    group->count = 0;
+    group->obj_num = 0;
     /* box valid detect target */
     for (int i = 0; i < validCount; ++i)
     {
@@ -363,7 +363,7 @@ int post_process(int8_t *input0, int8_t *input1, int8_t *input2, int model_in_h,
         //        group->results[last_count].box.right, group->results[last_count].box.bottom, label);
         last_count++;
     }
-    group->count = last_count;
+    group->obj_num = last_count;
 
     return 0;
 }

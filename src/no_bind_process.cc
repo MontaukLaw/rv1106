@@ -42,7 +42,7 @@ typedef struct _rkMpiCtx
 
 static rknn_list_t *rknn_list_;
 
-bool quit = false;
+bool quitApp = false;
 
 rtsp_demo_handle g_rtsplive = NULL;
 static rtsp_session_handle g_rtsp_session;
@@ -50,7 +50,7 @@ static rtsp_session_handle g_rtsp_session;
 static void sigterm_handler(int sig)
 {
     fprintf(stderr, "signal %d\n", sig);
-    quit = true;
+    quitApp = true;
 }
 
 typedef struct g_box_info_t
@@ -65,6 +65,8 @@ box_info_t boxInfoList[10];
 int boxInfoListNumber = 0;
 // rknn推理结果的刷新
 RK_U32 rknnDetectRefreshCounter = 0;
+
+detect_result_group_t detectResultGroup; // [MAX_RKNN_LIST_NUM];
 
 // 直接在nv12的内存上画框
 static int nv12_border(char *pic, int pic_w, int pic_h, int rect_x, int rect_y, int rect_w, int rect_h, int R, int G, int B)
@@ -105,10 +107,8 @@ static int nv12_border(char *pic, int pic_w, int pic_h, int rect_x, int rect_y, 
 // 计算推理结果的框的信息, x,y,w,h, 并画框
 void count_box_info(char *data, RK_U8 rknnObjNumber, detect_result_group_t detectResultGroup)
 {
-    RK_U8 idx;
-    long time_before;
-
-    for (int j = 0; j < detectResultGroup.count; j++)
+    int j = 0;
+    for (int j = 0; j < detectResultGroup.obj_num; j++)
     {
         int x = detectResultGroup.results[j].box.left * RTSP_INPUT_VI_WIDTH / RKNN_VI_WIDTH;
         int y = (detectResultGroup.results[j].box.top - DETECT_X_START) * RTSP_INPUT_VI_HEIGHT / RKNN_VI_HEIGHT;
@@ -145,12 +145,11 @@ static void *get_vi_stream(void *arg)
     RK_U8 rknnObjNumber = 0;
 
     RK_U32 lastRknnDetectRefreshCounter = 0;
-    detect_result_group_t detectResultGroup; // [MAX_RKNN_LIST_NUM];
 
     long time_before;
     int ret = 0;
 
-    while (!quit)
+    while (!quitApp)
     {
         // 从vi chn 0拿数据帧
         s32Ret = RK_MPI_VI_GetChnFrame(0, VI_CHN_0, &stViFrame, GET_FRAME_TIMEOUT);
@@ -161,23 +160,6 @@ static void *get_vi_stream(void *arg)
             void *data = RK_MPI_MB_Handle2VirAddr(stViFrame.stVFrame.pMbBlk);
             // fd为dma buf的fd
             int32_t fd = RK_MPI_MB_Handle2Fd(stViFrame.stVFrame.pMbBlk);
-
-            // if (loopCount == 10)
-            // {
-            //     printf("creating data\n");
-            //     // 写成一个文件
-            //     FILE *fp = fopen("/userdata/vi_to_npu.yuv", "wb");
-            //     if (fp)
-            //     {
-            //         // fwrite(data, 1, stViFrame.stVFrame.u32Width * stViFrame.stVFrame.u32Height * 3 / 2, fp);
-            //         fclose(fp);
-            //     }
-            // }
-
-            if (loopCount % 10 == 0)
-            {
-                printf("loopCount:%d, fd:%d, data:%p\n", loopCount, fd, data);
-            }
 
             // 当有新的推理结果的时候
             if (lastRknnDetectRefreshCounter != rknnDetectRefreshCounter)
@@ -192,6 +174,13 @@ static void *get_vi_stream(void *arg)
                 // 复制列表
                 rknn_list_pop(rknn_list_, &time_before, &detectResultGroup);
 
+                // printf("Get new rknn detect result rknnObjNumber :%d\n", detectResultGroup.count);
+                // printf("rknn_list size :%d \n", rknn_list_size(rknn_list_));
+                // if (rknn_list_size(rknn_list_))
+                // {
+                //     printf("---------------------------\n");
+                // }
+
                 // for (rknnListIdx = 0; rknnListIdx < rknnObjNumber; rknnListIdx++)
                 // {
                 //     rknn_list_pop(rknn_list_, &time_before, &detectResultGroup);
@@ -203,7 +192,7 @@ static void *get_vi_stream(void *arg)
             // 这里其实就是做了一个缓存, 在两个推理结果之间, 会有多次的vi数据帧, 在没有收到新的rknn推理结果之前, 会一直使用上一次的推理结果
 
             // 计算框的信息, 并画框
-            count_box_info((char *)data, rknnObjNumber, detectResultGroup);
+            // count_box_info((char *)data, rknnObjNumber, detectResultGroup);
 
             // 发送到编码器
             s32Ret = RK_MPI_VENC_SendFrame(VENC_CHN_0, &stViFrame, SEND_FRAME_TIMEOUT);
@@ -234,7 +223,7 @@ static RK_VOID *venc_get_stream(RK_VOID *pArgs)
     void *pData = RK_NULL;
     FILE *fp = RK_NULL;
 
-    while (!quit)
+    while (!quitApp)
     {
         s32Ret = SAMPLE_COMM_VENC_GetStream(ctx, &pData);
         if (s32Ret == RK_SUCCESS)
@@ -262,7 +251,7 @@ static void *get_vpss_starem(void *arg)
 
     MB_BLK dstBlk = RK_NULL;
 
-    while (!quit)
+    while (!quitApp)
     {
         // 不断从vpss group0, chn0拿数据帧
         s32Ret = RK_MPI_VPSS_GetChnFrame(VPSS_GRP_0, VPSS_CHN_0, &pstVideoFrameVpss, GET_FRAME_TIMEOUT);
@@ -294,7 +283,7 @@ static void *get_vpss_starem(void *arg)
 
         // put detect result to list
         // 将推理结果放到列表中, 相当于异步的过程
-        if (detect_result_group.count > 0)
+        if (detect_result_group.obj_num > 0)
         {
 
             rknn_list_push(rknn_list_, get_current_time_ms(), detect_result_group);
@@ -334,6 +323,8 @@ static void *get_vpss_starem(void *arg)
             continue;
         }
     }
+
+    return NULL;
 }
 
 // 创建vpss chn 0, 并与vi绑定
@@ -500,6 +491,7 @@ int init_vi_chn0(SAMPLE_VI_CTX_S *viCtx)
 }
 
 // vi 通道1 用于给rknn推理的数据
+// 如果不需要通过RK_MPI_VI_GetChnFrame获取图像，建议u32Depth设置为0
 int init_vi_chn1(SAMPLE_VI_CTX_S *viCtx)
 {
     int s32Ret = RK_SUCCESS;
@@ -508,9 +500,9 @@ int init_vi_chn1(SAMPLE_VI_CTX_S *viCtx)
     viCtx[1].s32DevId = 0;
     viCtx[1].u32PipeId = viCtx[0].s32DevId;
     viCtx[1].s32ChnId = VI_CHN_1;
-    viCtx[1].stChnAttr.stIspOpt.u32BufCount = 3;
+    viCtx[1].stChnAttr.stIspOpt.u32BufCount = 2;
     viCtx[1].stChnAttr.stIspOpt.enMemoryType = VI_V4L2_MEMORY_TYPE_DMABUF;
-    viCtx[1].stChnAttr.u32Depth = 1;
+    viCtx[1].stChnAttr.u32Depth = 0;
     viCtx[1].stChnAttr.enPixelFormat = RK_FMT_YUV420SP;
     viCtx[1].stChnAttr.stFrameRate.s32SrcFrameRate = -1;
     viCtx[1].stChnAttr.stFrameRate.s32DstFrameRate = -1;
@@ -660,10 +652,12 @@ int main(int argc, char *argv[])
     pthread_t rgn_ts_thread;
     pthread_create(&rgn_ts_thread, NULL, add_ts_thread, NULL);
 
+    rkipc_osd_draw_nn_init();
+
     getchar();
 
 __FINISHED:
-    quit = true;
+    quitApp = true;
 
     // 关闭线程
     pthread_join(vpss_get_starem_thread, RK_NULL);

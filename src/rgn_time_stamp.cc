@@ -356,7 +356,6 @@ RK_U32 init_rgn(void)
 }
 
 
-
 RK_S32 load_file_osdmem(const RK_CHAR *filename, RK_U8 *pu8Virt, RK_U32 u32Width, RK_U32 u32Height, RK_U32 pixel_size, RK_U32 shift_value)
 {
     RK_U32 mem_len = u32Width;

@@ -72,6 +72,7 @@ add_executable(no_bind src/no_bind_process.cc
                             src/tde.cc
                             src/rgn_demo.c
                             src/rgn_thread.cc
+                            src/nn_osd.cc
                             src/samples/fillimage.c
                             src/samples/sample_comm_vpss.c
                             src/samples/sample_comm_isp.c 

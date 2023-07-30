@@ -37,7 +37,7 @@ extern "C"
 #include "loadbmp.h"
 
 #define VENC_RECORD_TIME_OSD_HANDLE 0
-#define DRAW_NN_OSD_ID 0
+#define DRAW_NN_OSD_ID 1
 #define OBJ_NAME_MAX_SIZE 16
 #define OBJ_NUMB_MAX_SIZE 64
 #define OBJ_CLASS_NUM 80
@@ -76,6 +76,18 @@ extern "C"
 #define HI_BOOL RK_BOOL
 #define HI_FAILURE RK_FAILURE
 
+#define RED_COLOR 0x0000FF
+#define BLUE_COLOR 0xFF0000
+
+#define UPALIGNTO(value, align) ((value + align - 1) & (~(align - 1)))
+#define UPALIGNTO16(value) UPALIGNTO(value, 16)
+
+    typedef enum rkCOLOR_INDEX_E
+    {
+        RGN_COLOR_LUT_INDEX_0 = 0,
+        RGN_COLOR_LUT_INDEX_1 = 1,
+    } COLOR_INDEX_E;
+
     typedef struct _BOX_RECT
     {
         int left;
@@ -94,7 +106,7 @@ extern "C"
     typedef struct _detect_result_group_t
     {
         int id;
-        int count;
+        int obj_num;
         detect_result_t results[OBJ_NUMB_MAX_SIZE];
     } detect_result_group_t;
 
@@ -112,7 +124,10 @@ extern "C"
     } rknn_list_t;
 
     RK_S32 bind_rgn_to_venc(void);
+    
     RK_VOID *add_ts_thread(RK_VOID *p);
+   
+    int rkipc_osd_draw_nn_init(void);
 
 #ifdef __cplusplus
 }

@@ -1,159 +1,7 @@
-      chnId  :      0
-        buffcnt:      0
-        buffSize:     0
-        width:        0
-        height:       0
-        Maxwidth:     0
-        Maxwidth:     0
-        streaming:    0
-RKViChn          02:59:00-332 {prepareRuntime    :334} --------------------------------------------------                             -------
-RKViChn          02:59:00-342 {prepareRuntime    :336} vi version: 1.98, name:vvi
-RKViChn          02:59:00-350 {prepareRuntime    :337} rockit-ko version: vmpi:c130c8959511
-RKViChn          02:59:00-358 {prepareRuntime    :338} rockit-ko building: -2023-04-13-17:04:15
-RKViChn          02:59:00-366 {prepareRuntime    :339} --------------------------------------------------                             -------
-RKViChn          02:59:00-376 {prepareRuntime    :358} mb pool create success, MBCnt= 3
-RTIsp3x          02:59:00-385 {ispInitDevice     :317} sensor name = m00_b_sc230ai 4-0030-1
-RTIsp3x          02:59:00-393 {ispInitDevice     :320} sensor_index = 0
-                Sensor link info dump:
-         media name           : /dev/media1
-         model name           : rkisp0
-         camera id            : 0
-         sensor name          : m00_b_sc230ai 4-0030-1
-         mainpath video name  : /dev/video11
-         selfpath video name  : /dev/video12
-         bypasspath video name: /dev/video13
-         sensor type :2:
-cmpi             02:59:00-428 {createRuntime     :582} [non-WRAP MODE]: buff size = 3133440
-RTIsp3x          02:59:00-440 {ispInitDevice     :317} sensor name = m00_b_sc230ai 4-0030-1
-RTIsp3x          02:59:00-445 {ispInitDevice     :320} sensor_index = 0
-RTDeviceV4L2     02:59:00-455 {open              :135} cameraIndex:0, entityName:rkisp_mainpath
-RTDeviceV4L2     02:59:00-462 {open              :141} open video name(/dev/video11)
-RTDeviceV4L2     02:59:00-471 {ispCameraInfo     :554} current device:/dev/video11 isn't compatible(cap:0                             x84201000) device,memoryType:4, retry:0
-RTDeviceV4L2     02:59:00-485 {ispInitFormat     :731} ioctl VIDIOC_S_FMT OK
-[10740.1RKViChn          02:59:00-494 {start             :883} =========== vi Start startRuntime ========                             ===
-RTDeviceV4L2     02:59:00-504 {ispStreamOn       :445} do ispStreamOn start
-93834] vsys dev open 26
-[10740.493713] rkisp queue buf done
-[10740.511728] rkisp_hw ffa00000.rkisp: set isp clk = 198000000Hz
-[10740.511761] rkcif-mipi-lvds: sditf_reinit_mode, mode->rdbk_mode 0, mode->name rkisp-vir0, link_modRTDe                             viceV4L2     02:59:00-532 {ispStreamOn       :e 1
-[10740498} do ispStreamOn done
-=== 0 ===
-cmpi             02:59:00-541 {SAMPLE_COMM_VI_Cre:.513045} RK_MPI_VI_SetDevAttr already!
-cmpi             02:59:00-549 {SAMPLE_COMM_VI_Cre:066} RK_MPI_VI_EnableDev already!
-  === VI ATTRS INFO: ===
-        devId  :      0
-        chnId  :      0
-        buffcnt:      0
-        buffSize:     0
-        width:        0
-        height:       0372] rkcif-mip
-        Maxwidth:     0
-        Maxwidth:     0
-        streaming:    0
-RKViChn         i- 02:59:00-574 {prepareRuntime    :334} ------------lvds: stream[0] start strea---------                             ------------------------------------
-=== 1 ===
-RKViChn          02:59:00-588 {prepareRuntime    :336} vi version: 1.98, name:vvi
-RKViChn          02:59:00-595 {prepareRuntime    :337} rockit-ko version: vmpi:c130c8959511
-RKViChn          02:59:00-603 {prepareRuntime    :338} rockit-ko buming
-[10740.5ilding: -2023-04-13-17:04:15
-RKViChn          02:59:00-613 {prepareRuntime    :339} -----------------------------13480] rockchip-mipi-                             ----------------------------
-RKViChn          02:59:00-625 {prepareRuntime    :358} mb pool create success, MBCnt= 3
-csi2 ffa20RTIsp3x          02:59:00-633 {ispInitDevice     :317} sensor name = m00_b_sc230ai 4-0030-1
-RTIsp3x          02:59:00-643 {ispInitDevice     :320} sen000.mipi-csi2:sor_index = 0
- stream on, src_sd: 5fb454              Sensor link info9e dump:
-         media name     , sd_name:rockchip-c      : /dev/media1
-         model name           : rkisp0
-         camera id            : 0
-         sensor name          : m00_b_sc230ai 4-0030-1
-         mainpath video name  : /dev/video11
-         selfpath video name  : /dev/video12
-         bypasspath video name: /dev/video13
-         sensor type :2:
-cmpi             02:59:00-682 {createRuntime     :582} [non-WRAP MOsi2-dphy0
-[10DE]: buff size = 353280
-740.513491] rockchRTIsp3x          02:59:00-693 {isippInitDevice     :317} sensor name = m00_b_-mipi-csi2                              ffa20000.misc230ai 4-0030-1
-RTIsp3x          02:59:00-705 {ispInitDevice     :320} sensor_index = 0
-pi-csi2: stream ON
-[10740RTDeviceV4L2     02:59:00-715 {open              :135} cameraIndex:0, entityName:rkisp_selfpath
-RTDeviceV4L2     02:59:00-724 {open              :.513558] rockc141} open video name(/dev/video12)
-hipRTDeviceV4L2    -c 02:59:00-734 {ispCameraInfo     :554} cursi2-dphy0: dphy0, datrent device:/dev/vide                             o12 isn't compatible(cap:0x84201000) device,memoryType:4, retry:0
-RTDeviceV4L2     02:59:00-750 {ispInitFormat     :731} ioctl VIDIOC_S_FMT OK
-a_rate_mbps 37   02:59:00-758 {start             :883} =========== vi Start startRuntime ===========
-1RTDeviceV4L2     02:59:00-769 {ispStreamOn       :445} do
-ispStreamOn start
-[10740.513585] rockchip-RTDeviceV4L2     02:59:00-779 {ispStreamOn       :498} do ispStreamOn done
-cmpi             02:59:00-787 {SAMPLE_COMM_VENC_C:129} V_C:0 bufferCnt:3
-MpiAdapterEncode 02:59:00-794 {ma_encode_create  :1653} ringbuf buf_size 3112960
-csi2-dphy csi2-dphy0: csi2_dphy_s_stream stream on:1, dphy0
-[10740.513594] rockcmpi             02:59:00-807 {mb_create_pool    :222} allocated buffer(this=0x24297ch                             8, data=0xa359600ip0, size=49152, id-csi2-dphy csi2-dphy0=206)
-: ccmpi             02:59:00-822 {mb_create_pool    :222} allocated buffer(this=0x245818, data=0xa358a000                             , size=49152, id=207)
-cmpi             02:59:00-833 {bind_rgn_to_venc  :102} The handle: 0, create success!
-cmpi             02:59:00-841 {attachToChn       :480} The channel attr attach mapidsi2_dphy_s_str: 0x0.
-cmpi             02:59:00-850 {bind_rgn_to_venc  :144} Display regieaon to chn success!
-m stream on:1, dphy0
-[10740.758204] rkisp queue buf done
-[1074stSize.u32Width:0.802384 stSize.u32Height:32
-u32Width:-1554423808, u32Height:384
-rga_api version 1.9.1_[5]
-cmpi             02:59:00-873 {cr186eate_vi_vpss    :390} vpss Grp 0's work unit is 1
-#Start get_vi_stream thread, arg:(nil)
-read bmp success
-read bmp success
-] mpp_vcodec: 44: num_chan = 0read bmp success
-[1
-read bmp success0740.8022
-read bmp success
-94] mpp_vcodec: 368: attread bmp success
-read bmp success
-read bmp success
-read bmp success
-read bmp success
-read bmp success
-read bmp success
-read bmp success
-read bmp success
-read bmp success
-read bmp success
-read bmp success
-read bmp success
-r->max_width = 1920, attr->max_height = 1080
-[10740.805270] mpp_vcodec: 103: chan_entry->handle 7e35e3a4, enc 7e35e3a4
-[10740.806254] 755: MPP_ENC_SET_CFG in
-[10740.806280] 524: MPP_ENC_SET_RC_CFG bps 7776000 [7290000 : 8262000] fps [30:30] gop 60
-[10740.806291] 329: MPP_ENC_SET_PREP_CFG w:h [1920:1080] stride [1920:1080]
-[10740.806303] 271: send header for set cfg change input/format
-[10740.806471] 755: MPP_ENC_SET_CFG in
-[10740.806487] 524: MPP_ENC_SET_RC_CFG bps 4096000 [3840000 : 4352000] fps [30:30] gop 50
-[10740.806497] 271: send header for set cfg change rc_mode/fps/gop
-[10740.806705] 755: MPP_ENC_SET_CFG in
-[10740.806720] 524: MPP_ENC_SET_RC_CFG bps 4096000 [3840000 : 4352000] fps [30:30] gop 50
-[10740.806730] 271: send header for set cfg change rc_mode/fps/gop
-[10740.806795] 755: MPP_ENC_SET_CFG in
-[10740.806807] 524: MPP_ENC_SET_RC_CFG bps 4096000 [3840000 : 4352000] fps [30:30] gop 50
-[10740.806814] 271: send header for set cfg change rc_mode/fps/gop
-[10740.891707] create vpss node = 691200
-[10740.930101] rga_job: [tgid:1000 pid:1018] destroy request[37] when the user exits
-[10740.930134] rga_job: [tgid:1000 pid:1018] destroy request[38] when the user exits
-[10740.930146] rga_job: [tgid:1000 pid:1018] destroy request[39] when the user exits
-[10740.930154] rga_job: [tgid:1000 pid:1018] destroy request[40] when the user exits
-[10740.930163] rga_job: [tgid:1000 pid:1018] destroy request[41] when the user exits
-[10741.007776] rkcif-mipi-lvds: stream[0] start stopping, total modeSegmentation fault (core dumped)
- 0x# 2, cur 0x2
-[10741.047122] rockchip-mipi-csi2 ffa20000.mipi-csi2: stream off, src_sd: 5fb4549e, sd_name:rockchip-csi2                             -dphy0
-[10741.047161] rockchip-mipi-csi2 ffa20000.mipi-csi2: stream OFF
-[10741.047931] rockchip-csi2-dphy csi2-dphy0: csi2_dphy_s_stream_stop stream stop, dphy0
-[10741.047968] rockchip-csi2-dphy csi2-dphy0: csi2_dphy_s_stream stream on:0, dphy0
-[10741.048020] rockchip-csi2-dphy csi2-dphy0: csi2_dphy_s_stream stream on:0, dphy0
-[10741.048246] rkcif-mipi-lvds: stream[0] stopping finished, dma_en 0x0
-[10741.051697] rockit isp stream off
-[10741.051762] rockit isp stream off
-[10741.052519] stream_cif_mipi_id1: close video, entity use_count 0
-[10741.052632] stream_cif_mipi_id0: close video, entity use_count 1
-[10741.052925] stream_cif_mipi_id0: s_power 0, entity use_count 0
-# /data/no_bind /data/yolov5s-640-640_origin_good.rknn
+/data/no_bind /data/yolov5s-640-640_origin_good.rknn
 model path :/data/yolov5s-640-640_origin_good.rknn
 rkaiq log level ff0
-[10916.515993] stream_cif_mipi_id0: s_power 1, entity use_count 1
+[ 5471.296559] stream_cif_mipi_id0: s_power 1, entity use_count 1
 
 ************************** VERSION INFOS **************************
 version release date: 2023-03-02
@@ -161,40 +9,40 @@ version release date: 2023-03-02
    IQ PARSER:       Calib v1.4.8,magicCode:1170944
 ************************ VERSION INFOS END ************************
 ID: 0, sensor_name is m00_b_sc230ai 4-0030-1, iqfiles is /etc/iqfiles/
-[10916.516723] stream_cif_mipi_id0: s_power 0, entity use_count 0
-[10916.870395] stream_cif_mipi_id0: s_power 1, entity use_count 1
-[10916.872303] stream_cif_mipi_id0: open video, entity use_countt 2
-[10916.872609] stream_cif_mipi_id1: open vidrk_aiq_uapi2_sysctl_init/prepare succeed
-eo, entity use_countt 1
-[10916.886248] rkrk_aiq_uapi2_sysctl_start succeed
+[ 5471.297558] stream_cif_mipi_id0: s_power 0, entity use_count 0
+[ 5471.667429] stream_cif_mipi_id0: s_power 1, entity use_count 1
+[ 5471.669252] stream_cif_mipi_id0: open video, entity use_countt 2
+[ 5471.669577] stream_cif_mipi_id1: open video, entity use_countt 1
+rk_aiq_uapi2_sysctl_init/prepare succeed
+rk_aiq_uapi2_sysctl_start succeed
 create rknn_list success
 [INFO  rtsp_demo.c:280:rtsp_new_demo] rtsp server demo starting on port 554
 [DEBUG rtsp_demo.c:480:rtsp_new_session] add session path: /live/0
-isp rrtsp streamq_alloc size is 1753484
+rtsp streamq_alloc size is 1753484
 rockit log path (null), log_size = 0, can use export rt_log_path=, export rt_log_size= change
 log_file = (nil)
-RTVersion        03:01:56-909 {dump              :064} ---------------------------------------------------------
-RTVersion        03:01:56-930 {dump              :065} rockit version: git-8040d59d5 Mon Mar 27 09:56:43 2023 +0800
-RTVersion        03:01:56-940 {dump              :066} rockit building: built- 2023-03-27 10:57:39
-RTVersion        03:01:56-949 {dump              :067} ---------------------------------------------------------
-(null)           03:01:56-959 {log_level_init    :206}
+RTVersion        01:31:11-703 {dump              :064} ---------------------------------------------------------
+RTVersion        01:31:11-724 {dump              :065} rockit version: git-8040d59d5 Mon Mar 27 09:56:43 2023 +0800
+RTVersion        01:31:11-735 {dump              :066} rockit building: built- 2023-03-27 10:57:39
+RTVersion        01:31:11-743 {dump              :067} ---------------------------------------------------------
+(null)           01:31:11-753 {log_level_init    :206}
 
  please use echo name=level > /tmp/rt_log_level set log level
         name: all cmpi mb sys vdec venc rgn vpss vgs tde avs wbc vo vi ai ao aenc adec
         log_level: 0 1 2 3 4 5 6
 
 rockit default level 4, can use export rt_log_level=x, x=0,1,2,3,4,5,6 change
-(null)           03:01:56-989 {read_log_level    :097} text is all=4
-(null)           03:01:56-995 {read_log_level    :099} module is all, log_level is 4
-kisp-vir0: first params buf qRTIsp3x          03:01:57-005 {ispInitDevice     :317} sensor name = m00_b_sc230ai 4-0030-1
-(null)           03:01:57-014 {monitor_log_level :148} #Start monitor_log_level thread, arg:(nil)
-RTIsp3x          03:01:57-023 {ispInitDevice     :320} sensor_index = 0
-ueue
+(null)           01:31:11-783 {read_log_level    :097} text is all=4
+(null)           01:31:11-789 {read_log_level    :099} module is all, log_level is 4
+RTIsp3x          01:31:11-799 {ispInitDevice     :317} sensor name = m00_b_sc230ai 4-0030-1
+(null)           01:31:11-806 {monitor_log_level :148} #Start monitor_log_level thread, arg:(nil)
+RTIsp3x          01:31:11-814 {ispInitDevice     :320} sensor_index = 0
+[ 5471.684697] rkisp rkisp-vir0: first params buf queue
 rknn_api/rknnrt version: 1.4.1b9 (09eb4be80@2022-10-19T09:51:39), driver version: 0.8.5
 model input num: 1, output num: 3
 input tensors:
 output tensors:
-RKViDev          03:01:57-119 {vi_set_dev_attr   :445} VI_DEV_ATTR_S all parameter reserved
+RKViDev          01:31:11-915 {vi_set_dev_attr   :445} VI_DEV_ATTR_S all parameter reserved
   === VI ATTRS INFO: ===
         devId  :      0
         chnId  :      0
@@ -205,14 +53,14 @@ RKViDev          03:01:57-119 {vi_set_dev_attr   :445} VI_DEV_ATTR_S all paramet
         Maxwidth:     0
         Maxwidth:     0
         streaming:    0
-RKViChn          03:01:57-145 {prepareRuntime    :334} ---------------------------------------------------------
-RKViChn          03:01:57-155 {prepareRuntime    :336} vi version: 1.98, name:vvi
-RKViChn          03:01:57-162 {prepareRuntime    :337} rockit-ko version: vmpi:c130c8959511
-RKViChn          03:01:57-170 {prepareRuntime    :338} rockit-ko building: -2023-04-13-17:04:15
-RKViChn          03:01:57-179 {prepareRuntime    :339} ---------------------------------------------------------
-RKViChn          03:01:57-189 {prepareRuntime    :358} mb pool create success, MBCnt= 3
-RTIsp3x          03:01:57-197 {ispInitDevice     :317} sensor name = m00_b_sc230ai 4-0030-1
-RTIsp3x          03:01:57-206 {ispInitDevice     :320} sensor_index = 0
+RKViChn          01:31:11-941 {prepareRuntime    :334} ---------------------------------------------------------
+RKViChn          01:31:11-951 {prepareRuntime    :336} vi version: 1.98, name:vvi
+RKViChn          01:31:11-958 {prepareRuntime    :337} rockit-ko version: vmpi:c130c8959511
+RKViChn          01:31:11-966 {prepareRuntime    :338} rockit-ko building: -2023-04-13-17:04:15
+RKViChn          01:31:11-974 {prepareRuntime    :339} ---------------------------------------------------------
+RKViChn          01:31:11-985 {prepareRuntime    :358} mb pool create success, MBCnt= 2
+RTIsp3x          01:31:11-993 {ispInitDevice     :317} sensor name = m00_b_sc230ai 4-0030-1
+RTIsp3x          01:31:12-002 {ispInitDevice     :320} sensor_index = 0
                 Sensor link info dump:
          media name           : /dev/media1
          model name           : rkisp0
@@ -222,45 +70,46 @@ RTIsp3x          03:01:57-206 {ispInitDevice     :320} sensor_index = 0
          selfpath video name  : /dev/video12
          bypasspath video name: /dev/video13
          sensor type :2:
-cmpi             03:01:57-240 {createRuntime     :582} [non-WRAP MODE]: buff size = 3133440
-RTIsp3x          03:01:57-253 {ispInitDevice     :317} sensor name = m00_b_sc230ai 4-0030-1
-RTIsp3x          03:01:57-257 {ispInitDevice     :320} sensor_index = 0
-RTDeviceV4L2     03:01:57-267 {open              :135} cameraIndex:0, entityName:rkisp_mainpath
-RTDeviceV4L2     03:01:57-275 {open              :141} open video name(/dev/video11)
-RTDeviceV4L2     03:01:57-283 {ispCameraInfo     :554} current device:/dev/video11 isn't compatible(cap:0x84201000) device,memoryType:4, retry:0
-RTDeviceV4L2     03:01:57-297 {ispInitFormat     :731} ioctl VIDIOC_S_FMT OK
-[10917.00RKViChn          03:01:57-306 {start             :883} =========== vi Start startRuntime ===========
-RTDeviceV4L2     03:01:57-316 {ispStreamOn       :445} do ispStreamOn start
-3313] vsys dev open 26
-[10917.305915] rkisp queue buf done
-[10917.324008] rkisp_hw ffa00000.rkisp: set isp clk = 198000000Hz
-[10917.324041] rkcif-mipi-lvds: sditf_reinit_mode, mode->rdbk_mode 0, mode->name rkisp-vir0, link_modeRTDeviceV4L2     03:01:57-344 {ispStreamOn       : 1
-[1091498} do ispStreamOn done
+cmpi             01:31:12-036 {createRuntime     :582} [non-WRAP MODE]: buff size = 3133440
+RTIsp3x          01:31:12-048 {ispInitDevice     :317} sensor name = m00_b_sc230ai 4-0030-1
+RTIsp3x          01:31:12-053 {ispInitDevice     :320} sensor_index = 0
+RTDeviceV4L2     01:31:12-063 {open              :135} cameraIndex:0, entityName:rkisp_mainpath
+RTDeviceV4L2     01:31:12-071 {open              :141} open video name(/dev/video11)
+RTDeviceV4L2     01:31:12-079 {ispCameraInfo     :554} current device:/dev/video11 isn't compatible(cap:0x84201000) device,memoryType:4, retry:0
+RTDeviceV4L2     01:31:12-093 {ispInitFormat     :731} ioctl VIDIOC_S_FMT OK
+[ 5471RKViChn          01:31:12-102 {start             :883} =========== vi Start startRuntime ===========
+RTDeviceV4L2     01:31:12-112 {ispStreamOn       :445} do ispStreamOn start
+.798392] vsys dev open 26
+[ 5472.102555] rkisp queue buf done
+[ 5472.120594] rkisp_hw ffa00000.rkisp: set isp clk = 198000000Hz
+[ 5472.120628] rkcif-mipi-lvds: sditf_reinit_mode, mode->rdbk_mode 0, mode->name rkisp-vir0, linkRTDeviceV4L2     01:31:12-139 {ispStreamOn       :_mode 1
+[ 54498} do 72.1ispStreamOn done
 === 0 ===
-cmpi             03:01:57-353 {SA7.32MPLE_COMM_VI_Cre:045} RK_MPI_VI_SetDevAttr already!
-cmpi             03:01:57-361 {SAMPLE_COMM_VI_Cre:066} RK_MPI_VI_EnableDev already!
+cmpi             01:31:12-150 {SAMPLE_COMM_VI_Cre:045} RK_MPI_VI_SetDevAttr already!
+cmpi             01:31:12-157 {SA2223MPLE_COMM_VI_Cre:066} RK_MPI_VI_EnableDev already!
   === VI ATTRS INFO: ===
         devId  :      0
         chnId  :      0
         buffcnt:      0
         buffSize:     0
         width:        0
-        height:       05645] rkcif-mi
+5] rkcif-mipi-  height:       0
         Maxwidth:     0
         Maxwidth:     0
         streaming:    0
-RKViChn          03:01:57-386 {prepareRuntime    :334} ------------pi-lvds: stream[0] start st---------------------------------------------
+RKViChn         lv 01:31:12-183 {prepareRuntime    :334} ------------ds: stream[0] start streamin---------------------------------------------
 === 1 ===
-RKViChn          03:01:57-400 {prepareRuntime    :336} vi version: 1.98, name:vvi
-RKViChn          03:01:57-407 {prepareRuntime    :337} rockit-ko version: vmpi:c130c8959511
-RKViChn          03:01:57-415 {prepareRuntime    :338} rockit-ko bureaming
-[1091ilding: -2023-04-13-17:04:15
-RKViChn          03:01:57-425 {pr7.epareRuntime    :339} -----------------------------325760] rockchip-mip----------------------------
-RKViChn          03:01:57-437 {prepareRuntime    :358} mb pool create success, MBCnt= 3
-i-csi2 ffa2RTIsp3x          03:01:57-445 {ispInitDevice     :317} sensor name = m00_b_sc230ai 4-0030-1
-RTIsp3x          03:01:57-455 {ispInitDevice     :320} sen0000.mipi-csi2sor_index = 0
-: stream on, src_sd: 5fb45              Sensor link info dump:
-         media name     49e, sd_name:rockchi      : /dev/media1
+RKViChn          01:31:12-196 {prepareRuntime    :336} vi version: 1.98, name:vvi
+RKViChn          01:31:12-203 {prepareRuntime    :337} rockit-ko version: vmpi:c130c8959511
+RKViChn          01:31:12-212 {prepareRuntime    :g
+[ 5472.12234338} rockit-ko building: -2023-04-13-17:04:15
+RKViChn         4]  01:31:12-221 {prepareRuntime    :rockchip-mipi-csi2 ff339} ---------------------------------------------------------
+RKViChn          01:31:12-233 {prepareRuntime    :358} mb pool create success, MBCnt= 2
+a20000.mipi-cRTIsp3x          01:31:12-242 {ispInitDevice     :317} sensor name = m00_b_sc230ai 4-0030-1
+RTIsp3x          01:31:12-252 {ispInitDevice     :si2: stream on320} sensor_index = 0
+, src_sd: efeb8256, sd_name:rockc               hip-csi2-dphy0
+[ 54Sensor link info dump:
+         media name           : /dev/media1
          model name           : rkisp0
          camera id            : 0
          sensor name          : m00_b_sc230ai 4-0030-1
@@ -268,90 +117,102 @@ RTIsp3x          03:01:57-455 {ispInitDevice     :320} sen0000.mipi-csi2sor_inde
          selfpath video name  : /dev/video12
          bypasspath video name: /dev/video13
          sensor type :2:
-cmpi             03:01:57-494 {createRuntime     :582} [non-WRAP MOp-csi2-dphy0
-DE]: buff size = 353280
-[10917.325783] rockRTIsp3x          03:01:57-505 {ispInitDevice     :317} sensor name = m00_b_chip-mipi-csi2 ffa200sc230ai 4-0030-1
-RTIsp3x          03:01:57-516 {ispInitDevice     :320} sensor_index = 0
-RTDeviceV4L2     03:01:57-526 {open              :135} cameraIndex:0, entityName:rkisp_selfpath
-RTDeviceV4L2     03:01:57-536 {open              :
-                                                  [10917.325841]141} open video name(/dev/video12)
- roRTDeviceV4L2     03:01:57-546 {ispCameraInfo     :554} curckchip-csi2-dphy0: dprent device:/dev/video12 isn't compatible(cap:0x84201000) device,memoryType:4, retry:0
-RTDeviceV4L2     03:01:57-562 {ispInitFormat     :731} ioctl VIDIOC_S_FMT OK
-RKViChn          03:01:57-570 {start             :883} =========== vi Start startRuntime ===========
-RTDeviceV4L2    hy0, data_rate 03:01:57-580 {ispStreamOn       :445} do ispStreamOn start
-_mbps 371
-[10917.3258RTDeviceV4L2     03:01:57-591 {ispStreamOn       :498} do ispStreamOn done
-cmpi             03:01:57-598 {SAMPLE_COMM_VENC_C:129} V_C:0 bufferCnt:3
-68] rockMpiAdapterEncode 03:01:57-606 {ma_encode_create  :1653} ringbuf buf_size 3112960
-chip-csi2-dphy csi2-dphy0: csi2_dphy_s_stream stream on:1, dphy0cmpi
- rockchip-csi2-dphy csi19 {mb_create_pool    :222} allocated buffer(this=0x242957]0, data=0xa3584000, size=49152, id=211)
-2-dpcmpi             03:01:57-634 {mb_create_pool    :222} allocated buffer(this=0x22f2f8, data=0xa3578000, size=49152, id=212)
-cmpi             03:01:57-645 {bind_rgn_to_venc  :102} The handle: 0, create success!
-cmpi             03:01:57-653 {attachToChn       :480} The channel attr attach mapidhy0: csi2_dphy_: 0x0.
-cmpi             03:01:57-662 {bind_rgn_to_venc  :144} Display regis_on to chn success!
-stream stream on:1, dphy0
-stSize.u32Width:kisp queue buf done
-                [384 stSize.u32Height:32
-#Start get_vi_stream thread, arg:(nil)
+cmpi             01:31:12-292 {createRuntime     :72.122354] roc582} [non-WRAP MODE]: buff size = 353280
+RTIsp3x         kchip 01:31:12-303 {ispInitDevice     :317} sen-mipi-csi2 ffa20000.misor name = m00_b_sc230ai 4-0030-1
+RTIsp3x          01:31:12-313 {ispInitDevice     :320} sensor_index = 0
+pi-csi2: stream ON
+[ 5472.12RTDeviceV4L2     01:31:12-323 {open              :135} cameraIndex:0, entityName:rkisp_selfpath
+RTDeviceV4L2     01:31:12-332 {ope2423] rockchip-cn              :141} open video name(/dev/video12)
+si2-dRTDeviceV4L2     01:31:12-343 {ispCameraInfo     :phy0: dphy0, data_rate554} current device:/dev/video12 isn't compatible(cap:0x84201000) device,memoryType:4, retry:0
+RTDeviceV4L2     01:31:12-359 {ispInitFormat     :731} ioctl VIDIOC_S_FMT OK
+_RKViChn          01:31:12-367 {start             :883} =========== vi Start startRuntime ===mbps 371
+[ 54========
+RTDeviceV4L2     01:31:12-378 {ispStreamOn       :445} do 72ispStreamOn start
+.122450] rockchip-csi2-dRTDeviceV4L2     01:31:12-388 {ispStreamOn       :498} do ispStreamOn done
+cmpi             01:31:12-396 {SAMPLE_COMM_VENC_C:129} V_C:0 bufferCnt:3
+phy csi2MpiAdapterEncode 01:31:12-403 {ma_encode_create  :1653} ringbuf buf_size 3112960
+-dphy0: csi2_dphy_s_stream stream on:1, dphy0
+[ 5472.122459] rockchip-csi2-dphy cmpi             01:31:12-419 {mb_create_pool    :cs222} allocated buffer(this=0x244e9i2-dphy0: csi2_dphy_s_s8, data=0xa34d2000, size=65536, id=299)
+trecmpi             01:31:12-432 {mb_create_pool    :222} allocated buffer(this=0x2454b8, data=0xa34c2000, size=65536, id=300)
+cmpi             01:31:12-443 {bind_rgn_to_venc  :102} The handle: 0, create success!
+cmpi             01:31:12-450 {attachToChn       :480} The channel am stream on:1attr attach mapid: 0x0.
+dphy0            01:31:12-460 {bind_rgn_to_venc  :, 144} Display region to chn success!
+[ 5472.367737]
+rkisp queue buf done
+[ 5472.412450] mpp_vc#Start get_vi_stodream thread, arg:(enil)
 rga_api version 1.9.1_[5]
-10917.read bmp success
-read bmp success
-read bmp success
-read bmp success
-cmpi             03:01:57-690 {create_vi_vpss    :390} vpss Grp 0's work unit is 1
-read bmp success613957] mpp_vcod
-cmpi             03:01:57-702 {mb_get_buffer_by_i:ec: 44: n426} allocated buum_chan = 0
-[10917.614064] ffer(this=0x26f0dmpp_vco8, data=(nil), sidec: 368ze=0, id=-1)
-read bmp success
-read bmp success
-read bmp success
-: attr->maxRKViChn          03:01:57-723 {getFrameRuntime   :1124} -------------------------------vviBuf->buf_size: 3133440
-read bmp success
-read bmp success
-read bmp success
-loopCount:0, fd:_width = 1920, attr->m59, data:0xa247b000
-cmpi             03:01:57-741 {mb_get_buffer_by_i:ax_height = 1080
-[10917.617109] mpp_vcodec: 103: chan_entry->h426} allocated buffer(this=0x243478, data=(nil), size=0, id=-1)
-read bmp success
-read bmp successandle
-262MpiAdapterEncode 03:01:57-763 {ma_encode_get_pack:1978} map ptr: 0xa1e8b000
-read bmp success58824, e
-ncread bmp success 26258824
+c: 44:cmpi             01:31:12-480 {create_vpss_bind_t:381} vpss Grp 0's work unit is 1
+start
+cmpi             01:31:12-490 {mb_create_pool    :222} allocated bu num_chan = 0
+r-5472.412554] mpp_vcodec: 368: attffer(this=0x26c260, data=0xa2642000, size=522240, id=313)
+cmpi             01:31:12-497 {mb_get_buffer_by_i:>max_width = 1920, attr426} allocated buffer(this=0x242ee8, data=(nil), size=0, id=-1)
+The handle: 1, create success
+cmpi            ->max_hei 01:31:12-518 {attachToChn       :480} The channel attr attach mapid: 0x0.
+RKViChn          01:31:12-520 {getFrameRuntime   :1124} -------------------------------vviBught = 1080
+[ 5472.4156f->buf_size: 3133440
+RK_MPI_RGN_AttachToChn to venc0 su89ccess
+cmpi             01:31:12-537 {mb] mpp_vcodec: 103: ch_get_buffer_by_i:426} allocated buffer(this=0x26c85an_entry->handle 457a16c7, enc 450, data=(nil), size=0, id=-1)
+end
+7a16c7
+[ 5472.418196] 755: MPP_ENC_SET_CFG in
+[ 5472.418240] 524: MPP_ENC_SET_RC_CFG bpMpiAdapterEncode 01:31:12-567 {ma_encode_get_pack:1978} mas 7776000 [7290000 : 826200p ptr: 0xa18540000] fps [30:30] gop 60
+] 5472.418253
+cmpi             01:31:12-577 {mb32_get_buffer_by_i:426} allocated bu9: MPP_ENC_SET_PREP_CFG w:h [1920:1080] stride [1920:1080]
+ 271: send header fohis=0x26cf18, data=(nil), size=0, id=-1)
+[DEBUG utils.c:134:rtsp_codec_data_parse_from_userr set cfg change input/format
+[ 5472.418418] 755: MPP_ENC_SET_CFG in
+[ 5472.418435] 524: MPP_ENC_SET_h264] sps 30
+RKViChn          01:31:12-604 {ge_RC_CFG bps 4096000 [tFrameRuntime   :1124} -------------------------------vviBu38f->buf_size: 3133440
+40000 : 4352000] fps [3[DEBUG utils.c:142:rtsp_codec_data_parse_from_user0:30] gop _h264] pps 4
+50
+[ 5472.418444] 271: send header for set cfg change rc_mode/fps/gop
+[ 5472.418649] 755: MPP_ENC_SET_CFG in
+[ 5472.418664] 524: MPP_ENC_SET_RC_CFG bps 4096000 [3840000 : 4352000] fps [30:30] gop 50
+[ 5472.418675] 271: send header for set cfg change rc_mode/fps/gop
+[ 5472.418767] 755: MPP_ENC_SET_CFG in
+[ 5472.418781] 524: MPP_ENC_SET_RC_CFG bps 4096000 [3840000 : 4352000] fps [30:30] gop 50
+[ 5472.418789] 271: send header for set cfg change rc_mode/fps/gop
+[ 5472.488900] create vpss node = 691200
+[ 5472.553725] 1062: mode cbr bps [3840000:4096000:4352000] fps fix [30/1] -> fix [30/1] gop i [50] v [0]
+loadLabelName /data/coco.txt
+person @ (256 265 533 495) 0.389705
+>>>>>>>>>>>>>>>One time detect cost = 207.46ms, FPS = 4.82
+person @ (256 269 533 491) 0.410417
+>>>>>>>>>>>>>>>One time detect cost = 202.48ms, FPS = 4.94
+person @ (250 266 536 496) 0.409673
+>>>>>>>>>>>>>>>One time detect cost = 201.19ms, FPS = 4.97
+person @ (252 265 537 497) 0.431911
+>>>>>>>>>>>>>>>One time detect cost = 205.20ms, FPS = 4.87
 
-[10917.618098] 75read bmp success5:
- MPP_ENC_SET_CFG in
-[1091cmpi             03:01:57-782 {mb_get_buffer_by_i:7.618125] 426} allocated bu524: MPP_ENC_SET_RC_CFG bps 7776000 [ffer(this=0x26e327290000 : 8262000] fp8, data=(nil), size=0, id=-1)
-read bmp success
-read bmp success
-s [[DEBUG utils.c:134:rtsp_codec_data_parse_from_user30:30] gop 60
-[10917.61813_h264] sps 30
-7] 329: MPP_ENC_SET_PREP_CFG w:h [1920:1080] stride [1920:1080]
-[10917.618150] 271: send header for set cfg change input/format
-[10917.618307] 755: MPP_ENC_SET_CFG in
-[10917.618320] 524: MPP_ENC_SET_RC_CFG bps 4096000 [3840000 : 4352000] fps [30:30] gop 50
-[10917.618333] 271: send header for set cfg change rc_mode/fps/gop
-[10917.618551] 755: MPP_ENC_SET_CFG in
-[10917.618566] 524: MPP_ENC_SET_RC_CFG bps 4096000 [3840000 : 4352000] fps [30:30] gop 50
-[10917.618575] 271: send header for set cfg change rc_mode/fps/gop
-[10917.618646] 755: MPP_ENC_SET_CFG in
-[10917.618659] 524: MPP_ENC_SET_RC_CFG bps 4096000 [3840000 : 4352000] fps [30:30] gop 50
-[10917.618669] 271: send header for set cfg change rc_mode/fps/gop
-[10917.712893] create vpss node = 691200
-[10917.748676] 1062: mode cbr bps [3840000:4096000:4352000] fps fix [30/1] -> fix [30/1] gop i [50] v [0]
-[10917.819051] rga_job: [tgid:1026 pid:1044] destroy request[42] when the user exits
-[10917.819069] rga_job: [tgid:1026 pid:1044] destroy request[43] when the user exits
-[10917.819087] rga_job: [tgid:1026 pid:1044] destroy requesSegmentation fault (core dumped)t[44]
-whe# n the user exits
-[10917.819095] rga_job: [tgid:1026 pid:1044] destroy request[45] when the user exits
-[10917.819103] rga_job: [tgid:1026 pid:1044] destroy request[46] when the user exits
-[10917.860044] rkcif-mipi-lvds: stream[0] start stopping, total mode 0x2, cur 0x2
-[10917.899371] rockchip-mipi-csi2 ffa20000.mipi-csi2: stream off, src_sd: 5fb4549e, sd_name:rockchip-csi2-dphy0
-[10917.899432] rockchip-mipi-csi2 ffa20000.mipi-csi2: stream OFF
-[10917.900201] rockchip-csi2-dphy csi2-dphy0: csi2_dphy_s_stream_stop stream stop, dphy0
-[10917.900237] rockchip-csi2-dphy csi2-dphy0: csi2_dphy_s_stream stream on:0, dphy0
-[10917.900289] rockchip-csi2-dphy csi2-dphy0: csi2_dphy_s_stream stream on:0, dphy0
-[10917.900523] rkcif-mipi-lvds: stream[0] stopping finished, dma_en 0x0
-[10917.903985] rockit isp stream off
-[10917.904045] rockit isp stream off
-[10917.905602] stream_cif_mipi_id1: close video, entity use_count 0
-[10917.905694] stream_cif_mipi_id0: close video, entity use_count 1
+person @ (245 265 544 497) 0.372877
+>>>>>>>>>>>>>>>One time detect cost = 198.21ms, FPS = 5.05
+cmpi             01:31:13-848 {SAMPLE_COMM_VENC_D:327} destroy enc chn:0
+mpp[1007]: mpp_chan: ctx is no found in chan server
+
+Jan  1 01:31:13 mpp[1007]: mpp_chan: ctx is no found in chan server
+
+MpiAdapterEncode 01:31:13-865 {ma_encode_destroy :2222} unmap ptr: 0xa1854000
+RTDeviceV4L2     01:31:13-872 {ispStreamOff      :508} do ispStreamOff start
+RTDeviceV4L2     01:31:13-898 {ispStreamOff      :519} do ispStreamOff done
+RTDeviceV4L2     01:31:13-900 {close             :370} do RTDeviceV4L2 close
+RKViDev          01:31:13-909 {vi_disable_dev    :493} please first destory all bind pipe
+[DEBUG rtsp_demo.c:645:rtsp_del_session] del session path: /live/0
+[ 5473.872423] rockit isp stream off
+RKSockServer     01:31:14-804 {start             :162} accept failed
+(null)           01:31:14-823 {monitor_log_level :189} monitor_log_level quit
+rk_aiq_uapi2_sysctl_stop enter
+rk_aiq_uapi2_sysctl_deinit enter
+MessageParser process loop exit!
+[ 5473.926366] rockit isp strk_aiq_uapi2_sysctl_deinit exit
+ream off
+[ 5474.836506] stream_cif_mipi_id1: close video, entity use_count 0
+[ 5474.836663] stream_cif_mipi_id0: close video, entity use_count 1
+[ 5474.844798] rkcif-mipi-lvds: stream[0] start stoppi# ng, total mode 0x2, cur 0x2
+[ 5474.855728] rockchip-mipi-csi2 ffa20000.mipi-csi2: stream off, src_sd: efeb8256, sd_name:rockchip-csi2-dphy0
+[ 5474.855746] rockchip-mipi-csi2 ffa20000.mipi-csi2: stream OFF
+[ 5474.856371] rockchip-csi2-dphy csi2-dphy0: csi2_dphy_s_stream_stop stream stop, dphy0
+[ 5474.856384] rockchip-csi2-dphy csi2-dphy0: csi2_dphy_s_stream stream on:0, dphy0
+[ 5474.856409] rockchip-csi2-dphy csi2-dphy0: csi2_dphy_s_stream stream on:0, dphy0
+[ 5474.856592] rkcif-mipi-lvds: stream[0] stopping finished, dma_en 0x0
+[ 5474.856918] stream_cif_mipi_id0: s_power 0, entity use_count 0
+

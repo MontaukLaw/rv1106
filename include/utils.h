@@ -6,4 +6,6 @@ int64_t getCurrentTimeUs(void);
 // long get_current_time_ms(void);
 int64_t get_current_time_ms(void);
 
+long long rkipc_get_curren_time_ms(void);
+
 #endif

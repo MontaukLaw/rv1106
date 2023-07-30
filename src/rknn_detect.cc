@@ -266,7 +266,7 @@ int rknn_detect(unsigned char *input_data, detect_result_group_t *detect_result_
     // printf("pp end\n");
 
     char text[256];
-    for (int i = 0; i < detect_result_group->count; i++)
+    for (int i = 0; i < detect_result_group->obj_num; i++)
     {
         detect_result_t *det_result = &(detect_result_group->results[i]);
         sprintf(text, "%s %.1f%%", det_result->name, det_result->prop * 100);
@@ -277,7 +277,7 @@ int rknn_detect(unsigned char *input_data, detect_result_group_t *detect_result_
     }
 
     int64_t elapse_us = getCurrentTimeUs() - start_us;
-    printf("Elapse Time = %.2fms, FPS = %.2f\n", elapse_us / 1000.f, 1000.f * 1000.f / elapse_us);
+    printf(">>>>>>>>>>>>>>>One time detect cost = %.2fms, FPS = %.2f\n", elapse_us / 1000.f, 1000.f * 1000.f / elapse_us);
 
     // Destroy rknn memory
     rknn_destroy_mem(ctx, input_mems[0]);

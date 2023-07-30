@@ -9,7 +9,7 @@
 #define SPACE_WIDTH 16
 #define WATER_MARK_ALPHA 200
 
-extern bool quit;
+extern bool quitApp;
 // 这个文件里面很多东西是从海思移植过来的, 因为RK的RGN连函数名字都是抄袭海思的, 所以直接拿过来改个函数名就能用
 extern OSD_COMP_INFO s_OSDCompInfo[];
 
@@ -26,11 +26,6 @@ char *NUMBER_PICS[10] = {
     "/userdata/res/9_1080p.bmp",
 };
 
-typedef enum rkCOLOR_INDEX_E
-{
-    RGN_COLOR_LUT_INDEX_0 = 0,
-    RGN_COLOR_LUT_INDEX_1 = 1,
-} COLOR_INDEX_E;
 
 // 通过数字获取对应的图片
 char *RGN_GetBMPSrc(int num)
@@ -307,7 +302,7 @@ int RGN_LoadBMPCanvas_TimeStamp(OSD_LOGO_T *pVideoLogo)
             return -1;
         }
 
-        printf("bmp filename: is %s \n", filename);
+        // printf("bmp filename: is %s \n", filename);
         // 获取bmp图片信息, bmp文件头和bmp信息头
         if (get_bmp_info(filename, &bmpFileHeader, &bmpInfo) < 0)
         {
@@ -575,59 +570,6 @@ static HI_S32 update_canvas(BITMAP_S *pstBitmap, HI_U32 u16FilColor, RK_U32 canv
     return HI_SUCCESS;
 }
 
-static RK_U8 rgn_color_lut_0_left_value[4] = {0x03, 0xf, 0x3f, 0xff};
-static RK_U8 rgn_color_lut_0_right_value[4] = {0xc0, 0xf0, 0xfc, 0xff};
-static RK_U8 rgn_color_lut_1_left_value[4] = {0x02, 0xa, 0x2a, 0xaa};
-static RK_U8 rgn_color_lut_1_right_value[4] = {0x80, 0xa0, 0xa8, 0xaa};
-RK_S32 draw_rect_2bpp(RK_U8 *buffer, RK_U32 width, RK_U32 height, int rgn_x, int rgn_y, int rgn_w,
-                      int rgn_h, int line_pixel, COLOR_INDEX_E color_index)
-{
-    int i;
-    RK_U8 *ptr = buffer;
-    RK_U8 value = 0;
-    if (color_index == RGN_COLOR_LUT_INDEX_0)
-        value = 0xff;
-    if (color_index == RGN_COLOR_LUT_INDEX_1)
-        value = 0xaa;
-
-    if (line_pixel > 4)
-    {
-        printf("line_pixel > 4, not support\n", line_pixel);
-        return -1;
-    }
-
-    // printf("YUV %dx%d, rgn (%d,%d,%d,%d), line pixel %d\n", width, height, rgn_x, rgn_y, rgn_w,
-    // rgn_h, line_pixel); draw top line
-    ptr += (width * rgn_y + rgn_x) >> 2;
-    for (i = 0; i < line_pixel; i++)
-    {
-        memset(ptr, value, (rgn_w + 3) >> 2);
-        ptr += width >> 2;
-    }
-    // draw letft/right line
-    for (i = 0; i < (rgn_h - line_pixel * 2); i++)
-    {
-        if (color_index == RGN_COLOR_LUT_INDEX_1)
-        {
-            *ptr = rgn_color_lut_1_left_value[line_pixel - 1];
-            *(ptr + ((rgn_w + 3) >> 2)) = rgn_color_lut_1_right_value[line_pixel - 1];
-        }
-        else
-        {
-            *ptr = rgn_color_lut_0_left_value[line_pixel - 1];
-            *(ptr + ((rgn_w + 3) >> 2)) = rgn_color_lut_0_right_value[line_pixel - 1];
-        }
-        ptr += width >> 2;
-    }
-    // draw bottom line
-    for (i = 0; i < line_pixel; i++)
-    {
-        memset(ptr, value, (rgn_w + 3) >> 2);
-        ptr += width >> 2;
-    }
-    return 0;
-}
-
 void canvas_drawing(void)
 {
 
@@ -696,7 +638,7 @@ HI_S32 rgn_add(unsigned int Handle)
     RK_U32 canvasHeight = stCanvasInfo.stSize.u32Height;
     RK_U32 canvasWidth = stCanvasInfo.stSize.u32Width;
 
-    printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>> canvas.u32Width:%d canvas.u32Height:%d \n", stSize.u32Width, stSize.u32Height);
+    // printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>> canvas.u32Width:%d canvas.u32Height:%d \n", stSize.u32Width, stSize.u32Height);
     s32Ret = update_canvas(&stBitmap, 0x0000, canvasHeight, canvasWidth);
     // s32Ret = update_canvas(Type, &stBitmap, HI_TRUE, 0x0000, &stSize, stCanvasInfo.u32Stride, stRgnAttrSet.unAttr.stOverlayEx.enPixelFmt);
 
@@ -726,7 +668,7 @@ RK_VOID *add_ts_thread(RK_VOID *p)
     // RGN_HANDLE Handle;
     // Handle = VENC_RECORD_TIME_OSD_HANDLE;
     // s32Ret = rgn_add(Handle, VENC_RECORD_TIME_OSD_HANDLE);
-    while (!quit)
+    while (!quitApp)
     {
         time(&timep);
         pLocalTime = localtime(&timep);
@@ -753,5 +695,5 @@ RK_VOID *add_ts_thread(RK_VOID *p)
 
     // pthread_detach(pthread_self());
 
-    return 0;
+    return NULL;
 }
