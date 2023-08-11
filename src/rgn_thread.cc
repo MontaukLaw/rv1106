@@ -330,7 +330,7 @@ int RGN_LoadBMPCanvas_TimeStamp(OSD_LOGO_T *pVideoLogo)
         RK_U32 bmpPicSize = bmpHeight * bmpStride;
 
         /* RGB8888 or RGB1555 */
-        // 申请内存用于保存每个bmp原始图像数据, 即3*长宽高
+        // 申请内存用于保存每个bmp原始图像数据, 即4*长宽高
         pOrigBMPBuf = (HI_U8 *)malloc(bmpPicSize);
         if (NULL == pOrigBMPBuf)
         {
