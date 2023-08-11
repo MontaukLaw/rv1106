@@ -611,6 +611,7 @@ int main(int argc, char *argv[])
         printf("init model failed\n");
         goto __FAILED;
     }
+    printf("init model success\n");
 
     // 初始两个vi通道
     s32Ret = init_vi(viCtx);

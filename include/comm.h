@@ -41,6 +41,7 @@ extern "C"
 #define OBJ_NAME_MAX_SIZE 16
 #define OBJ_NUMB_MAX_SIZE 64
 #define OBJ_CLASS_NUM 80
+// #define OBJ_CLASS_NUM 80
 #define NMS_THRESH 0.45
 #define BOX_THRESH 0.35
 #define PROP_BOX_SIZE (5 + OBJ_CLASS_NUM)

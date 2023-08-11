@@ -1,16 +1,3 @@
-// Copyright (c) 2021 by Rockchip Electronics Co., Ltd. All Rights Reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,7 +8,7 @@
 #include <set>
 #include "postprocess.h"
 #include <stdint.h>
-#define LABEL_NALE_TXT_PATH   "/data/coco.txt"
+#define LABEL_NALE_TXT_PATH "/data/coco.txt"
 
 static char *labels[OBJ_CLASS_NUM];
 
@@ -317,6 +304,8 @@ int post_process(int8_t *input0, int8_t *input1, int8_t *input2, int model_in_h,
         return 0;
     }
 
+    printf("validCount %d\n", validCount);
+
     std::vector<int> indexArray;
     for (int i = 0; i < validCount; ++i)
     {
@@ -325,10 +314,15 @@ int post_process(int8_t *input0, int8_t *input1, int8_t *input2, int model_in_h,
 
     quick_sort_indice_inverse(objProbs, 0, validCount - 1, indexArray);
 
-    std::set<int> class_set(std::begin(classId), std::end(classId));
+    for(int i = 0; i < validCount; i++)
+    {
+        printf("objProbs[%d] = %f\n", i, objProbs[i]);
+    }
 
+    std::set<int> class_set(std::begin(classId), std::end(classId));
     for (auto c : class_set)
     {
+        printf("class %d\n", c);
         nms(validCount, filterBoxes, classId, indexArray, c, nms_threshold);
     }
 
